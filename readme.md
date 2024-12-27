@@ -19,8 +19,8 @@ Serverless solution for monitoring RPC nodes latency across different blockchain
 
 1. Clone repository:
 ```bash
-git clone <repository-url>
-cd rpc-latency-monitor
+git clone https://github.com/chainstacklabs/chainstack-rpc-dashboard-functions.git
+cd chainstack-rpc-dashboard-functions
 ```
 
 2. Set environment variables in Vercel project (see `.env.example`)
@@ -52,14 +52,16 @@ curl http://localhost:3000/api/chains/ethereum
 ### Endpoints JSON format
 ```json
 {
-  "providers": [
-    {
-      "blockchain": "Ethereum",
-      "name": "Provider1",
-      "http_endpoint": "https://...",
-      "websocket_endpoint": "wss://..."
-    }
-  ]
+    "providers": [
+        {
+            "blockchain": "Ethereum",
+            "name": "Chainstack",
+            "region": "Global",
+            "websocket_endpoint": "wss://ethereum-mainnet...",
+            "http_endpoint": "https://ethereum-mainnet...",
+            "data": {}
+        }
+    ]
 }
 ```
 

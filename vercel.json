@@ -1,0 +1,34 @@
+{
+  "functions": {
+    "api/chains/ethereum.py": {
+      "maxDuration": 40
+    },
+    "api/chains/base.py": {
+      "maxDuration": 40
+    },
+    "api/chains/solana.py": {
+      "maxDuration": 40
+    },
+    "api/chains/ton.py": {
+      "maxDuration": 40
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/chains/ethereum",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/chains/base",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/chains/solana",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/chains/ton",
+      "schedule": "* * * * *"
+    }
+  ]
+}

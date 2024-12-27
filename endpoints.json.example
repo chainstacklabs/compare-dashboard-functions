@@ -1,0 +1,12 @@
+{
+    "providers": [
+        {
+            "blockchain": "Ethereum",
+            "name": "Chainstack",
+            "region": "Global",
+            "websocket_endpoint": "wss://ethereum-mainnet...",
+            "http_endpoint": "https://ethereum-mainnet...",
+            "data": {}
+        }
+    ]
+}

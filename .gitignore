@@ -1,0 +1,5 @@
+*.vercel
+*.env
+endpoints*.json
+venv
+.vercel

@@ -1,5 +1,11 @@
-*.vercel
-*.env
-endpoints*.json
-venv
+__pycache__
+
 .vercel
+*.vercel
+
+venv
+*.env
+*.local
+
+api/test
+endpoints*.json

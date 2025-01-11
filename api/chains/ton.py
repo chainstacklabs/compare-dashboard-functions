@@ -1,3 +1,5 @@
+import os
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from metrics.ton import (
     HTTPGetAddressBalanceLatencyMetric,
@@ -7,12 +9,14 @@ from metrics.ton import (
     HTTPRunGetMethodLatencyMetric,
 )
 
+metric_name = os.getenv("METRIC_NAME", "test_response_latency_seconds")
+
 METRICS = [
-    (HTTPGetBlockHeaderLatencyMetric, "response_latency_seconds"),
-    (HTTPRunGetMethodLatencyMetric, "response_latency_seconds"),
-    (HTTPGetAddressBalanceLatencyMetric, "response_latency_seconds"),
-    (HTTPGetBlockTxsLatencyMetric, "response_latency_seconds"),
-    (HTTPGetWalletTxsLatencyMetric, "response_latency_seconds"),
+    (HTTPGetBlockHeaderLatencyMetric, metric_name),
+    (HTTPRunGetMethodLatencyMetric, metric_name),
+    (HTTPGetAddressBalanceLatencyMetric, metric_name),
+    (HTTPGetBlockTxsLatencyMetric, metric_name),
+    (HTTPGetWalletTxsLatencyMetric, metric_name),
 ]
 
 

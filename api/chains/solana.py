@@ -1,3 +1,5 @@
+import os
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from metrics.solana import (
     HTTPGetBalanceLatencyMetric,
@@ -7,12 +9,14 @@ from metrics.solana import (
     HTTPSimulateTxLatencyMetric,
 )
 
+metric_name = os.getenv("METRIC_NAME", "test_response_latency_seconds")
+
 METRICS = [
-    (HTTPGetRecentBlockhashLatencyMetric, "response_latency_seconds"),
-    (HTTPSimulateTxLatencyMetric, "response_latency_seconds"),
-    (HTTPGetBalanceLatencyMetric, "response_latency_seconds"),
-    (HTTPGetBlockLatencyMetric, "response_latency_seconds"),
-    (HTTPGetTxLatencyMetric, "response_latency_seconds"),
+    (HTTPGetRecentBlockhashLatencyMetric, metric_name),
+    (HTTPSimulateTxLatencyMetric, metric_name),
+    (HTTPGetBalanceLatencyMetric, metric_name),
+    (HTTPGetBlockLatencyMetric, metric_name),
+    (HTTPGetTxLatencyMetric, metric_name),
 ]
 
 

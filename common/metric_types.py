@@ -155,7 +155,9 @@ class HttpCallLatencyMetricBase(HttpMetric):
             ) as response:
                 if response.status != 200:
                     raise ValueError(f"Status code: {response.status}")
-                await response.json()
+                json_response = await response.json()
+                if "error" in json_response:
+                    raise ValueError(f"JSON-RPC error: {json_response['error']}")
                 return time.monotonic() - start_time
 
     def process_data(self, value: float) -> float:

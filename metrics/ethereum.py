@@ -52,7 +52,6 @@ class WSBlockLatencyMetric(WebSocketMetric):
             raise ValueError("Subscription to newHeads failed")
 
     async def unsubscribe(self, websocket):
-        # EVM blockchains have no unsubscribe logic; do nothing.
         pass
 
     async def listen_for_data(self, websocket):

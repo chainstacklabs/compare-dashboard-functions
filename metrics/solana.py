@@ -241,3 +241,30 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
             ],
             **kwargs,
         )
+
+
+class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):
+    """
+    Collects call latency for the `getBlock` method.
+    """
+
+    def __init__(
+        self,
+        handler: "MetricsHandler",  # type: ignore
+        metric_name: str,
+        labels: MetricLabels,
+        config: MetricConfig,
+        **kwargs,
+    ):
+        super().__init__(
+            handler=handler,
+            metric_name=metric_name,
+            labels=labels,
+            config=config,
+            method="getProgramAccounts",
+            method_params=[
+                "FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH",
+                {"encoding": "jsonParsed"},
+            ],
+            **kwargs,
+        )

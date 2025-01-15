@@ -7,6 +7,7 @@ from metrics.solana import (
     HTTPGetRecentBlockhashLatencyMetric,
     HTTPGetTxLatencyMetric,
     HTTPSimulateTxLatencyMetric,
+    HTTPGetProgramAccsLatencyMetric,
 )
 
 metric_name = os.getenv("METRIC_NAME", "test_response_latency_seconds")
@@ -17,6 +18,7 @@ METRICS = [
     (HTTPGetBalanceLatencyMetric, metric_name),
     (HTTPGetBlockLatencyMetric, metric_name),
     (HTTPGetTxLatencyMetric, metric_name),
+    (HTTPGetProgramAccsLatencyMetric, metric_name),
 ]
 
 

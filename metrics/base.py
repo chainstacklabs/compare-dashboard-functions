@@ -106,7 +106,7 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
             method="debug_traceTransaction",
             method_params=[
                 "0x317888c89fe0914c6d11be51acf758742afbe0cf1fdac11f19d35d6ed652ac29",
-                {"tracer": "callTracer"}
+                {"tracer": "callTracer"},
             ],
             **kwargs,
         )

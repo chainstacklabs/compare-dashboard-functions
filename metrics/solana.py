@@ -245,7 +245,7 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
 
 class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):
     """
-    Collects call latency for the `getBlock` method.
+    Collects call latency for the `getProgramAccounts` method.
     """
 
     def __init__(

@@ -1,71 +1,173 @@
-# Chainstack dashboard functions
+# Public RPC Dashboard
 
-Serverless solution for monitoring RPC nodes latency across different blockchains and regions using Vercel Functions.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,ENDPOINTS,SKIP_AUTH,METRIC_NAME)
 
-## Design
+A serverless solution for monitoring RPC nodes response time across different blockchains and regions using Vercel Functions and Grafana Cloud. The project collects metrics from HTTP/WS endpoints for multiple blockchains and pushes them to Grafana Cloud for visualization.
 
-- Serverless functions run every minute in multiple regions
-- Collects metrics from HTTP/WS endpoints for each blockchain
-- Pushes metrics to Grafana Cloud
+## Features
 
-## Quick start
+- 🌐 Multi-region monitoring: US West, Germany, Singapore
+- 📊 Real-time metrics visualization in Grafana Cloud
+- 🔗 Support for multiple blockchains:
+  - Ethereum
+  - Base
+  - Solana
+  - TON
 
-### Prerequisites
-- Vercel account (check limits of your plan)
-- Python 3.9+
-- Grafana Cloud account
+## Architecture
 
-### Setup
+- Serverless functions run every minute in configured regions
+- Metrics are collected and pushed to Grafana Cloud
+- Authentication for production endpoints using `CRON_SECRET`
+- Preview deployments for testing with `SKIP_AUTH`
 
-1. Clone repository:
+## Deployment options
+
+### 1. Single region quick deploy
+
+1. Fork this repository
+2. Click the "Deploy with Vercel" button above
+3. Configure the required environment variables (see below)
+4. Deploy!
+
+### 2. Multi-region svetup
+
+To monitor RPC providers from multiple regions:
+
+1. Create three separate Vercel projects for different regions:
+   - Project 1: `your-project-iad1` (US East)
+   - Project 2: `your-project-sfo1` (US West)
+   - Project 3: `your-project-hkg1` (Asia)
+
+2. Link each project to the same repository
+
+3. Configure region override in each project:
+   - Project Settings → Functions → Function Region
+   - Select the corresponding region (iad1/sfo1/hkg1)
+
+4. Configure shared environment variables:
+   - Team Settings → Environment Variables → Link To Projects
+
+## Environment Variables
+
+### Production Required Variables
+
+```env
+# Grafana Cloud configuration
+GRAFANA_URL=https://influx-...-east-0.grafana.net/api/v1/push/influx/write
+GRAFANA_USER=your_grafana_user_id
+GRAFANA_API_KEY=your_grafana_api_key
+
+# Monitoring configuration
+METRIC_NAME=response_latency_seconds
+METRIC_REQUEST_TIMEOUT=35
+METRIC_MAX_LATENCY=35
+
+# Security
+CRON_SECRET=your_production_cron_secret  # Required for production
+SKIP_AUTH=FALSE                          # Should be FALSE in production
+
+# RPC configuration
+ENDPOINTS={"providers":[{"blockchain":"Ethereum","name":"Provider1"...}]}
+```
+
+### Preview Environment Variables
+
+For development and testing:
+
+```env
+METRIC_NAME=test_response_latency_seconds  # Add prefix to avoid metric conflicts
+SKIP_AUTH=TRUE                            # Allows direct URL access
+```
+
+## Local Development
+
+1. Clone and setup:
 ```bash
 git clone https://github.com/chainstacklabs/chainstack-rpc-dashboard-functions.git
 cd chainstack-rpc-dashboard-functions
 ```
 
-2. Set environment variables in Vercel project (see `.env.example`)
-
-3. Deploy to Vercel:
+2. Create and activate virtual environment:
 ```bash
-vercel deploy
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows
+venv\Scripts\activate
+# On macOS/Linux
+source venv/bin/activate
 ```
 
-### Local development
+3. Configure environment:
+```bash
+cp .env.local.example .env.local   # Update with your values
+cp endpoints.json.example endpoints.json
+```
 
-1. Install dependencies:
+4. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Run development server:
+5. Run development server:
 ```bash
-vercel dev
+python run_local.py
 ```
 
-3. Test endpoint:
+6. Test endpoints:
 ```bash
-curl http://localhost:3000/api/chains/ethereum
+curl http://localhost:8000/api/chains/ethereum
 ```
 
-## Configuration
+## RPC provider configuration
 
-### Endpoints JSON format
+Configure your RPC providers in `endpoints.json`:
+
 ```json
 {
     "providers": [
         {
-            "blockchain": "Ethereum",
-            "name": "Chainstack",
-            "region": "Global",
-            "websocket_endpoint": "wss://ethereum-mainnet...",
-            "http_endpoint": "https://ethereum-mainnet...",
-            "data": {}
+            "blockchain": "Ethereum",   // Supported: Ethereum, Base, Solana, TON
+            "name": "Chainstack-Free",  // Provider identifier
+            "region": "Global",         // Provider region
+            "websocket_endpoint": "wss://ethereum-mainnet.core.chainstack.com/...",
+            "http_endpoint": "https://ethereum-mainnet.core.chainstack.com/...",
+            "data": {}                  // Optional provider-specific data
         }
     ]
 }
 ```
 
-### Adding new blockchain
-1. Create metric classes in `metrics/`
-2. Register metrics in `api/chains/`
-3. Update `vercel.json` with new endpoint
+## Project structure
+
+```plaintext
+.
+├── api/                      # Vercel Serverless Functions
+│   └── chains/              # Blockchain-specific handlers
+│       ├── base.py          
+│       ├── ethereum.py      
+│       ├── solana.py        
+│       └── ton.py           
+├── common/                   # Shared utilities
+│   ├── base_metric.py       # Base metric collection
+│   ├── factory.py           # Metric factory pattern
+│   ├── metric_config.py     # Configuration classes
+│   ├── metric_types.py      # Metric type definitions
+│   └── metrics_handler.py   # Core metrics handler
+├── metrics/                  # Blockchain-specific metrics
+│   ├── base.py              
+│   ├── ethereum.py          
+│   ├── solana.py            
+│   └── ton.py               
+└── config files...          # Configuration and setup files
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -am 'Add YourFeature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Create a Pull Request

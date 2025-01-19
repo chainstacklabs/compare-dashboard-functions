@@ -4,6 +4,8 @@
 
 A serverless solution for monitoring RPC nodes response time across different blockchains and regions using Vercel Functions and Grafana Cloud. The project collects metrics from HTTP/WS endpoints for multiple blockchains and pushes them to Grafana Cloud for visualization.
 
+📚 **[Public RPC Dashboard Documentation](https://docs.chainstack.com/docs/public-rpc-dashboard)**
+
 ## Features
 
 - 🌐 Multi-region monitoring: US West, Germany, Singapore
@@ -129,12 +131,12 @@ Configure your RPC providers in `endpoints.json`:
 {
     "providers": [
         {
-            "blockchain": "Ethereum",   // Supported: Ethereum, Base, Solana, TON
-            "name": "Chainstack-Free",  // Provider identifier
-            "region": "Global",         // Provider region
+            "blockchain": "Ethereum",
+            "name": "Chainstack-Free",
+            "region": "Global",
             "websocket_endpoint": "wss://ethereum-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://ethereum-mainnet.core.chainstack.com/...",
-            "data": {}                  // Optional provider-specific data
+            "data": {}
         }
     ]
 }

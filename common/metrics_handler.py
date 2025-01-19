@@ -14,6 +14,7 @@ from common.base_metric import BaseMetric
 from common.factory import MetricFactory
 from common.metric_config import MetricConfig
 
+from config.defaults import MetricsServiceConfig
 
 class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
@@ -27,13 +28,11 @@ class MetricsHandler:
             "url": os.environ.get("GRAFANA_URL"),
             "user": os.environ.get("GRAFANA_USER"),
             "api_key": os.environ.get("GRAFANA_API_KEY"),
-            "push_retries": int(os.environ.get("GRAFANA_PUSH_MAX_RETRIES", "3")),
-            "push_retry_delay": int(os.environ.get("GRAFANA_PUSH_RETRY_DELAY", "10")),
-            "push_timeout": int(os.environ.get("GRAFANA_PUSH_TIMEOUT", "10")),
-            "metric_request_timeout": int(
-                os.environ.get("METRIC_REQUEST_TIMEOUT", "30")
-            ),
-            "metric_max_latency": int(os.environ.get("METRIC_MAX_LATENCY", "30")),
+            "push_retries": MetricsServiceConfig.GRAFANA_PUSH_MAX_RETRIES,
+            "push_retry_delay": MetricsServiceConfig.GRAFANA_PUSH_RETRY_DELAY,
+            "push_timeout": MetricsServiceConfig.GRAFANA_PUSH_TIMEOUT,
+            "metric_request_timeout": MetricsServiceConfig.METRIC_REQUEST_TIMEOUT,
+            "metric_max_latency": MetricsServiceConfig.METRIC_MAX_LATENCY,
         }
 
     def get_metrics_influx_format(self) -> List[str]:

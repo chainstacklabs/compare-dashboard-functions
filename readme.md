@@ -50,9 +50,9 @@ To monitor RPC providers from multiple regions:
 4. Configure shared environment variables:
    - Team Settings → Environment Variables → Link To Projects
 
-## Environment Variables
+## Environment variables
 
-### Production Required Variables
+### Production required variables
 
 ```env
 # Grafana Cloud configuration
@@ -73,7 +73,7 @@ SKIP_AUTH=FALSE                          # Should be FALSE in production
 ENDPOINTS={"providers":[{"blockchain":"Ethereum","name":"Provider1"...}]}
 ```
 
-### Preview Environment Variables
+### Preview environment variables
 
 For development and testing:
 
@@ -82,7 +82,7 @@ METRIC_NAME=test_response_latency_seconds  # Add prefix to avoid metric conflict
 SKIP_AUTH=TRUE                            # Allows direct URL access
 ```
 
-## Local Development
+## Local development
 
 1. Clone and setup:
 ```bash
@@ -125,7 +125,7 @@ curl http://localhost:8000/api/chains/ethereum
 
 ## RPC provider configuration
 
-Configure your RPC providers in `endpoints.json`:
+Configure your RPC providers in `endpoints.json` (for local development) or in `ENDPOINTS` environment variable:
 
 ```json
 {

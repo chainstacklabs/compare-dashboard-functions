@@ -16,6 +16,7 @@ from common.metric_config import MetricConfig
 
 from config.defaults import MetricsServiceConfig
 
+
 class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
 

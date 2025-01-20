@@ -1,6 +1,6 @@
 class MetricsServiceConfig:
     """Default configuration for metrics collection and processing."""
-    
+
     # Grafana push settings
     GRAFANA_PUSH_MAX_RETRIES = 3
     GRAFANA_PUSH_RETRY_DELAY = 1

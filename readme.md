@@ -9,7 +9,7 @@ A serverless solution for monitoring RPC nodes response time across different bl
 ## Features
 
 - 🌐 Multi-region monitoring: US West, Germany, Singapore
-- 📊 Real-time metrics visualization in Grafana Cloud
+- 📊 Real-time metrics visualization in [Grafana Cloud](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1)
 - 🔗 Support for multiple blockchains:
   - Ethereum
   - Base

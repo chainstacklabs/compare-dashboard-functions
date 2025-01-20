@@ -2,10 +2,106 @@
     "providers": [
         {
             "blockchain": "Ethereum",
+            "name": "Alchemy-Growth",
+            "region": "Global",
+            "websocket_endpoint": "wss://eth-mainnet.g.alchemy.com/v2/...",
+            "http_endpoint": "https://eth-mainnet.g.alchemy.com/v2/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Base",
+            "name": "Alchemy-Growth",
+            "region": "Global",
+            "websocket_endpoint": "wss://base-mainnet.g.alchemy.com/v2/...",
+            "http_endpoint": "https://base-mainnet.g.alchemy.com/v2/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Solana",
+            "name": "Alchemy-Growth",
+            "region": "Global",
+            "websocket_endpoint": "not_supported",
+            "http_endpoint": "https://solana-mainnet.g.alchemy.com/v2/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Solana",
+            "name": "Helius-Developer",
+            "region": "Global",
+            "websocket_endpoint": "wss://mainnet.helius-rpc.com/?api-key=...",
+            "http_endpoint": "https://mainnet.helius-rpc.com/?api-key=...",
+            "data": {}
+        },
+        {
+            "blockchain": "Ethereum",
+            "name": "Quicknode-Growth",
+            "region": "Global",
+            "websocket_endpoint": "wss://quiknode.pro/...",
+            "http_endpoint": "https://quiknode.pro/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Base",
+            "name": "Quicknode-Growth",
+            "region": "Global",
+            "websocket_endpoint": "wss://base-mainnet.quiknode.pro/...",
+            "http_endpoint": "https://base-mainnet.quiknode.pro/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Solana",
+            "name": "Quicknode-Growth",
+            "region": "Global",
+            "websocket_endpoint": "wss://solana-mainnet.quiknode.pro/...",
+            "http_endpoint": "https://solana-mainnet.quiknode.pro/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Ethereum",
             "name": "Chainstack",
             "region": "Global",
-            "websocket_endpoint": "wss://ethereum-mainnet...",
-            "http_endpoint": "https://ethereum-mainnet...",
+            "websocket_endpoint": "wss://ethereum-mainnet.core.chainstack.com/...",
+            "http_endpoint": "https://ethereum-mainnet.core.chainstack.com/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Base",
+            "name": "Chainstack",
+            "region": "Global",
+            "websocket_endpoint": "wss://base-mainnet.core.chainstack.com/...",
+            "http_endpoint": "https://base-mainnet.core.chainstack.com/...",
+            "data": {}
+        },
+        {
+            "blockchain": "Solana",
+            "name": "Chainstack",
+            "region": "Global",
+            "websocket_endpoint": "wss://solana-mainnet.core.chainstack.com/...",
+            "http_endpoint": "https://solana-mainnet.core.chainstack.com/...",
+            "data": {}
+        },
+        {
+            "blockchain": "TON",
+            "name": "Chainstack",
+            "region": "Global",
+            "websocket_endpoint": "not_supported",
+            "http_endpoint": "https://ton-mainnet.core.chainstack.com/.../api/v2/jsonRPC",
+            "data": {}
+        },
+        {
+            "blockchain": "TON",
+            "name": "Quicknode-Growth",
+            "region": "Global",
+            "websocket_endpoint": "not_supported",
+            "http_endpoint": "https://ton-mainnet.quiknode.pro/.../jsonRPC",
+            "data": {}
+        },
+        {
+            "blockchain": "TON",
+            "name": "TonCenter-WithAPIKey",
+            "region": "Global",
+            "websocket_endpoint": "not_supported",
+            "http_endpoint": "https://toncenter.com/api/v2/jsonRPC?api_key=...",
             "data": {}
         }
     ]

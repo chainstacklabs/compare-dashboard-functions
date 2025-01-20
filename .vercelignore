@@ -1,4 +1,5 @@
 dashboards
 run_local.py
+
 *.local
-*.local.example
+*.example

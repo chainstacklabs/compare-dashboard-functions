@@ -15,19 +15,19 @@
   },
   "crons": [
     {
-      "path": "/api/chains/ethereum",
+      "path": "/api/read/ethereum",
       "schedule": "* * * * *"
     },
     {
-      "path": "/api/chains/base",
+      "path": "/api/read/base",
       "schedule": "* * * * *"
     },
     {
-      "path": "/api/chains/solana",
+      "path": "/api/read/solana",
       "schedule": "* * * * *"
     },
     {
-      "path": "/api/chains/ton",
+      "path": "/api/read/ton",
       "schedule": "* * * * *"
     }
   ]

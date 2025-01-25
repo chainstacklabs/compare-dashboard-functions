@@ -1,18 +1,12 @@
 import os
 
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
-from metrics.base import (
-    HTTPAccBalanceLatencyMetric,
-    HTTPDebugTraceTxLatencyMetric,
-    HTTPEthCallLatencyMetric,
-    HTTPTxReceiptLatencyMetric,
-)
-from metrics.ethereum import (
-    HTTPBlockNumberLatencyMetric,
-    HTTPDebugTraceBlockByNumberLatencyMetric,
-    WSBlockLatencyMetric,
-)
-
+from metrics.ethereum import (HTTPAccBalanceLatencyMetric,
+                              HTTPBlockNumberLatencyMetric,
+                              HTTPDebugTraceBlockByNumberLatencyMetric,
+                              HTTPDebugTraceTxLatencyMetric,
+                              HTTPEthCallLatencyMetric,
+                              HTTPTxReceiptLatencyMetric, WSBlockLatencyMetric)
 
 metric_name = os.getenv("METRIC_NAME", "test_response_latency_seconds")
 
@@ -28,4 +22,4 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
-    metrics_handler = MetricsHandler("Base", METRICS)
+    metrics_handler = MetricsHandler("Ethereum", METRICS)

@@ -13,7 +13,6 @@ import aiohttp
 from common.base_metric import BaseMetric
 from common.factory import MetricFactory
 from common.metric_config import MetricConfig
-
 from config.defaults import MetricsServiceConfig
 
 

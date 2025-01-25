@@ -3,9 +3,9 @@ class MetricsServiceConfig:
     
     # Grafana push settings
     GRAFANA_PUSH_MAX_RETRIES = 3
-    GRAFANA_PUSH_RETRY_DELAY = 3
-    GRAFANA_PUSH_TIMEOUT = 5
+    GRAFANA_PUSH_RETRY_DELAY = 1
+    GRAFANA_PUSH_TIMEOUT = 3
     
     # Metrics collection settings
-    METRIC_REQUEST_TIMEOUT = 35
-    METRIC_MAX_LATENCY = 35
+    METRIC_REQUEST_TIMEOUT = 45
+    METRIC_MAX_LATENCY = 45

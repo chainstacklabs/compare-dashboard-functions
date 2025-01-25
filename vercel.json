@@ -1,16 +1,16 @@
 {
   "functions": {
     "api/chains/ethereum.py": {
-      "maxDuration": 40
+      "maxDuration": 55
     },
     "api/chains/base.py": {
-      "maxDuration": 40
+      "maxDuration": 55
     },
     "api/chains/solana.py": {
-      "maxDuration": 40
+      "maxDuration": 55
     },
     "api/chains/ton.py": {
-      "maxDuration": 40
+      "maxDuration": 55
     }
   },
   "crons": [

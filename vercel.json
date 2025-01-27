@@ -1,15 +1,15 @@
 {
   "functions": {
-    "api/chains/ethereum.py": {
+    "api/read/ethereum.py": {
       "maxDuration": 55
     },
-    "api/chains/base.py": {
+    "api/read/base.py": {
       "maxDuration": 55
     },
-    "api/chains/solana.py": {
+    "api/read/solana.py": {
       "maxDuration": 55
     },
-    "api/chains/ton.py": {
+    "api/read/ton.py": {
       "maxDuration": 55
     }
   },

@@ -64,4 +64,11 @@ class BaseMetric(ABC):
         """Logs error and sets default value if none exists."""
         if not self.latest_value:
             self.update_metric_value(0)
-        logging.error(f"Error in {self.labels.get_prometheus_labels()}: {str(error)}")
+        
+        error_type = error.__class__.__name__
+        error_details = getattr(error, 'error_msg', str(error))
+        
+        logging.error(
+            f"Metric error [{error_type}] {self.labels.get_prometheus_labels()}: {error_details}",
+            exc_info=True
+        )

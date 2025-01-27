@@ -19,9 +19,9 @@ def main():
     setup_environment()
 
     # Import handler after environment setup
-    from api.chains.ethereum import handler as EthereumHandler
+    from api.write.solana import handler as SolanaHandler
 
-    server = HTTPServer(("localhost", 8000), EthereumHandler)
+    server = HTTPServer(("localhost", 8000), SolanaHandler)
     print("Server started at http://localhost:8000")
     server.serve_forever()
 

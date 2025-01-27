@@ -1,12 +1,15 @@
 import os
 
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
-from metrics.ethereum import (HTTPAccBalanceLatencyMetric,
-                              HTTPBlockNumberLatencyMetric,
-                              HTTPDebugTraceBlockByNumberLatencyMetric,
-                              HTTPDebugTraceTxLatencyMetric,
-                              HTTPEthCallLatencyMetric,
-                              HTTPTxReceiptLatencyMetric, WSBlockLatencyMetric)
+from metrics.ethereum import (
+    HTTPAccBalanceLatencyMetric,
+    HTTPBlockNumberLatencyMetric,
+    HTTPDebugTraceBlockByNumberLatencyMetric,
+    HTTPDebugTraceTxLatencyMetric,
+    HTTPEthCallLatencyMetric,
+    HTTPTxReceiptLatencyMetric,
+    WSBlockLatencyMetric,
+)
 
 metric_name = os.getenv("METRIC_NAME", "test_response_latency_seconds")
 

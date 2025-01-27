@@ -36,11 +36,12 @@ class MetricsHandler:
         }
 
     def get_metrics_influx_format(self) -> List[str]:
-        return [
-            instance.get_influx_format()
-            for instance in self._instances
-            if instance.latest_value is not None
-        ]
+        """Returns all metric values in Influx format."""
+        metrics = []
+        for instance in self._instances:
+            if instance.values:
+                metrics.extend(instance.get_influx_format())
+        return metrics
 
     def get_metrics_text(self) -> str:
         current_time = int(time.time_ns())

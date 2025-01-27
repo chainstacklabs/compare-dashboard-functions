@@ -2,25 +2,22 @@
 
 import asyncio
 import os
+import random
 import time
 from typing import Optional
-import random
-import base58
 
+import base58
 from solana.rpc.async_api import AsyncClient
-from solders.keypair import Keypair
+from solana.rpc.types import TxOpts
+from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
 from solders.instruction import Instruction
+from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 from solders.transaction import Transaction
-from solders.compute_budget import (
-    set_compute_unit_limit,
-    set_compute_unit_price,
-)
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpMetric
 from common.metrics_handler import MetricsHandler
-
 
 PRIORITY_FEE_MICROLAMPORTS = 200_000
 COMPUTE_LIMIT = 10_000
@@ -68,7 +65,7 @@ class SolanaLandingMetric(HttpMetric):
         return AsyncClient(self.http_endpoint)
 
     async def _get_slot(self, client: AsyncClient) -> int:
-        response = await client.get_slot()
+        response = await client.get_slot("confirmed")
         if not response or response.value is None:
             raise ValueError("Failed to get current slot")
         return response.value
@@ -79,7 +76,9 @@ class SolanaLandingMetric(HttpMetric):
         try:
             confirmation_task = asyncio.create_task(
                 client.confirm_transaction(
-                    signature, commitment=os.getenv("CONFIRMATION_LEVEL", "confirmed")
+                    signature,
+                    commitment=os.getenv("CONFIRMATION_LEVEL", "confirmed"),
+                    sleep_seconds=0.3,
                 )
             )
             await asyncio.wait_for(confirmation_task, timeout=timeout)
@@ -129,7 +128,9 @@ class SolanaLandingMetric(HttpMetric):
             start_time = time.monotonic()
             start_slot = await self._get_slot(client)
 
-            signature_response = await client.send_transaction(tx)
+            signature_response = await client.send_transaction(
+                tx, TxOpts(skip_preflight=True, max_retries=0)
+            )
             if not signature_response or not signature_response.value:
                 raise ValueError("Failed to send transaction")
 
@@ -141,10 +142,13 @@ class SolanaLandingMetric(HttpMetric):
 
             response_time = time.monotonic() - start_time
 
-            await asyncio.sleep(0.4)
+            await asyncio.sleep(1)
             await self._update_slot_diff(client, signature_response.value, start_slot)
             self.update_metric_value(self._slot_diff, "slot_latency")
 
+            # It doesn't make sense to measure response/confirmation time
+            # since slots in Solana always take 400 ms each. The main
+            # metric here is the slot latency/delay.
             return response_time
 
         finally:

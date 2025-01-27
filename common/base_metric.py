@@ -3,8 +3,8 @@
 import logging
 import uuid
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional, Union
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Union
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 

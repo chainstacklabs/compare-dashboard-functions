@@ -18,9 +18,7 @@ from solders.transaction import Transaction
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpMetric
 from common.metrics_handler import MetricsHandler
-
-PRIORITY_FEE_MICROLAMPORTS = 200_000
-COMPUTE_LIMIT = 10_000
+from config.defaults import MetricsServiceConfig
 
 
 def generate_fixed_memo(region: str) -> str:
@@ -62,10 +60,11 @@ class SolanaLandingMetric(HttpMetric):
         self._slot_diff = 0
 
     async def _create_client(self) -> AsyncClient:
-        return AsyncClient(self.http_endpoint)
+        endpoint = self.get_endpoint("sendTransaction")
+        return AsyncClient(endpoint)
 
     async def _get_slot(self, client: AsyncClient) -> int:
-        response = await client.get_slot("confirmed")
+        response = await client.get_slot(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)
         if not response or response.value is None:
             raise ValueError("Failed to get current slot")
         return response.value
@@ -77,7 +76,7 @@ class SolanaLandingMetric(HttpMetric):
             confirmation_task = asyncio.create_task(
                 client.confirm_transaction(
                     signature,
-                    commitment=os.getenv("CONFIRMATION_LEVEL", "confirmed"),
+                    commitment=MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL,
                     sleep_seconds=0.3,
                 )
             )
@@ -86,10 +85,14 @@ class SolanaLandingMetric(HttpMetric):
             raise ValueError(f"Transaction confirmation timeout after {timeout}s")
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
-        memo_text = generate_fixed_memo(os.getenv("REGION", "default"))
+        memo_text = generate_fixed_memo(
+            self.labels.get_label(MetricLabelKey.SOURCE_REGION)
+        )
 
-        compute_limit_ix = set_compute_unit_limit(COMPUTE_LIMIT)
-        compute_price_ix = set_compute_unit_price(PRIORITY_FEE_MICROLAMPORTS)
+        compute_limit_ix = set_compute_unit_limit(MetricsServiceConfig.COMPUTE_LIMIT)
+        compute_price_ix = set_compute_unit_price(
+            MetricsServiceConfig.PRIORITY_FEE_MICROLAMPORTS
+        )
 
         memo_ix = Instruction(
             program_id=Pubkey.from_string(
@@ -137,7 +140,7 @@ class SolanaLandingMetric(HttpMetric):
             await self._confirm_transaction(
                 client,
                 signature_response.value,
-                int(os.getenv("CONFIRMATION_TIMEOUT", "30")),
+                self.config.timeout,
             )
 
             response_time = time.monotonic() - start_time

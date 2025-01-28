@@ -16,6 +16,26 @@ class MetricLabelKey(Enum):
     RESPONSE_STATUS = "response_status"
 
 
+class EndpointConfig:
+    """Configuration for RPC endpoints."""
+
+    def __init__(
+        self,
+        main_endpoint: Optional[str] = None,
+        tx_endpoint: Optional[str] = None,
+        ws_endpoint: Optional[str] = None,
+    ) -> None:
+        self.main_endpoint = main_endpoint
+        self.tx_endpoint = tx_endpoint
+        self.ws_endpoint = ws_endpoint
+
+    def get_endpoint(self, method: str) -> Optional[str]:
+        """Returns appropriate endpoint based on method."""
+        if method == "sendTransaction" and self.tx_endpoint:
+            return self.tx_endpoint
+        return self.main_endpoint
+
+
 class MetricConfig:
     """Configuration settings for metric collection."""
 
@@ -24,9 +44,11 @@ class MetricConfig:
         timeout: int,
         max_latency: int,
         extra_params: Optional[Dict[str, Any]] = None,
+        endpoints: Optional[EndpointConfig] = None,
     ) -> None:
         self.timeout = timeout
         self.max_latency = max_latency
+        self.endpoints = endpoints or EndpointConfig()
         self.extra_params = extra_params or {}
 
 

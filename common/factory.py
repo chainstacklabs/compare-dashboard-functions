@@ -3,7 +3,7 @@
 from typing import Dict, List, Tuple, Type
 
 from common.base_metric import BaseMetric
-from common.metric_config import MetricConfig, MetricLabels
+from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
 
 
 class MetricFactory:
@@ -36,7 +36,6 @@ class MetricFactory:
         config: MetricConfig,
         **kwargs,
     ) -> List[BaseMetric]:
-        """Creates metric instances for specified blockchain."""
         if blockchain_name not in cls._registry:
             available = list(cls._registry.keys())
             raise ValueError(
@@ -46,8 +45,16 @@ class MetricFactory:
         source_region = kwargs.get("source_region", "default")
         target_region = kwargs.get("target_region", "default")
         provider = kwargs.get("provider", "default")
-        metrics = []
 
+        endpoints = EndpointConfig(
+            main_endpoint=kwargs.get("http_endpoint"),
+            tx_endpoint=kwargs.get("tx_endpoint"),
+            ws_endpoint=kwargs.get("ws_endpoint"),
+        )
+
+        config.endpoints = endpoints
+
+        metrics = []
         for metric_class, metric_name in cls._registry[blockchain_name]:
             labels = MetricLabels(
                 source_region=source_region,

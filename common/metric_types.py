@@ -89,8 +89,11 @@ class HttpMetric(BaseMetric):
     async def fetch_data(self) -> Optional[Any]:
         """Fetches HTTP endpoint data."""
 
+    def get_endpoint(self, method: str) -> str:
+        """Returns appropriate endpoint based on method."""
+        return self.config.endpoints.get_endpoint(method)
+
     async def collect_metric(self) -> None:
-        """Collects single HTTP metric."""
         try:
             data = await self.fetch_data()
             if data is not None:
@@ -100,8 +103,7 @@ class HttpMetric(BaseMetric):
                     raise ValueError(f"Invalid latency: {latency}s")
                 self.mark_success()
                 return
-            raise ValueError(f"No data in response")
-
+            raise ValueError("No data in response")
         except Exception as e:
             self.mark_failure()
             self.handle_error(e)
@@ -120,13 +122,11 @@ class HttpCallLatencyMetricBase(HttpMetric):
         method_params: dict = None,
         **kwargs,
     ):
-        http_endpoint = kwargs.get("http_endpoint")
         super().__init__(
             handler=handler,
             metric_name=metric_name,
             labels=labels,
             config=config,
-            http_endpoint=http_endpoint,
         )
         self.method = method
         self.method_params = method_params or None
@@ -143,9 +143,11 @@ class HttpCallLatencyMetricBase(HttpMetric):
         """Measures single request latency."""
         start_time = time.monotonic()
 
+        endpoint = self.config.endpoints.get_endpoint(self.method)
+
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                self.http_endpoint,
+                endpoint,
                 headers={
                     "Accept": "application/json",
                     "Content-Type": "application/json",

@@ -49,19 +49,23 @@ class MetricsHandler:
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
 
     async def collect_metrics(self, provider: dict, config: dict):
+        metric_config = MetricConfig(
+            timeout=self.grafana_config["metric_request_timeout"],
+            max_latency=self.grafana_config["metric_max_latency"],
+            endpoints=None,  # Will be set in factory
+            extra_params={"tx_data": provider.get("data")},
+        )
+
         metrics = MetricFactory.create_metrics(
             blockchain_name=self.blockchain,
             metrics_handler=self,
-            config=MetricConfig(
-                timeout=self.grafana_config["metric_request_timeout"],
-                max_latency=self.grafana_config["metric_max_latency"],
-            ),
+            config=metric_config,
             provider=provider["name"],
             source_region=self.grafana_config["current_region"],
             target_region=config.get("region", "default"),
             ws_endpoint=provider.get("websocket_endpoint"),
             http_endpoint=provider.get("http_endpoint"),
-            extra_params={"tx_data": provider.get("data")},
+            tx_endpoint=provider.get("tx_endpoint"),
         )
         await asyncio.gather(*(m.collect_metric() for m in metrics))
 

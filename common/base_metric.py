@@ -8,6 +8,8 @@ from typing import Any, Dict, List, Optional, Union
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
 
 @dataclass
 class MetricValue:

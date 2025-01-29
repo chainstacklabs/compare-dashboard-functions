@@ -123,6 +123,11 @@ class SolanaLandingMetric(HttpMetric):
         self._slot_diff = max(confirmed_slot - start_slot, 0)
 
     async def fetch_data(self) -> Optional[float]:
+        # Since we use here an additional value (metric_type),
+        # let's initialize all used metric types.
+        self.update_metric_value(0, "response_time")
+        self.update_metric_value(0, "slot_latency")
+
         client = None
         try:
             client = await self._create_client()

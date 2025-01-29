@@ -78,7 +78,9 @@ class BaseMetric(ABC):
         value_type: str = "response_time",
         labels: Optional[Dict[str, str]] = None,
     ) -> None:
-        """Updates metric value with optional type-specific labels."""
+        """Updates metric value, preserving existing labels if present."""
+        if value_type in self.values:
+            labels = labels or self.values[value_type].labels
         self.values[value_type] = MetricValue(value=value, labels=labels)
 
     def mark_success(self) -> None:
@@ -86,8 +88,11 @@ class BaseMetric(ABC):
         self.labels.update_label(MetricLabelKey.RESPONSE_STATUS, "success")
 
     def mark_failure(self) -> None:
-        """Sets response status to failed."""
+        """Sets failure status and zeros all existing metric types."""
         self.labels.update_label(MetricLabelKey.RESPONSE_STATUS, "failed")
+        value_types = list(self.values.keys())
+        for value_type in value_types:
+            self.update_metric_value(0, value_type)
 
     def handle_error(self, error: Exception) -> None:
         """Logs error and sets default value if none exists."""

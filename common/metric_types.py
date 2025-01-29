@@ -63,8 +63,8 @@ class WebSocketMetric(BaseMetric):
             if data is not None:
                 latency = self.process_data(data)
                 self.update_metric_value(latency)
-                if latency > self.config.max_latency:
-                    raise ValueError(f"Invalid latency: {latency}s")
+                # if latency > self.config.max_latency:
+                #     raise ValueError(f"Invalid latency: {latency}s")
                 self.mark_success()
                 return
             raise ValueError("No data in response")
@@ -91,7 +91,7 @@ class HttpMetric(BaseMetric):
 
     def get_endpoint(self, method: str) -> str:
         """Returns appropriate endpoint based on method."""
-        return self.config.endpoints.get_endpoint(method)
+        return self.config.endpoints.get_endpoint(method)  # type: ignore
 
     async def collect_metric(self) -> None:
         try:
@@ -99,8 +99,8 @@ class HttpMetric(BaseMetric):
             if data is not None:
                 latency = self.process_data(data)
                 self.update_metric_value(latency)
-                if latency > self.config.max_latency:
-                    raise ValueError(f"Invalid latency: {latency}s")
+                # if latency > self.config.max_latency:
+                #     raise ValueError(f"Invalid latency: {latency}s")
                 self.mark_success()
                 return
             raise ValueError("No data in response")

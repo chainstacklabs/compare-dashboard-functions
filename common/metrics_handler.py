@@ -24,7 +24,9 @@ class MetricsHandler:
         self.blockchain = blockchain
         self.metrics = metrics
         self.grafana_config = {
-            "current_region": os.getenv("VERCEL_REGION"),  # System env var
+            "current_region": os.getenv(
+                "VERCEL_REGION"
+            ),  # System env var, standard name
             "url": os.environ.get("GRAFANA_URL"),
             "user": os.environ.get("GRAFANA_USER"),
             "api_key": os.environ.get("GRAFANA_API_KEY"),

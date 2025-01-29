@@ -1,6 +1,5 @@
-import os
-
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
+from config.defaults import MetricsServiceConfig
 from metrics.ton import (
     HTTPGetAddressBalanceLatencyMetric,
     HTTPGetBlockHeaderLatencyMetric,
@@ -9,7 +8,7 @@ from metrics.ton import (
     HTTPRunGetMethodLatencyMetric,
 )
 
-metric_name = os.getenv("METRIC_NAME", "test_response_latency_seconds")
+metric_name = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
 
 METRICS = [
     (HTTPGetBlockHeaderLatencyMetric, metric_name),

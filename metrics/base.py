@@ -5,8 +5,7 @@ from common.metric_types import HttpCallLatencyMetricBase
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects transaction latency for endpoints using eth_call to simulate a transaction.
+    """Collects transaction latency for endpoints using eth_call to simulate a transaction.
     This metric tracks the time taken for a simulated transaction (eth_call) to be processed by the RPC node.
     """
 
@@ -36,9 +35,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `eth_getTransactionReceipt` method.
-    """
+    """Collects call latency for the `eth_getTransactionReceipt` method."""
 
     def __init__(
         self,
@@ -62,9 +59,7 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `eth_getBalance` method.
-    """
+    """Collects call latency for the `eth_getBalance` method."""
 
     def __init__(
         self,
@@ -86,9 +81,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `debug_traceTransaction` method.
-    """
+    """Collects call latency for the `debug_traceTransaction` method."""
 
     def __init__(
         self,

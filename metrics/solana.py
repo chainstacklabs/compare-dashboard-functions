@@ -13,8 +13,7 @@ from common.metric_types import HttpCallLatencyMetricBase, WebSocketMetric
 
 
 class WSBlockLatencyMetric(WebSocketMetric):
-    """
-    Collects block latency for Solana providers using a WebSocket connection.
+    """Collects block latency for Solana providers using a WebSocket connection.
     Suitable for serverless invocation: connects, subscribes, collects one message, and disconnects.
     """
 
@@ -38,9 +37,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         self.last_block_hash: Optional[str] = None
 
     async def subscribe(self, websocket: WebSocketClientProtocol) -> None:
-        """
-        Subscribe to the newBlocks event on the WebSocket endpoint.
-        """
+        """Subscribe to the newBlocks event on the WebSocket endpoint."""
         subscription_msg: str = json.dumps(
             {
                 "jsonrpc": "2.0",
@@ -64,9 +61,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         self.subscription_id = subscription_data.get("result")
 
     async def unsubscribe(self, websocket: WebSocketClientProtocol) -> None:
-        """
-        Unsubscribe from the block subscription.
-        """
+        """Unsubscribe from the block subscription."""
         unsubscribe_msg: str = json.dumps(
             {
                 "jsonrpc": "2.0",
@@ -87,9 +82,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
     async def listen_for_data(
         self, websocket: WebSocketClientProtocol
     ) -> Optional[Dict[str, Any]]:
-        """
-        Listen for a single data message from the WebSocket and process block latency.
-        """
+        """Listen for a single data message from the WebSocket and process block latency."""
         response = await asyncio.wait_for(websocket.recv(), timeout=self.config.timeout)
         response_data: Dict[str, Any] = json.loads(response)
 
@@ -100,9 +93,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         return None
 
     def process_data(self, block_info: Dict[str, Any]) -> float:
-        """
-        Calculate block latency in seconds.
-        """
+        """Calculate block latency in seconds."""
         block_time: Optional[int] = block_info.get("blockTime")
 
         if block_time is None:
@@ -115,9 +106,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
 
 class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `simulateTransaction` method.
-    """
+    """Collects call latency for the `simulateTransaction` method."""
 
     def __init__(
         self,
@@ -142,9 +131,7 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getLatestBlockhash` method.
-    """
+    """Collects call latency for the `getLatestBlockhash` method."""
 
     def __init__(
         self,
@@ -166,9 +153,7 @@ class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getTransaction` method.
-    """
+    """Collects call latency for the `getTransaction` method."""
 
     def __init__(
         self,
@@ -193,9 +178,7 @@ class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPGetBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getBalance` method.
-    """
+    """Collects call latency for the `getBalance` method."""
 
     def __init__(
         self,
@@ -217,9 +200,7 @@ class HTTPGetBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getBlock` method.
-    """
+    """Collects call latency for the `getBlock` method."""
 
     def __init__(
         self,
@@ -244,9 +225,7 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getProgramAccounts` method.
-    """
+    """Collects call latency for the `getProgramAccounts` method."""
 
     def __init__(
         self,

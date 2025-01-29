@@ -5,9 +5,7 @@ from common.metric_types import HttpCallLatencyMetricBase
 
 
 class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `runGetMethod` method.
-    """
+    """Collects call latency for the `runGetMethod` method."""
 
     def __init__(
         self,
@@ -15,7 +13,7 @@ class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             handler=handler,
@@ -33,14 +31,12 @@ class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
                     ]
                 ],
             },
-            **kwargs
+            **kwargs,
         )
 
 
 class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getBlockHeader` method.
-    """
+    """Collects call latency for the `getBlockHeader` method."""
 
     def __init__(
         self,
@@ -48,7 +44,7 @@ class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             handler=handler,
@@ -61,14 +57,12 @@ class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
                 "shard": "-9223372036854775808",
                 "seqno": 39064874,
             },
-            **kwargs
+            **kwargs,
         )
 
 
 class HTTPGetWalletTxsLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getWalletInformation` method.
-    """
+    """Collects call latency for the `getWalletInformation` method."""
 
     def __init__(
         self,
@@ -76,7 +70,7 @@ class HTTPGetWalletTxsLatencyMetric(HttpCallLatencyMetricBase):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             handler=handler,
@@ -87,14 +81,12 @@ class HTTPGetWalletTxsLatencyMetric(HttpCallLatencyMetricBase):
             method_params={
                 "address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
             },
-            **kwargs
+            **kwargs,
         )
 
 
 class HTTPGetAddressBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getAddressBalance` method.
-    """
+    """Collects call latency for the `getAddressBalance` method."""
 
     def __init__(
         self,
@@ -102,7 +94,7 @@ class HTTPGetAddressBalanceLatencyMetric(HttpCallLatencyMetricBase):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             handler=handler,
@@ -113,14 +105,12 @@ class HTTPGetAddressBalanceLatencyMetric(HttpCallLatencyMetricBase):
             method_params={
                 "address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
             },
-            **kwargs
+            **kwargs,
         )
 
 
 class HTTPGetBlockTxsLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `getBlockTransactions` method.
-    """
+    """Collects call latency for the `getBlockTransactions` method."""
 
     def __init__(
         self,
@@ -128,7 +118,7 @@ class HTTPGetBlockTxsLatencyMetric(HttpCallLatencyMetricBase):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(
             handler=handler,
@@ -142,5 +132,5 @@ class HTTPGetBlockTxsLatencyMetric(HttpCallLatencyMetricBase):
                 "seqno": 39064874,
                 "count": 40,
             },
-            **kwargs
+            **kwargs,
         )

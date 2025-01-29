@@ -20,7 +20,7 @@ class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
 
     def __init__(self, blockchain: str, metrics: List[Tuple[Type, str]]):
-        self._instances: List["BaseMetric"] = []
+        self._instances: List[BaseMetric] = []
         self.blockchain = blockchain
         self.metrics = metrics
         self.grafana_config = {
@@ -124,7 +124,7 @@ class MetricsHandler:
             return "done", metrics_text
 
         except Exception as e:
-            logging.error(f"Error in {self.blockchain} metrics handler: {str(e)}")
+            logging.error(f"Error in {self.blockchain} metrics handler: {e!s}")
             raise
 
 
@@ -144,7 +144,7 @@ class BaseVercelHandler(BaseHTTPRequestHandler):
             self.send_response(401)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write("Unauthorized".encode("utf-8"))
+            self.wfile.write(b"Unauthorized")
             return
 
         loop = asyncio.new_event_loop()

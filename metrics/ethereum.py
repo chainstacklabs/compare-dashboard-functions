@@ -9,8 +9,7 @@ from common.metric_types import HttpCallLatencyMetricBase, WebSocketMetric
 
 
 class WSBlockLatencyMetric(WebSocketMetric):
-    """
-    Collects block latency for EVM providers using a WebSocket connection.
+    """Collects block latency for EVM providers using a WebSocket connection.
     Suitable for serverless invocation: connects, subscribes, collects one message, and disconnects.
     """
 
@@ -33,9 +32,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         self.labels.update_label(MetricLabelKey.API_METHOD, "eth_subscribe")
 
     async def subscribe(self, websocket):
-        """
-        Subscribe to the newHeads event on the WebSocket endpoint.
-        """
+        """Subscribe to the newHeads event on the WebSocket endpoint."""
         subscription_msg = json.dumps(
             {
                 "id": 1,
@@ -55,9 +52,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         pass
 
     async def listen_for_data(self, websocket):
-        """
-        Listen for a single data message from the WebSocket and process block latency.
-        """
+        """Listen for a single data message from the WebSocket and process block latency."""
         response = await asyncio.wait_for(websocket.recv(), timeout=self.config.timeout)
         response_data = json.loads(response)
 
@@ -68,9 +63,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         return None
 
     def process_data(self, block):
-        """
-        Calculate block latency in seconds.
-        """
+        """Calculate block latency in seconds."""
         block_timestamp_hex = block.get("timestamp", "0x0")
         block_timestamp = int(block_timestamp_hex, 16)
         block_time = datetime.fromtimestamp(block_timestamp, timezone.utc)
@@ -80,8 +73,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects transaction latency for endpoints using eth_call to simulate a transaction.
+    """Collects transaction latency for endpoints using eth_call to simulate a transaction.
     This metric tracks the time taken for a simulated transaction (eth_call) to be processed by the RPC node.
     """
 
@@ -111,9 +103,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `eth_blockNumber` method.
-    """
+    """Collects call latency for the `eth_blockNumber` method."""
 
     def __init__(
         self,
@@ -135,9 +125,7 @@ class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `eth_getTransactionReceipt` method.
-    """
+    """Collects call latency for the `eth_getTransactionReceipt` method."""
 
     def __init__(
         self,
@@ -161,9 +149,7 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `eth_getBalance` method.
-    """
+    """Collects call latency for the `eth_getBalance` method."""
 
     def __init__(
         self,
@@ -185,9 +171,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `debug_traceBlockByNumber` method.
-    """
+    """Collects call latency for the `debug_traceBlockByNumber` method."""
 
     def __init__(
         self,
@@ -209,9 +193,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
-    """
-    Collects call latency for the `debug_traceTransaction` method.
-    """
+    """Collects call latency for the `debug_traceTransaction` method."""
 
     def __init__(
         self,

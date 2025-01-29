@@ -67,7 +67,7 @@ class WebSocketMetric(BaseMetric):
                     raise ValueError(f"Invalid latency: {latency}s")
                 self.mark_success()
                 return
-            raise ValueError(f"No data in response")
+            raise ValueError("No data in response")
 
         except Exception as e:
             self.mark_failure()
@@ -79,7 +79,7 @@ class WebSocketMetric(BaseMetric):
                     await self.unsubscribe(websocket)
                     await websocket.close()
                 except Exception as e:
-                    logging.error(f"Error closing websocket: {str(e)}")
+                    logging.error(f"Error closing websocket: {e!s}")
 
 
 class HttpMetric(BaseMetric):

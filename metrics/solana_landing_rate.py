@@ -122,6 +122,15 @@ class SolanaLandingMetric(HttpMetric):
         confirmed_slot = status.value[0].slot
         self._slot_diff = max(confirmed_slot - start_slot, 0)
 
+    async def _check_health(self, client: AsyncClient) -> None:
+        """Check node health via getHealth RPC."""
+        try:
+            response = await client.is_connected()
+            if not response:
+                raise ValueError(f"Node health check failed: {response}")
+        except Exception as e:
+            raise ValueError(f"Health check failed: {e!s}")
+
     async def fetch_data(self) -> Optional[float]:
         # Since we use here an additional value (metric_type),
         # let's initialize all used metric types.
@@ -131,6 +140,7 @@ class SolanaLandingMetric(HttpMetric):
         client = None
         try:
             client = await self._create_client()
+            await self._check_health(client)
             tx = await self._prepare_memo_transaction(client)
 
             start_time = time.monotonic()

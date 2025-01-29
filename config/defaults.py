@@ -18,4 +18,6 @@ class MetricsServiceConfig:
     PRIORITY_FEE_MICROLAMPORTS = 200_000
     COMPUTE_LIMIT = 1000
 
-    METRIC_PREFIX = "dev_" if os.getenv("VERCEL_ENV") != "production" else ""
+    METRIC_PREFIX = (
+        "dev_" if os.getenv("VERCEL_ENV") != "production" else ""
+    )  # System env var, standard name

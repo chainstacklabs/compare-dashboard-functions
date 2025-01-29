@@ -10,7 +10,7 @@ target_region = "fra1"
 # Run this metric only in EU (fra1)
 METRICS = (
     []
-    if os.getenv("VERCEL_REGION") != target_region
+    if os.getenv("VERCEL_REGION") != target_region  # System env var, standard name
     else [(SolanaLandingMetric, metric_name)]
 )
 

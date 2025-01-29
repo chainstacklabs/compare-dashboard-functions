@@ -2,5 +2,8 @@ dashboards
 run_local.py
 readme.md
 
-*.local
-*.example
+*.local*
+*.example*
+
+pyproject.toml
+.vscode

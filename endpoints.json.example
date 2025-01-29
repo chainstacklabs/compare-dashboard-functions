@@ -6,6 +6,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://eth-mainnet.g.alchemy.com/v2/...",
             "http_endpoint": "https://eth-mainnet.g.alchemy.com/v2/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -14,6 +15,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://base-mainnet.g.alchemy.com/v2/...",
             "http_endpoint": "https://base-mainnet.g.alchemy.com/v2/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -22,6 +24,7 @@
             "region": "Global",
             "websocket_endpoint": "not_supported",
             "http_endpoint": "https://solana-mainnet.g.alchemy.com/v2/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -30,6 +33,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://mainnet.helius-rpc.com/?api-key=...",
             "http_endpoint": "https://mainnet.helius-rpc.com/?api-key=...",
+            "tx_endpoint": "https://staked.helius-rpc.com/?api-key=...",
             "data": {}
         },
         {
@@ -38,6 +42,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://quiknode.pro/...",
             "http_endpoint": "https://quiknode.pro/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -46,6 +51,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://base-mainnet.quiknode.pro/...",
             "http_endpoint": "https://base-mainnet.quiknode.pro/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -54,6 +60,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://solana-mainnet.quiknode.pro/...",
             "http_endpoint": "https://solana-mainnet.quiknode.pro/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -62,6 +69,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://ethereum-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://ethereum-mainnet.core.chainstack.com/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -70,6 +78,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://base-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://base-mainnet.core.chainstack.com/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -78,6 +87,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://solana-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://solana-mainnet.core.chainstack.com/...",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -86,6 +96,7 @@
             "region": "Global",
             "websocket_endpoint": "not_supported",
             "http_endpoint": "https://ton-mainnet.core.chainstack.com/.../api/v2/jsonRPC",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -94,6 +105,7 @@
             "region": "Global",
             "websocket_endpoint": "not_supported",
             "http_endpoint": "https://ton-mainnet.quiknode.pro/.../jsonRPC",
+            "tx_endpoint": "",
             "data": {}
         },
         {
@@ -102,6 +114,7 @@
             "region": "Global",
             "websocket_endpoint": "not_supported",
             "http_endpoint": "https://toncenter.com/api/v2/jsonRPC?api_key=...",
+            "tx_endpoint": "",
             "data": {}
         }
     ]

@@ -1,55 +1,148 @@
-"""Blockchain data fetching utilities."""
+"""Fetches latest block and transaction data from blockchain RPC nodes."""
 
 import logging
-from typing import Any, Dict, Optional, Tuple
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Union
 
 import aiohttp
 
 
-class BlockchainDataFetcher:
-    """Fetches latest block and transaction data from nodes."""
+@dataclass
+class BlockchainData:
+    """Container for blockchain state data."""
 
-    def __init__(self, http_endpoint: str):
+    block_id: str
+    transaction_id: str
+
+
+class BlockchainDataFetcher:
+    """Fetches blockchain data from RPC nodes using JSON-RPC protocol."""
+
+    def __init__(self, http_endpoint: str) -> None:
         self.http_endpoint = http_endpoint
-        self._headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-        }
+        self._headers = {"Content-Type": "application/json"}
+        self._timeout = aiohttp.ClientTimeout(total=10)
+
+        logging.basicConfig(
+            level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+        )
+        self._logger = logging.getLogger(__name__)
 
     async def _make_rpc_request(
-        self, method: str, params: Optional[list] = None
-    ) -> Dict[str, Any]:
-        async with aiohttp.ClientSession() as session:
+        self, method: str, params: Optional[Union[List, Dict]] = None
+    ) -> Any:
+        request = {"jsonrpc": "2.0", "method": method, "params": params or [], "id": 1}
+
+        async with aiohttp.ClientSession(timeout=self._timeout) as session:
             async with session.post(
-                self.http_endpoint,
-                headers=self._headers,
-                json={
-                    "jsonrpc": "2.0",
-                    "id": 1,
-                    "method": method,
-                    "params": params or [],
-                },
-                timeout=30,  # type: ignore
+                self.http_endpoint, headers=self._headers, json=request
             ) as response:
-                if response.status != 200:
-                    raise ValueError(f"RPC request failed: {response.status}")
                 data = await response.json()
                 if "error" in data:
-                    raise ValueError(f"RPC error: {data['error']}")
-                return data["result"]
+                    raise Exception(f"RPC error: {data['error']}")
+                return data.get("result")
 
-    async def fetch_latest_data(self, blockchain: str) -> Tuple[str, str]:
-        """Fetches latest block and transaction data for specified blockchain.
+    async def _fetch_evm_data(self) -> BlockchainData:
+        try:
+            block = await self._make_rpc_request(
+                "eth_getBlockByNumber", ["latest", True]
+            )
+            if not isinstance(block, dict):
+                self._logger.error(f"Invalid block format: {type(block)}")
+                return BlockchainData(block_id="", transaction_id="")
 
-        Args:
-            blockchain: Lowercase blockchain identifier (ethereum, base, solana, ton)
+            block_hash = block.get("hash", "")
+            tx_hash = ""
 
-        Returns:
-            Tuple of (block_identifier, transaction_identifier)
+            transactions = block.get("transactions", [])
+            if transactions and isinstance(transactions[0], (dict, str)):
+                tx_hash = (
+                    transactions[0].get("hash", "")
+                    if isinstance(transactions[0], dict)
+                    else transactions[0]
+                )
 
-        Raises:
-            ValueError: If blockchain is unsupported or data fetch fails
-        """
+            logging.info(f"{block_hash} {tx_hash}")
+            return BlockchainData(block_id=block_hash, transaction_id=tx_hash)
+
+        except Exception as e:
+            self._logger.error(f"EVM fetch failed: {e!s}")
+            return BlockchainData(block_id="", transaction_id="")
+
+    async def _fetch_solana_data(self) -> BlockchainData:
+        try:
+            block_info = await self._make_rpc_request(
+                "getLatestBlockhash", [{"commitment": "finalized"}]
+            )
+            if not isinstance(block_info, dict):
+                return BlockchainData(block_id="", transaction_id="")
+
+            block_slot = block_info.get("context", {}).get("slot", "")
+            if not block_slot:
+                return BlockchainData(block_id="", transaction_id="")
+
+            block = await self._make_rpc_request(
+                "getBlock",
+                [
+                    block_slot,
+                    {
+                        "encoding": "json",
+                        "maxSupportedTransactionVersion": 0,
+                        "transactionDetails": "signatures",
+                        "rewards": False,
+                    },
+                ],
+            )
+
+            tx_sig = ""
+            if isinstance(block, dict):
+                signatures = block.get("signatures", [])
+                if signatures:
+                    tx_sig = signatures[0]
+
+            logging.info(f"{block_slot} {tx_sig}")
+            return BlockchainData(block_id=str(block_slot), transaction_id=tx_sig)
+
+        except Exception as e:
+            self._logger.error(f"Solana fetch failed: {e!s}")
+            return BlockchainData(block_id="", transaction_id="")
+
+    async def _fetch_ton_data(self) -> BlockchainData:
+        try:
+            info = await self._make_rpc_request("getMasterchainInfo")
+            if not isinstance(info, dict) or "last" not in info:
+                raise ValueError("Invalid masterchain info")
+
+            last_block = info["last"]
+            if not isinstance(last_block, dict):
+                raise ValueError("Invalid last block format")
+
+            block_id = (
+                f"{last_block['workchain']}:{last_block['shard']}:{last_block['seqno']}"
+            )
+
+            block = await self._make_rpc_request(
+                "getBlockTransactions",
+                {
+                    "workchain": last_block["workchain"],
+                    "shard": last_block["shard"],
+                    "seqno": last_block["seqno"],
+                    "count": 1,
+                },
+            )
+
+            tx_id = ""
+            if isinstance(block, dict) and block.get("transactions"):
+                tx_id = block["transactions"][0].get("hash", "")
+
+            logging.info(f"{block_id} {tx_id}")
+            return BlockchainData(block_id=block_id, transaction_id=tx_id)
+
+        except Exception as e:
+            self._logger.error(f"TON fetch failed: {e!s}")
+            return BlockchainData(block_id="", transaction_id="")
+
+    async def fetch_latest_data(self, blockchain: str) -> BlockchainData:
         try:
             if blockchain in ("ethereum", "base"):
                 return await self._fetch_evm_data()
@@ -58,58 +151,7 @@ class BlockchainDataFetcher:
             elif blockchain == "ton":
                 return await self._fetch_ton_data()
             raise ValueError(f"Unsupported blockchain: {blockchain}")
+
         except Exception as e:
-            logging.error(f"Failed to fetch {blockchain} data: {e!s}")
-            raise
-
-    async def _fetch_evm_data(self) -> Tuple[str, str]:
-        """Fetches latest block and first transaction hash for EVM chains."""
-        block = await self._make_rpc_request("eth_getBlockByNumber", ["latest", True])
-        if not block:
-            raise ValueError("Empty block data received")
-
-        tx_hash = block["transactions"][0]["hash"] if block["transactions"] else ""
-        return block["hash"], tx_hash
-
-    async def _fetch_solana_data(self) -> Tuple[str, str]:
-        """Fetches latest slot and first transaction signature for Solana."""
-        slot = await self._make_rpc_request("getSlot", [{"commitment": "finalized"}])
-        if slot is None:
-            raise ValueError("Failed to fetch latest slot")
-
-        block = await self._make_rpc_request(
-            "getBlock",
-            [slot, {"maxSupportedTransactionVersion": 0, "encoding": "json"}],
-        )
-        if not block:
-            raise ValueError("Empty block data received")
-
-        tx_sig = (
-            block["transactions"][0]["transaction"]["signatures"][0]
-            if block["transactions"]
-            else ""
-        )
-        return str(slot), tx_sig
-
-    async def _fetch_ton_data(self) -> Tuple[str, str]:
-        """Fetches latest block and first transaction hash for TON."""
-        info = await self._make_rpc_request("getMasterchainInfo")
-        if not info or "last" not in info:
-            raise ValueError("Invalid masterchain info received")
-
-        block_id = f"{info['last']['workchain']}:{info['last']['shard']}:{info['last']['seqno']}"
-
-        txs = await self._make_rpc_request(
-            "getBlockTransactions",
-            [
-                {
-                    "workchain": info["last"]["workchain"],
-                    "shard": info["last"]["shard"],
-                    "seqno": info["last"]["seqno"],
-                    "count": 1,
-                }
-            ],
-        )
-
-        tx_id = txs["transactions"][0]["hash"] if txs.get("transactions") else ""
-        return block_id, tx_id
+            logging.error(f"Failed to fetch {blockchain} data: {e}")
+            return BlockchainData(block_id="", transaction_id="")

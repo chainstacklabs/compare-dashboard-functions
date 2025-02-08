@@ -1,87 +1,96 @@
+"""State update handler for blockchain data collection."""
+
 import asyncio
 import json
 import logging
 import os
 from http.server import BaseHTTPRequestHandler
-from typing import Dict, Set
+from typing import Dict, Tuple
 
 from common.state.blob_storage import BlobConfig, BlobStorageHandler
-from common.state.blockchain_fetcher import BlockchainDataFetcher
+from common.state.blockchain_fetcher import BlockchainData, BlockchainDataFetcher
 
-ALLOWED_REGIONS: Set[str] = {"fra1"}
 SUPPORTED_BLOCKCHAINS = ["ethereum", "solana", "ton", "base"]
+ALLOWED_REGIONS = {"fra1"}
+
+
+class StateUpdateManager:
+    def __init__(self):
+        store_id = os.getenv("STORE_ID")
+        token = os.getenv("VERCEL_BLOB_TOKEN")
+        if not all([store_id, token]):
+            raise ValueError("Missing required blob storage configuration")
+
+        self.blob_config = BlobConfig(store_id=store_id, token=token)  # type: ignore
+
+    async def _fetch_provider_endpoints(self) -> Dict[str, str]:
+        endpoints = json.loads(os.getenv("ENDPOINTS", "{}"))
+        return {
+            p["blockchain"].lower(): p["http_endpoint"]
+            for p in endpoints.get("providers", [])
+            if p["blockchain"].lower() in SUPPORTED_BLOCKCHAINS
+        }
+
+    async def _collect_blockchain_data(
+        self, providers: Dict[str, str]
+    ) -> Dict[str, dict]:
+        async def fetch_single(
+            blockchain: str, endpoint: str
+        ) -> Tuple[str, Dict[str, str]]:
+            try:
+                fetcher = BlockchainDataFetcher(endpoint)
+                data: BlockchainData = await fetcher.fetch_latest_data(blockchain)
+                return blockchain, {"block": data.block_id, "tx": data.transaction_id}
+            except Exception as e:
+                logging.error(f"Failed to fetch {blockchain} data: {e}")
+                return blockchain, {"block": "", "tx": ""}
+
+        tasks = [
+            fetch_single(blockchain, endpoint)
+            for blockchain, endpoint in providers.items()
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+
+        return {
+            blockchain: data
+            for blockchain, data in results  # type: ignore
+            if not isinstance(blockchain, Exception)
+        }
+
+    async def update(self) -> str:
+        if os.getenv("VERCEL_REGION") not in ALLOWED_REGIONS:
+            return "Region not authorized for state updates"
+
+        try:
+            providers = await self._fetch_provider_endpoints()
+            if not providers:
+                return "No valid providers configured"
+
+            blockchain_data = await self._collect_blockchain_data(providers)
+            if not blockchain_data:
+                return "No blockchain data collected"
+
+            blob_handler = BlobStorageHandler(self.blob_config)
+            await blob_handler.initialize()
+            await blob_handler.update_all(blockchain_data)
+
+            return "State updated successfully"
+
+        except Exception as e:
+            logging.error(f"State update failed: {e}")
+            raise
 
 
 class handler(BaseHTTPRequestHandler):
-    async def _get_blockchain_providers(self) -> Dict[str, Dict]:
-        endpoints = json.loads(os.getenv("ENDPOINTS", "{}"))
-        providers = endpoints.get("providers", [])
-
-        blockchain_providers: Dict[str, Dict] = {}
-        for provider in providers:
-            blockchain = provider["blockchain"].lower()
-            if (
-                blockchain in SUPPORTED_BLOCKCHAINS
-                and blockchain not in blockchain_providers
-            ):
-                blockchain_providers[blockchain] = provider
-
-        if not blockchain_providers:
-            raise ValueError("No valid providers found")
-
-        return blockchain_providers
-
-    async def update_state(self) -> None:
-        current_region = os.getenv("VERCEL_REGION")
-        if current_region not in ALLOWED_REGIONS:
-            logging.info(f"Skipping execution in region {current_region}")
-            return
-
-        config = BlobConfig(
-            store_id=os.getenv("STORE_ID", ""),
-            token=os.getenv("VERCEL_BLOB_TOKEN", ""),
-        )
-
-        if not all([config.store_id, config.token]):
-            raise ValueError("Missing required blob storage configuration")
-
-        blob_handler = BlobStorageHandler(config)
-        await blob_handler.initialize()
-
-        providers = await self._get_blockchain_providers()
-        fetch_tasks = []
-        blockchain_data = {}
-
-        for blockchain, provider in providers.items():
-            fetcher = BlockchainDataFetcher(provider["http_endpoint"])
-            task = asyncio.create_task(fetcher.fetch_latest_data(blockchain))
-            fetch_tasks.append((blockchain, task))
-
-        for blockchain, task in fetch_tasks:
-            try:
-                block, tx = await task
-                blockchain_data[blockchain] = {"block": block, "tx": tx}
-            except Exception as e:
-                logging.error(f"Failed to process {blockchain}: {e}")
-                # Continue collecting data from other blockchains
-
-        if blockchain_data:
-            try:
-                await blob_handler.update_all(blockchain_data)
-            except Exception as e:
-                logging.error(f"Failed to update blob storage: {e}")
-                raise
-
-    def validate_token(self):
-        auth_token = self.headers.get("Authorization")
-        expected_token = os.environ.get("CRON_SECRET")
-        return auth_token == f"Bearer {expected_token}"
+    def _check_auth(self) -> bool:
+        if os.getenv("SKIP_AUTH", "").lower() == "true":
+            return True
+        token = self.headers.get("Authorization", "")
+        return token == f"Bearer {os.getenv('CRON_SECRET', '')}"
 
     def do_GET(self):
-        skip_auth = os.environ.get("SKIP_AUTH", "false").lower() == "true"
-        if not skip_auth and not self.validate_token():
+        if not self._check_auth():
             self.send_response(401)
-            self.send_header("Content-type", "text/plain")
             self.end_headers()
             self.wfile.write(b"Unauthorized")
             return
@@ -90,15 +99,15 @@ class handler(BaseHTTPRequestHandler):
         asyncio.set_event_loop(loop)
 
         try:
-            loop.run_until_complete(self.update_state())
+            result = loop.run_until_complete(StateUpdateManager().update())
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(b"State updated successfully")
+            self.wfile.write(result.encode())
         except Exception as e:
             self.send_response(500)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(str(e).encode("utf-8"))
+            self.wfile.write(str(e).encode())
         finally:
             loop.close()

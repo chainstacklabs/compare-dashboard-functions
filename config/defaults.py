@@ -21,3 +21,12 @@ class MetricsServiceConfig:
     METRIC_PREFIX = (
         "dev_" if os.getenv("VERCEL_ENV") != "production" else ""
     )  # System env var, standard name
+
+
+class BlobStorageConfig:
+    """Default configuration for blob storage."""
+
+    BLOB_BASE_URL = "https://blob.vercel-storage.com"
+    BLOB_FILENAME = "blockchain-data.json"
+    RETRY_ATTEMPTS = 3
+    RETRY_DELAY = 1

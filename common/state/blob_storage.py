@@ -1,12 +1,13 @@
 """Vercel Blob storage handler for blockchain data."""
 
-import asyncio
 import json
 import time
 from dataclasses import dataclass
 from typing import Dict, Optional
 
 import aiohttp
+
+from config.defaults import BlobStorageConfig
 
 
 @dataclass
@@ -15,9 +16,10 @@ class BlobConfig:
 
     store_id: str
     token: str
-    base_url: str = "https://blob.vercel-storage.com"
-    retry_attempts: int = 3
-    retry_delay: int = 1
+    base_url: str = BlobStorageConfig.BLOB_BASE_URL
+    blob_filename: str = BlobStorageConfig.BLOB_FILENAME
+    retry_attempts: int = BlobStorageConfig.RETRY_ATTEMPTS
+    retry_delay: int = BlobStorageConfig.RETRY_DELAY
 
 
 class BlobStorageHandler:
@@ -58,22 +60,19 @@ class BlobStorageHandler:
             "created_at": int(time.time()),
         }
         result = await self._make_request(
-            "PUT", f"{self.config.base_url}/blockchain-data.json", initial_data
+            "PUT", f"{self.config.base_url}/{self.config.blob_filename}", initial_data
         )
         self._blob_url = result.get("url")
 
-    async def update(self, blockchain: str, block: str, tx: str) -> None:
+    async def update_all(self, blockchain_data: Dict[str, Dict[str, str]]) -> None:
+        """Updates data for all blockchains in a single operation."""
         if not self._blob_url:
             await self.initialize()
 
-        for attempt in range(self.config.retry_attempts):
-            try:
-                current_data = await self._make_request("GET", self._blob_url)  # type: ignore
-                current_data[blockchain] = {"block": block, "tx": tx}
-                current_data["updated_at"] = int(time.time())
-                await self._make_request("PUT", self._blob_url, current_data)  # type: ignore
-                return
-            except Exception as e:
-                if attempt == self.config.retry_attempts - 1:
-                    raise Exception(f"Update failed: {e}")
-                await asyncio.sleep(self.config.retry_delay)
+        try:
+            current_data = await self._make_request("GET", self._blob_url)  # type: ignore
+            current_data.update(blockchain_data)
+            current_data["updated_at"] = int(time.time())
+            await self._make_request("PUT", self._blob_url, current_data)  # type: ignore
+        except Exception as e:
+            raise Exception(f"Bulk update failed: {e}")

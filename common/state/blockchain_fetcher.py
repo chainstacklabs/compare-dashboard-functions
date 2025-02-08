@@ -1,7 +1,7 @@
 """Blockchain data fetching utilities."""
 
 import logging
-from typing import Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 import aiohttp
 
@@ -18,7 +18,7 @@ class BlockchainDataFetcher:
 
     async def _make_rpc_request(
         self, method: str, params: Optional[list] = None
-    ) -> Dict:
+    ) -> Dict[str, Any]:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.http_endpoint,
@@ -39,39 +39,66 @@ class BlockchainDataFetcher:
                 return data["result"]
 
     async def fetch_latest_data(self, blockchain: str) -> Tuple[str, str]:
+        """Fetches latest block and transaction data for specified blockchain.
+
+        Args:
+            blockchain: Lowercase blockchain identifier (ethereum, base, solana, ton)
+
+        Returns:
+            Tuple of (block_identifier, transaction_identifier)
+
+        Raises:
+            ValueError: If blockchain is unsupported or data fetch fails
+        """
         try:
             if blockchain in ("ethereum", "base"):
-                return await self._fetch_ethereum_like()
+                return await self._fetch_evm_data()
             elif blockchain == "solana":
-                return await self._fetch_solana()
+                return await self._fetch_solana_data()
             elif blockchain == "ton":
-                return await self._fetch_ton()
+                return await self._fetch_ton_data()
             raise ValueError(f"Unsupported blockchain: {blockchain}")
         except Exception as e:
-            logging.error(f"Failed to fetch {blockchain} data: {e}")
+            logging.error(f"Failed to fetch {blockchain} data: {e!s}")
             raise
 
-    async def _fetch_ethereum_like(self) -> Tuple[str, str]:
+    async def _fetch_evm_data(self) -> Tuple[str, str]:
+        """Fetches latest block and first transaction hash for EVM chains."""
         block = await self._make_rpc_request("eth_getBlockByNumber", ["latest", True])
-        tx_hash = block["transactions"][0]["hash"] if block["transactions"] else None
-        return block["hash"], tx_hash  # type: ignore
+        if not block:
+            raise ValueError("Empty block data received")
 
-    async def _fetch_solana(self) -> Tuple[str, str]:
+        tx_hash = block["transactions"][0]["hash"] if block["transactions"] else ""
+        return block["hash"], tx_hash
+
+    async def _fetch_solana_data(self) -> Tuple[str, str]:
+        """Fetches latest slot and first transaction signature for Solana."""
         slot = await self._make_rpc_request("getSlot", [{"commitment": "finalized"}])
+        if slot is None:
+            raise ValueError("Failed to fetch latest slot")
+
         block = await self._make_rpc_request(
             "getBlock",
             [slot, {"maxSupportedTransactionVersion": 0, "encoding": "json"}],
         )
+        if not block:
+            raise ValueError("Empty block data received")
+
         tx_sig = (
             block["transactions"][0]["transaction"]["signatures"][0]
             if block["transactions"]
-            else None
+            else ""
         )
-        return str(slot), tx_sig  # type: ignore
+        return str(slot), tx_sig
 
-    async def _fetch_ton(self) -> Tuple[str, str]:
+    async def _fetch_ton_data(self) -> Tuple[str, str]:
+        """Fetches latest block and first transaction hash for TON."""
         info = await self._make_rpc_request("getMasterchainInfo")
+        if not info or "last" not in info:
+            raise ValueError("Invalid masterchain info received")
+
         block_id = f"{info['last']['workchain']}:{info['last']['shard']}:{info['last']['seqno']}"
+
         txs = await self._make_rpc_request(
             "getBlockTransactions",
             [
@@ -83,5 +110,6 @@ class BlockchainDataFetcher:
                 }
             ],
         )
-        tx_id = txs["transactions"][0]["hash"] if txs["transactions"] else None
-        return block_id, tx_id  # type: ignore
+
+        tx_id = txs["transactions"][0]["hash"] if txs.get("transactions") else ""
+        return block_id, tx_id

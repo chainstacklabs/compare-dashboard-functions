@@ -15,7 +15,7 @@
     "api/write/solana.py": {
       "maxDuration": 59
     },
-    "api/write/update_state.py": {
+    "api/support/update_state.py": {
       "maxDuration": 120
     }
   },

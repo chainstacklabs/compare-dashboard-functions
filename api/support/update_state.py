@@ -71,8 +71,7 @@ class StateUpdateManager:
                 return "No blockchain data collected"
 
             blob_handler = BlobStorageHandler(self.blob_config)
-            await blob_handler.initialize()
-            await blob_handler.update_all(blockchain_data)
+            await blob_handler.update_data(blockchain_data)
 
             return "State updated successfully"
 

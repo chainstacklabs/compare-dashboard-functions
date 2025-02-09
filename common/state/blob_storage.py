@@ -1,9 +1,7 @@
-"""Vercel Blob storage handler for blockchain data."""
-
 import json
 import time
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import aiohttp
 
@@ -12,28 +10,26 @@ from config.defaults import BlobStorageConfig
 
 @dataclass
 class BlobConfig:
-    """Configuration for Vercel Blob storage."""
-
     store_id: str
     token: str
     base_url: str = BlobStorageConfig.BLOB_BASE_URL
-    blob_filename: str = BlobStorageConfig.BLOB_FILENAME
     retry_attempts: int = BlobStorageConfig.RETRY_ATTEMPTS
     retry_delay: int = BlobStorageConfig.RETRY_DELAY
+    filename: str = BlobStorageConfig.BLOB_FILENAME
+    folder: str = BlobStorageConfig.BLOB_FOLDER
 
 
 class BlobStorageHandler:
-    """Manages blockchain data storage in Vercel Blob."""
-
     def __init__(self, config: BlobConfig):
         self.config = config
-        self._blob_url: Optional[str] = None
         self._headers = {
             "Authorization": f"Bearer {config.token}",
-            "x-content-type": "application/json",
-            "x-access": "public",
+            "Content-Type": "application/json",
             "x-store-id": config.store_id,
-            "x-add-random-suffix": "0",
+            "x-add-random-suffix": "false",
+            "x-access": "private",
+            "x-cache-control-max-age": "0",
+            "x-mime-type": "application/json",
         }
 
     async def _make_request(
@@ -51,28 +47,25 @@ class BlobStorageHandler:
                     raise Exception(f"Blob operation failed: {resp.status} - {text}")
                 return await resp.json()
 
-    async def initialize(self) -> None:
-        initial_data = {
-            "ethereum": {"block": None, "tx": None},
-            "solana": {"block": None, "tx": None},
-            "ton": {"block": None, "tx": None},
-            "base": {"block": None, "tx": None},
-            "created_at": int(time.time()),
-        }
-        result = await self._make_request(
-            "PUT", f"{self.config.base_url}/{self.config.blob_filename}", initial_data
-        )
-        self._blob_url = result.get("url")
+    async def list_files(self) -> List[Dict[str, str]]:
+        list_url = f"{self.config.base_url}?prefix={self.config.folder}/"
+        response = await self._make_request("GET", list_url)
+        return response.get("blobs", [])
 
-    async def update_all(self, blockchain_data: Dict[str, Dict[str, str]]) -> None:
-        """Updates data for all blockchains in a single operation."""
-        if not self._blob_url:
-            await self.initialize()
+    async def delete_blobs(self, urls: List[str]) -> None:
+        if not urls:
+            return
+        delete_url = f"{self.config.base_url}/delete"
+        await self._make_request("POST", delete_url, {"urls": urls})
 
-        try:
-            current_data = await self._make_request("GET", self._blob_url)  # type: ignore
-            current_data.update(blockchain_data)
-            current_data["updated_at"] = int(time.time())
-            await self._make_request("PUT", self._blob_url, current_data)  # type: ignore
-        except Exception as e:
-            raise Exception(f"Bulk update failed: {e}")
+    async def delete_all_files(self) -> None:
+        files = await self.list_files()
+        if files:
+            urls = [file["url"] for file in files]
+            await self.delete_blobs(urls)
+
+    async def update_data(self, blockchain_data: Dict[str, Dict[str, str]]) -> None:
+        await self.delete_all_files()
+        data = {**blockchain_data, "updated_at": int(time.time())}
+        blob_url = f"{self.config.base_url}/{self.config.folder}/{self.config.filename}"
+        await self._make_request("PUT", blob_url, data)

@@ -30,3 +30,5 @@ class BlobStorageConfig:
     BLOB_FILENAME = "blockchain-data.json"
     RETRY_ATTEMPTS = 3
     RETRY_DELAY = 1
+    FOLDER_PREFIX = "dev-" if os.getenv("VERCEL_ENV") != "production" else "prod-"
+    BLOB_FOLDER = f"{FOLDER_PREFIX}rpc-dashboard"

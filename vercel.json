@@ -14,6 +14,9 @@
     },
     "api/write/solana.py": {
       "maxDuration": 59
+    },
+    "api/support/update_state.py": {
+      "maxDuration": 120
     }
   },
   "crons": [
@@ -36,6 +39,10 @@
     {
       "path": "/api/write/solana",
       "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/support/update_state",
+      "schedule": "0 0 * * *"
     }
   ]
 }

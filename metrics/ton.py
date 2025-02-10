@@ -1,136 +1,98 @@
 """TON (The Open Network) metrics implementation for HTTP endpoints."""
 
-from common.metric_config import MetricConfig, MetricLabels
 from common.metric_types import HttpCallLatencyMetricBase
 
 
 class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `runGetMethod` method."""
+    """Collects call latency for smart contract method execution."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="runGetMethod",
-            method_params={
-                "address": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
-                "method": "get_wallet_address",
-                "stack": [
-                    [
-                        "tvm.Slice",
-                        "te6cckEBAQEAJAAAQ4AbUzrTQYTUv8s/I9ds2TSZgRjyrgl2S2LKcZMEFcxj6PARy3rF",
-                    ]
-                ],
-            },
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "runGetMethod"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> dict:
+        """Returns parameters for TVM smart contract method call."""
+        return {
+            "address": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+            "method": "get_wallet_address",
+            "stack": [
+                [
+                    "tvm.Slice",
+                    "te6cckEBAQEAJAAAQ4AbUzrTQYTUv8s/I9ds2TSZgRjyrgl2S2LKcZMEFcxj6PARy3rF",
+                ]
+            ],
+        }
 
 
 class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `getBlockHeader` method."""
+    """Collects call latency for masterchain block header retrieval."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="getBlockHeader",
-            method_params={
-                "workchain": -1,
-                "shard": "-9223372036854775808",
-                "seqno": 39064874,
-            },
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "getBlockHeader"
+
+    @staticmethod
+    def validate_state(state_data: dict) -> bool:
+        """Validates that required block identifier exists in state data."""
+        return bool(state_data and state_data.get("block"))
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> dict:
+        """Returns parameters using TON block identifier components."""
+        workchain, shard, seqno = state_data["block"].split(":")
+        return {
+            "workchain": int(workchain),
+            "shard": shard,
+            "seqno": int(seqno),
+        }
 
 
 class HTTPGetWalletTxsLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `getWalletInformation` method."""
+    """Collects call latency for TON wallet information retrieval."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="getWalletInformation",
-            method_params={
-                "address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
-            },
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "getWalletInformation"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> dict:
+        """Returns parameters for TON wallet query."""
+        return {"address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"}
 
 
 class HTTPGetAddressBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `getAddressBalance` method."""
+    """Collects call latency for TON address balance queries."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="getAddressBalance",
-            method_params={
-                "address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"
-            },
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "getAddressBalance"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> dict:
+        """Returns parameters for TON address balance check."""
+        return {"address": "EQDtFpEwcFAEcRe5mLVh2N6C0x-_hJEM7W61_JLnSF74p4q2"}
 
 
 class HTTPGetBlockTxsLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `getBlockTransactions` method."""
+    """Collects call latency for TON block transactions retrieval."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="getBlockTransactions",
-            method_params={
-                "workchain": -1,
-                "shard": "-9223372036854775808",
-                "seqno": 39064874,
-                "count": 40,
-            },
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "getBlockTransactions"
+
+    @staticmethod
+    def validate_state(state_data: dict) -> bool:
+        """Validates that required block identifier exists in state data."""
+        return bool(state_data and state_data.get("block"))
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> dict:
+        """Returns parameters using TON block identifier components."""
+        workchain, shard, seqno = state_data["block"].split(":")
+        return {
+            "workchain": int(workchain),
+            "shard": shard,
+            "seqno": int(seqno),
+            "count": 40,
+        }

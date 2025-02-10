@@ -1,17 +1,27 @@
-"""State update handler for blockchain data collection."""
+"""State update handler for blockchain data collection with provider filtering."""
 
 import asyncio
 import json
 import logging
 import os
 from http.server import BaseHTTPRequestHandler
-from typing import Dict, Tuple
+from typing import Dict, Set, Tuple
 
 from common.state.blob_storage import BlobConfig, BlobStorageHandler
 from common.state.blockchain_fetcher import BlockchainData, BlockchainDataFetcher
 
 SUPPORTED_BLOCKCHAINS = ["ethereum", "solana", "ton", "base"]
+ALLOWED_PROVIDERS = {"Chainstack"}
 ALLOWED_REGIONS = {"fra1"}
+
+
+class MissingEndpointsError(Exception):
+    """Raised when required blockchain endpoints are not found."""
+
+    def __init__(self, missing_chains: Set[str]):
+        self.missing_chains = missing_chains
+        chains = ", ".join(missing_chains)
+        super().__init__(f"Missing Chainstack endpoints for: {chains}")
 
 
 class StateUpdateManager:
@@ -23,13 +33,26 @@ class StateUpdateManager:
 
         self.blob_config = BlobConfig(store_id=store_id, token=token)  # type: ignore
 
-    async def _fetch_provider_endpoints(self) -> Dict[str, str]:
+    async def _get_chainstack_endpoints(self) -> Dict[str, str]:
+        """Get Chainstack endpoints for supported blockchains."""
         endpoints = json.loads(os.getenv("ENDPOINTS", "{}"))
-        return {
-            p["blockchain"].lower(): p["http_endpoint"]
-            for p in endpoints.get("providers", [])
-            if p["blockchain"].lower() in SUPPORTED_BLOCKCHAINS
-        }
+        chainstack_endpoints: Dict[str, str] = {}
+        missing_chains: Set[str] = set(SUPPORTED_BLOCKCHAINS)
+
+        for provider in endpoints.get("providers", []):
+            blockchain = provider["blockchain"].lower()
+            if (
+                blockchain in SUPPORTED_BLOCKCHAINS
+                and provider["name"] in ALLOWED_PROVIDERS
+                and blockchain not in chainstack_endpoints
+            ):
+                chainstack_endpoints[blockchain] = provider["http_endpoint"]
+                missing_chains.remove(blockchain)
+
+        if missing_chains:
+            raise MissingEndpointsError(missing_chains)
+
+        return chainstack_endpoints
 
     async def _collect_blockchain_data(
         self, providers: Dict[str, str]
@@ -62,10 +85,7 @@ class StateUpdateManager:
             return "Region not authorized for state updates"
 
         try:
-            providers = await self._fetch_provider_endpoints()
-            if not providers:
-                return "No valid providers configured"
-
+            providers = await self._get_chainstack_endpoints()
             blockchain_data = await self._collect_blockchain_data(providers)
             if not blockchain_data:
                 return "No blockchain data collected"
@@ -75,6 +95,9 @@ class StateUpdateManager:
 
             return "State updated successfully"
 
+        except MissingEndpointsError as e:
+            logging.error(f"Configuration error: {e}")
+            raise
         except Exception as e:
             logging.error(f"State update failed: {e}")
             raise

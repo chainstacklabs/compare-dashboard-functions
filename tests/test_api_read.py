@@ -29,9 +29,9 @@ def main():
     setup_environment()
 
     # Import handler after environment setup
-    from api.read.solana import handler as SolanaHandler
+    from api.read.base import handler as Handler
 
-    server = HTTPServer(("localhost", 8000), SolanaHandler)
+    server = HTTPServer(("localhost", 8000), Handler)
     print("Server started at http://localhost:8000")
     server.serve_forever()
 

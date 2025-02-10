@@ -3,7 +3,7 @@
 import logging
 import time
 from abc import abstractmethod
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 import aiohttp
 import websockets
@@ -110,7 +110,17 @@ class HttpMetric(BaseMetric):
 
 
 class HttpCallLatencyMetricBase(HttpMetric):
-    """Base class for JSON-RPC HTTP endpoint latency metrics."""
+    """Base class for JSON-RPC HTTP endpoint latency metrics.
+
+    Handles request configuration, state validation, and response time measurement
+    for blockchain RPC endpoints.
+    """
+
+    @property
+    @abstractmethod
+    def method(self) -> str:
+        """RPC method name to be implemented by subclasses."""
+        pass
 
     def __init__(
         self,
@@ -118,49 +128,73 @@ class HttpCallLatencyMetricBase(HttpMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        method: str,
-        method_params: dict = None,
-        **kwargs,
-    ):
+        method_params: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> None:
+        state_data = kwargs.get("state_data", {})
+        if not self.validate_state(state_data):
+            raise ValueError(f"Invalid state data for {self.method}")
+
         super().__init__(
             handler=handler,
             metric_name=metric_name,
             labels=labels,
             config=config,
         )
-        self.method = method
-        self.method_params = method_params or None
-        self.labels.update_label(MetricLabelKey.API_METHOD, method)
-        self._base_request = {
+
+        self.method_params = (
+            self.get_params_from_state(state_data)
+            if method_params is None
+            else method_params
+        )
+        self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
+        self._base_request = self._build_base_request()
+
+    def _build_base_request(self) -> Dict[str, Any]:
+        """Build the base JSON-RPC request object."""
+        request = {
             "id": 1,
             "jsonrpc": "2.0",
             "method": self.method,
         }
         if self.method_params:
-            self._base_request["params"] = self.method_params
+            request["params"] = self.method_params
+        return request
+
+    @staticmethod
+    def validate_state(state_data: Dict[str, Any]) -> bool:
+        """Validate blockchain state data."""
+        return True
+
+    @staticmethod
+    def get_params_from_state(state_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Get RPC method parameters from state data."""
+        return {}
 
     async def fetch_data(self) -> float:
-        """Measures single request latency."""
+        """Measure single request latency."""
         start_time = time.monotonic()
-
         endpoint = self.config.endpoints.get_endpoint(self.method)
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                endpoint,
+                endpoint,  # type: ignore
                 headers={
                     "Accept": "application/json",
                     "Content-Type": "application/json",
                 },
                 json=self._base_request,
-                timeout=self.config.timeout,
+                timeout=self.config.timeout,  # type: ignore
             ) as response:
                 if response.status != 200:
                     raise ValueError(f"Status code: {response.status}")
+
                 json_response = await response.json()
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
+
                 return time.monotonic() - start_time
 
     def process_data(self, value: float) -> float:
+        """Process raw latency measurement."""
         return value

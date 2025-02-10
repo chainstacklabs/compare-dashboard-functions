@@ -1,105 +1,97 @@
-"""Base EVM metrics implementation for WebSocket and HTTP endpoints."""
+"""Base EVM metrics implementation for HTTP endpoints."""
 
-from common.metric_config import MetricConfig, MetricLabels
 from common.metric_types import HttpCallLatencyMetricBase
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects transaction latency for endpoints using eth_call to simulate a transaction.
-    This metric tracks the time taken for a simulated transaction (eth_call) to be processed by the RPC node.
-    """
+    """Collects response time for eth_call simulation."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="eth_call",
-            method_params=[
-                {
-                    "to": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
-                    "data": "0x70a082310000000000000000000000001985ea6e9c68e1c272d8209f3b478ac2fdb25c87",
-                },
-                "latest",
-            ],
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "eth_call"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get eth_call parameters for USDC token balance query."""
+        return [
+            {
+                "to": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                "data": "0x70a082310000000000000000000000001985ea6e9c68e1c272d8209f3b478ac2fdb25c87",
+            },
+            "latest",
+        ]
 
 
 class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `eth_getTransactionReceipt` method."""
+    """Collects latency for transaction receipt retrieval."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="eth_getTransactionReceipt",
-            method_params=[
-                "0x1759c699e6e2b1f249fa0ed605c0de18998bc66556cd6ea3362f92f511aeb06a"
-            ],
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "eth_getTransactionReceipt"
+
+    @staticmethod
+    def validate_state(state_data: dict) -> bool:
+        """Validate blockchain state contains transaction hash."""
+        return bool(state_data and state_data.get("tx"))
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get parameters using transaction hash from state."""
+        return [state_data["tx"]]
 
 
 class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `eth_getBalance` method."""
+    """Collects latency for account balance queries."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="eth_getBalance",
-            method_params=["0xF977814e90dA44bFA03b6295A0616a897441aceC", "latest"],
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "eth_getBalance"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get parameters with fixed monitoring address."""
+        return ["0xF977814e90dA44bFA03b6295A0616a897441aceC", "latest"]
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `debug_traceTransaction` method."""
+    """Collects latency for transaction tracing."""
 
-    def __init__(
-        self,
-        handler: "MetricsHandler",  # type: ignore
-        metric_name: str,
-        labels: MetricLabels,
-        config: MetricConfig,
-        **kwargs,
-    ):
-        super().__init__(
-            handler=handler,
-            metric_name=metric_name,
-            labels=labels,
-            config=config,
-            method="debug_traceTransaction",
-            method_params=[
-                "0x317888c89fe0914c6d11be51acf758742afbe0cf1fdac11f19d35d6ed652ac29",
-                {"tracer": "callTracer"},
-            ],
-            **kwargs,
-        )
+    @property
+    def method(self) -> str:
+        return "debug_traceTransaction"
+
+    @staticmethod
+    def validate_state(state_data: dict) -> bool:
+        """Validate blockchain state contains transaction hash."""
+        return bool(state_data and state_data.get("tx"))
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get parameters using transaction hash from state."""
+        return [state_data["tx"], {"tracer": "callTracer"}]
+
+
+class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
+    """Collects call latency for the `debug_traceBlockByNumber` method."""
+
+    @property
+    def method(self) -> str:
+        return "debug_traceBlockByNumber"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get fixed parameters for latest block tracing."""
+        return ["latest", {"tracer": "callTracer"}]
+
+
+class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
+    """Collects call latency for the `eth_blockNumber` method."""
+
+    @property
+    def method(self) -> str:
+        return "eth_blockNumber"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get empty parameter list for block number query."""
+        return []

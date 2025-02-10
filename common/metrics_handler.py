@@ -13,6 +13,7 @@ import aiohttp
 from common.base_metric import BaseMetric
 from common.factory import MetricFactory
 from common.metric_config import MetricConfig
+from common.state.blockchain_state import BlockchainState
 from config.defaults import MetricsServiceConfig
 
 
@@ -57,6 +58,7 @@ class MetricsHandler:
             endpoints=None,  # Will be set in factory
             extra_params={"tx_data": provider.get("data")},
         )
+        state_data = await BlockchainState.get_data(self.blockchain)
 
         metrics = MetricFactory.create_metrics(
             blockchain_name=self.blockchain,
@@ -68,6 +70,7 @@ class MetricsHandler:
             ws_endpoint=provider.get("websocket_endpoint"),
             http_endpoint=provider.get("http_endpoint"),
             tx_endpoint=provider.get("tx_endpoint"),
+            state_data=state_data,
         )
         await asyncio.gather(*(m.collect_metric() for m in metrics))
 
@@ -103,7 +106,6 @@ class MetricsHandler:
     async def handle(self) -> Tuple[str, str]:
         """Main handler for metric collection and pushing."""
         self._instances = []
-
         try:
             config = json.loads(os.getenv("ENDPOINTS"))
             MetricFactory._registry.clear()

@@ -2,13 +2,13 @@ from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.base import (
     HTTPAccBalanceLatencyMetric,
+    HTTPBlockNumberLatencyMetric,
+    HTTPDebugTraceBlockByNumberLatencyMetric,
     HTTPDebugTraceTxLatencyMetric,
     HTTPEthCallLatencyMetric,
     HTTPTxReceiptLatencyMetric,
 )
 from metrics.ethereum import (
-    HTTPBlockNumberLatencyMetric,
-    HTTPDebugTraceBlockByNumberLatencyMetric,
     WSBlockLatencyMetric,
 )
 

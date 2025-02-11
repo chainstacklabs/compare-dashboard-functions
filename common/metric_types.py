@@ -1,5 +1,6 @@
 """Base classes for WebSocket and HTTP metric collection."""
 
+import asyncio
 import logging
 import time
 from abc import abstractmethod
@@ -11,6 +12,8 @@ import websockets
 from common.base_metric import BaseMetric
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
+
+MAX_RETRIES = 1
 
 
 class WebSocketMetric(BaseMetric):
@@ -172,28 +175,43 @@ class HttpCallLatencyMetricBase(HttpMetric):
         return {}
 
     async def fetch_data(self) -> float:
-        """Measure single request latency."""
-        start_time = time.monotonic()
+        """Measure single request latency with a retry on 429 error."""
         endpoint = self.config.endpoints.get_endpoint(self.method)
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(
-                endpoint,  # type: ignore
-                headers={
-                    "Accept": "application/json",
-                    "Content-Type": "application/json",
-                },
-                json=self._base_request,
-                timeout=self.config.timeout,  # type: ignore
-            ) as response:
+            start_time = time.monotonic()
+            async with await self._send_request(session, endpoint, 0) as response:  # type: ignore
                 if response.status != 200:
                     raise ValueError(f"Status code: {response.status}")
-
                 json_response = await response.json()
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
-
                 return time.monotonic() - start_time
+
+    async def _send_request(
+        self, session: aiohttp.ClientSession, endpoint: str, retry_count: int
+    ) -> aiohttp.ClientResponse:
+        """Send the request and handle rate limiting with retries."""
+        if retry_count >= MAX_RETRIES:
+            raise ValueError("Status code: 429. Max retries exceeded")
+
+        response = await session.post(
+            endpoint,
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            json=self._base_request,
+            timeout=self.config.timeout,  # type: ignore
+        )
+
+        if response.status == 429 and retry_count < MAX_RETRIES:
+            wait_time = int(response.headers.get("Retry-After", 10))
+            await response.release()
+            await asyncio.sleep(wait_time)
+            return await self._send_request(session, endpoint, retry_count + 1)
+
+        return response
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""

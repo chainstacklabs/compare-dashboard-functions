@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import os
 from typing import Dict
@@ -11,6 +12,8 @@ class BlockchainState:
     """Manages blockchain state data retrieval from blob storage."""
 
     _TIMEOUT = aiohttp.ClientTimeout(total=10)
+    _RETRIES = 3
+    _RETRY_DELAY = 2
 
     @staticmethod
     async def _get_blob_url(session: aiohttp.ClientSession) -> str:
@@ -46,18 +49,23 @@ class BlockchainState:
 
     @staticmethod
     async def get_data(blockchain: str) -> dict:
-        """Get blockchain state data."""
-        try:
-            async with aiohttp.ClientSession(
-                timeout=BlockchainState._TIMEOUT
-            ) as session:
-                blob_url = await BlockchainState._get_blob_url(session)
-                state_data = await BlockchainState._fetch_state_data(session, blob_url)
-                return state_data.get(blockchain.lower(), {})
+        """Get blockchain state data with retries."""
+        for attempt in range(1, BlockchainState._RETRIES + 1):
+            try:
+                async with aiohttp.ClientSession(
+                    timeout=BlockchainState._TIMEOUT
+                ) as session:
+                    blob_url = await BlockchainState._get_blob_url(session)
+                    state_data = await BlockchainState._fetch_state_data(
+                        session, blob_url
+                    )
+                    return state_data.get(blockchain.lower(), {})
+            except Exception as e:
+                logging.error(f"Attempt {attempt}: State fetch failed: {e}")
+                if attempt < BlockchainState._RETRIES:
+                    await asyncio.sleep(BlockchainState._RETRY_DELAY)
 
-        except Exception as e:
-            logging.error(f"State fetch failed: {e!s}")
-            raise
+        raise ValueError("Max retries reached for fetching state data")
 
     @staticmethod
     def clear_cache() -> None:

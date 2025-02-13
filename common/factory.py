@@ -1,21 +1,30 @@
 """Factory for creating blockchain-specific metric instances."""
 
 import copy
+from dataclasses import dataclass
 from typing import Dict, List, Tuple, Type
 
 from common.base_metric import BaseMetric
 from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
 
 
+@dataclass
+class MetricRegistration:  # Added: Type-safe registration container
+    metric_class: Type[BaseMetric]
+    metric_name: str
+
+
 class MetricFactory:
     """Creates metric instances for blockchains."""
 
-    _registry: Dict[str, List[Tuple[Type[BaseMetric], str]]] = {}
+    _registry: Dict[str, List[MetricRegistration]] = (
+        {}
+    )  # Modified: Using type-safe registration
 
     @classmethod
     def register(
         cls, blockchain_metrics: Dict[str, List[Tuple[Type[BaseMetric], str]]]
-    ):
+    ) -> None:
         """Registers metric classes for blockchains."""
         for blockchain_name, metrics in blockchain_metrics.items():
             if blockchain_name not in cls._registry:
@@ -23,7 +32,9 @@ class MetricFactory:
             for metric in metrics:
                 if isinstance(metric, tuple) and len(metric) == 2:
                     metric_class, metric_name = metric
-                    cls._registry[blockchain_name].append((metric_class, metric_name))
+                    cls._registry[blockchain_name].append(
+                        MetricRegistration(metric_class, metric_name)
+                    )
                 else:
                     raise ValueError(
                         "Each metric must be a tuple (metric_class, metric_name)"
@@ -33,34 +44,32 @@ class MetricFactory:
     def create_metrics(
         cls,
         blockchain_name: str,
-        metrics_handler: "MetricsHandler",  # type: ignore
+        metrics_handler: "MetricsHandler",  # type: ignore  # noqa: F821
         config: MetricConfig,
-        **kwargs,
+        **kwargs: Dict,
     ) -> List[BaseMetric]:
+        """Creates metric instances for a specific blockchain."""
         if blockchain_name not in cls._registry:
             available = list(cls._registry.keys())
             raise ValueError(
                 f"No metric classes registered for blockchain '{blockchain_name}'. Available blockchains: {available}"
             )
 
+        # Added: Extracted config setup to separate method
+        cls._setup_endpoint_config(config, kwargs)
+
         source_region = kwargs.get("source_region", "default")
         target_region = kwargs.get("target_region", "default")
         provider = kwargs.get("provider", "default")
 
-        config.endpoints = EndpointConfig(
-            main_endpoint=kwargs.get("http_endpoint"),
-            # tx_endpoint=kwargs.get("tx_endpoint"),
-            ws_endpoint=kwargs.get("ws_endpoint"),
-        )
         metrics = []
-
-        for metric_class, metric_name in cls._registry[blockchain_name]:
-            if metric_class.__name__ == "SolanaLandingMetric":
+        for registration in cls._registry[blockchain_name]:
+            if registration.metric_class.__name__ == "SolanaLandingMetric":
                 metrics.extend(
                     cls._create_solana_metrics(
                         blockchain_name,
-                        metric_class,
-                        metric_name,
+                        registration.metric_class,
+                        registration.metric_name,
                         metrics_handler,
                         config,
                         kwargs,
@@ -73,8 +82,8 @@ class MetricFactory:
                 metrics.append(
                     cls._create_single_metric(
                         blockchain_name,
-                        metric_class,
-                        metric_name,
+                        registration.metric_class,
+                        registration.metric_name,
                         metrics_handler,
                         config,
                         kwargs,
@@ -87,18 +96,28 @@ class MetricFactory:
         return metrics
 
     @staticmethod
+    def _setup_endpoint_config(
+        config: MetricConfig, kwargs: Dict
+    ) -> None:  # Added: Extracted method
+        """Sets up endpoint configuration from kwargs."""
+        config.endpoints = EndpointConfig(
+            main_endpoint=kwargs.get("http_endpoint"),
+            ws_endpoint=kwargs.get("ws_endpoint"),
+        )
+
+    @staticmethod
     def _create_solana_metrics(
-        blockchain_name,
-        metric_class,
-        metric_name,
-        metrics_handler,
-        config,
-        kwargs,
-        source_region,
-        target_region,
-        provider,
+        blockchain_name: str,  # Added: Type hints
+        metric_class: Type[BaseMetric],
+        metric_name: str,
+        metrics_handler: "MetricsHandler",
+        config: MetricConfig,
+        kwargs: Dict,
+        source_region: str,
+        target_region: str,
+        provider: str,
     ) -> List[BaseMetric]:
-        """Creates SolanaLandingMetric-specific instances, handling both http_endpoint and tx_endpoint."""
+        """Creates SolanaLandingMetric-specific instances."""
         metrics = []
 
         # First instance using http_endpoint as main endpoint (already set)
@@ -138,15 +157,15 @@ class MetricFactory:
 
     @staticmethod
     def _create_single_metric(
-        blockchain_name,
-        metric_class,
-        metric_name,
-        metrics_handler,
-        config,
-        kwargs,
-        source_region,
-        target_region,
-        provider,
+        blockchain_name: str,  # Added: Type hints
+        metric_class: Type[BaseMetric],
+        metric_name: str,
+        metrics_handler: "MetricsHandler",
+        config: MetricConfig,
+        kwargs: Dict,
+        source_region: str,
+        target_region: str,
+        provider: str,
     ) -> BaseMetric:
         """Creates a single metric instance."""
         labels = MetricLabels(
@@ -161,6 +180,6 @@ class MetricFactory:
             metric_name=metric_name,
             labels=labels,
             config=config,
-            **kwargs,
+            **kwargs.copy(),  # Modified: Added defensive copy
         )
         return metric_instance

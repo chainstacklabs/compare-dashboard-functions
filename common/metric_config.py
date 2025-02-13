@@ -31,7 +31,7 @@ class EndpointConfig:
 
     def get_endpoint(self, method: str) -> Optional[str]:
         """Returns appropriate endpoint based on method."""
-        if method == "sendTransaction" and self.tx_endpoint:
+        if method == "NOT_USED_ANYMORE" and self.tx_endpoint:
             return self.tx_endpoint
         return self.main_endpoint
 

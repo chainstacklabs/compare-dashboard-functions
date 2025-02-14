@@ -5,10 +5,11 @@ import json
 import logging
 import os
 from http.server import BaseHTTPRequestHandler
-from typing import Dict, Set, Tuple
+from typing import Any, Dict, Set, Tuple
 
 from common.state.blob_storage import BlobConfig, BlobStorageHandler
 from common.state.blockchain_fetcher import BlockchainData, BlockchainDataFetcher
+from common.state.blockchain_state import BlockchainState
 
 SUPPORTED_BLOCKCHAINS = ["ethereum", "solana", "ton", "base"]
 ALLOWED_PROVIDERS = {"Chainstack"}
@@ -32,6 +33,7 @@ class StateUpdateManager:
             raise ValueError("Missing required blob storage configuration")
 
         self.blob_config = BlobConfig(store_id=store_id, token=token)  # type: ignore
+        self.logger = logging.getLogger(__name__)
 
     async def _get_chainstack_endpoints(self) -> Dict[str, str]:
         """Get Chainstack endpoints for supported blockchains."""
@@ -54,8 +56,27 @@ class StateUpdateManager:
 
         return chainstack_endpoints
 
+    async def _get_previous_data(self) -> Dict[str, Any]:
+        """Fetch previous blockchain state data"""
+        try:
+            state = BlockchainState()
+            previous_data = {}
+            for blockchain in SUPPORTED_BLOCKCHAINS:
+                try:
+                    chain_data = await state.get_data(blockchain)
+                    if chain_data:
+                        previous_data[blockchain] = chain_data
+                except Exception as e:
+                    self.logger.warning(
+                        f"Failed to get previous data for {blockchain}: {e}"
+                    )
+            return previous_data
+        except Exception as e:
+            self.logger.error(f"Failed to get previous state data: {e}")
+            return {}
+
     async def _collect_blockchain_data(
-        self, providers: Dict[str, str]
+        self, providers: Dict[str, str], previous_data: Dict[str, Any]
     ) -> Dict[str, dict]:
         async def fetch_single(
             blockchain: str, endpoint: str
@@ -63,9 +84,27 @@ class StateUpdateManager:
             try:
                 fetcher = BlockchainDataFetcher(endpoint)
                 data: BlockchainData = await fetcher.fetch_latest_data(blockchain)
-                return blockchain, {"block": data.block_id, "tx": data.transaction_id}
+
+                if data.block_id and data.transaction_id:
+                    return blockchain, {
+                        "block": data.block_id,
+                        "tx": data.transaction_id,
+                    }
+
+                if blockchain in previous_data:
+                    self.logger.warning(f"Using previous data for {blockchain}")
+                    return blockchain, previous_data[blockchain]
+
+                self.logger.warning(f"Returning empty data for {blockchain}")
+                return blockchain, {"block": "", "tx": ""}
             except Exception as e:
-                logging.error(f"Failed to fetch {blockchain} data: {e}")
+                self.logger.error(f"Failed to fetch {blockchain} data: {e}")
+                if blockchain in previous_data:
+                    self.logger.warning(
+                        f"Using previous data for {blockchain} after error"
+                    )
+                    return blockchain, previous_data[blockchain]
+                self.logger.warning(f"Returning empty data for {blockchain}")
                 return blockchain, {"block": "", "tx": ""}
 
         tasks = [
@@ -85,10 +124,20 @@ class StateUpdateManager:
             return "Region not authorized for state updates"
 
         try:
-            providers = await self._get_chainstack_endpoints()
-            blockchain_data = await self._collect_blockchain_data(providers)
+            previous_data = await self._get_previous_data()
+
+            chainstack_endpoints = await self._get_chainstack_endpoints()
+            blockchain_data = await self._collect_blockchain_data(
+                chainstack_endpoints, previous_data
+            )
+
+            # If we didn't get any data, use previous data
             if not blockchain_data:
-                return "No blockchain data collected"
+                if previous_data:
+                    self.logger.warning("Using complete previous state as fallback")
+                    blockchain_data = previous_data
+                else:
+                    return "No blockchain data collected and no previous data available"
 
             blob_handler = BlobStorageHandler(self.blob_config)
             await blob_handler.update_data(blockchain_data)
@@ -96,10 +145,10 @@ class StateUpdateManager:
             return "State updated successfully"
 
         except MissingEndpointsError as e:
-            logging.error(f"Configuration error: {e}")
+            self.logger.error(f"Configuration error: {e}")
             raise
         except Exception as e:
-            logging.error(f"State update failed: {e}")
+            self.logger.error(f"State update failed: {e}")
             raise
 
 

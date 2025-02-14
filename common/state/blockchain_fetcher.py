@@ -1,5 +1,6 @@
 """Fetches latest block and transaction data from blockchain RPC nodes."""
 
+import asyncio
 import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
@@ -21,7 +22,9 @@ class BlockchainDataFetcher:
     def __init__(self, http_endpoint: str) -> None:
         self.http_endpoint = http_endpoint
         self._headers = {"Content-Type": "application/json"}
-        self._timeout = aiohttp.ClientTimeout(total=10)
+        self._timeout = aiohttp.ClientTimeout(total=15)
+        self._max_retries = 3
+        self._retry_delay = 5
 
         logging.basicConfig(
             level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -33,14 +36,23 @@ class BlockchainDataFetcher:
     ) -> Any:
         request = {"jsonrpc": "2.0", "method": method, "params": params or [], "id": 1}
 
-        async with aiohttp.ClientSession(timeout=self._timeout) as session:
-            async with session.post(
-                self.http_endpoint, headers=self._headers, json=request
-            ) as response:
-                data = await response.json()
-                if "error" in data:
-                    raise Exception(f"RPC error: {data['error']}")
-                return data.get("result")
+        for attempt in range(1, self._max_retries + 1):
+            try:
+                async with aiohttp.ClientSession(timeout=self._timeout) as session:
+                    async with session.post(
+                        self.http_endpoint, headers=self._headers, json=request
+                    ) as response:
+                        data = await response.json()
+                        if "error" in data:
+                            raise Exception(f"RPC error: {data['error']}")
+                        return data.get("result")
+            except Exception as e:
+                self._logger.warning(f"Attempt {attempt} failed: {e}")
+                if attempt < self._max_retries:
+                    await asyncio.sleep(self._retry_delay)
+                else:
+                    self._logger.error(f"All {self._max_retries} attempts failed")
+                    raise
 
     async def _fetch_evm_data(self) -> BlockchainData:
         try:
@@ -62,7 +74,7 @@ class BlockchainDataFetcher:
                     else transactions[0]
                 )
 
-            logging.info(f"{block_hash} {tx_hash}")
+            # self._logger.info(f"{block_hash} {tx_hash}")
             return BlockchainData(block_id=block_hash, transaction_id=tx_hash)
 
         except Exception as e:
@@ -100,7 +112,7 @@ class BlockchainDataFetcher:
                 if signatures:
                     tx_sig = signatures[0]
 
-            logging.info(f"{block_slot} {tx_sig}")
+            # self._logger.info(f"{block_slot} {tx_sig}")
             return BlockchainData(block_id=str(block_slot), transaction_id=tx_sig)
 
         except Exception as e:
@@ -135,7 +147,7 @@ class BlockchainDataFetcher:
             if isinstance(block, dict) and block.get("transactions"):
                 tx_id = block["transactions"][0].get("hash", "")
 
-            logging.info(f"{block_id} {tx_id}")
+            # self._logger.info(f"{block_id} {tx_id}")
             return BlockchainData(block_id=block_id, transaction_id=tx_id)
 
         except Exception as e:
@@ -153,5 +165,5 @@ class BlockchainDataFetcher:
             raise ValueError(f"Unsupported blockchain: {blockchain}")
 
         except Exception as e:
-            logging.error(f"Failed to fetch {blockchain} data: {e}")
+            self._logger.error(f"Failed to fetch {blockchain} data: {e}")
             return BlockchainData(block_id="", transaction_id="")

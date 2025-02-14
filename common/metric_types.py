@@ -13,7 +13,7 @@ from common.base_metric import BaseMetric
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
 
-MAX_RETRIES = 1
+MAX_RETRIES = 2
 
 
 class WebSocketMetric(BaseMetric):

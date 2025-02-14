@@ -1,6 +1,7 @@
 """Solana landing rate metrics with priority fees."""
 
 import asyncio
+import logging
 import os
 import random
 import time
@@ -118,7 +119,7 @@ class SolanaLandingMetric(HttpMetric):
     ) -> None:
         status = await client.get_signature_statuses([signature])
         if not status or not status.value[0] or not status.value[0].slot:
-            raise ValueError("Failed to get signature status")
+            raise ValueError(f"Failed to get signature status: {status}")
         confirmed_slot = status.value[0].slot
         self._slot_diff = max(confirmed_slot - start_slot, 0)
 
@@ -127,9 +128,10 @@ class SolanaLandingMetric(HttpMetric):
         try:
             response = await client.is_connected()
             if not response:
-                raise ValueError(f"Node health check failed: {response}")
+                raise ValueError(response)
         except Exception as e:
-            raise ValueError(f"Health check failed: {e!s}")
+            # raise ValueError(f"Health check failed: {e!s}")
+            logging.warning(f"Node health check failed: {e!s}")
 
     async def fetch_data(self) -> Optional[float]:
         # Since we use here an additional value (metric_type),
@@ -143,8 +145,8 @@ class SolanaLandingMetric(HttpMetric):
             await self._check_health(client)
             tx = await self._prepare_memo_transaction(client)
 
-            start_time = time.monotonic()
             start_slot = await self._get_slot(client)
+            start_time = time.monotonic()
 
             signature_response = await client.send_transaction(
                 tx, TxOpts(skip_preflight=True, max_retries=0)

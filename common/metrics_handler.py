@@ -124,6 +124,8 @@ class MetricsHandler:
             metrics_text = self.get_metrics_text()
             if metrics_text:
                 await self.push_to_grafana(metrics_text)
+            else:
+                logging.warning("Noting to push to Grafana.")
 
             return "done", metrics_text
 

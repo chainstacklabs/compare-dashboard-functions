@@ -51,14 +51,13 @@ class MetricsHandler:
         metrics = self.get_metrics_influx_format()
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
 
-    async def collect_metrics(self, provider: dict, config: dict):
+    async def collect_metrics(self, provider: dict, config: dict, state_data: dict):
         metric_config = MetricConfig(
             timeout=self.grafana_config["metric_request_timeout"],
             max_latency=self.grafana_config["metric_max_latency"],
             endpoints=None,  # Will be set in factory
             extra_params={"tx_data": provider.get("data")},
         )
-        state_data = await BlockchainState.get_data(self.blockchain)
 
         metrics = MetricFactory.create_metrics(
             blockchain_name=self.blockchain,
@@ -116,8 +115,11 @@ class MetricsHandler:
                 if p["blockchain"] == self.blockchain
             ]
 
+            state_data = await BlockchainState.get_data(self.blockchain)
+
             collection_tasks = [
-                self.collect_metrics(provider, config) for provider in rpc_providers
+                self.collect_metrics(provider, config, state_data)
+                for provider in rpc_providers
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)
 

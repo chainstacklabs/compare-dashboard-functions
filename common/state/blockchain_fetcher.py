@@ -74,7 +74,7 @@ class BlockchainDataFetcher:
                     else transactions[0]
                 )
 
-            self._logger.info(f"{block_hash} {tx_hash}")
+            # self._logger.info(f"{block_hash} {tx_hash}")
             return BlockchainData(block_id=block_hash, transaction_id=tx_hash)
 
         except Exception as e:
@@ -112,7 +112,7 @@ class BlockchainDataFetcher:
                 if signatures:
                     tx_sig = signatures[0]
 
-            self._logger.info(f"{block_slot} {tx_sig}")
+            # self._logger.info(f"{block_slot} {tx_sig}")
             return BlockchainData(block_id=str(block_slot), transaction_id=tx_sig)
 
         except Exception as e:
@@ -147,7 +147,7 @@ class BlockchainDataFetcher:
             if isinstance(block, dict) and block.get("transactions"):
                 tx_id = block["transactions"][0].get("hash", "")
 
-            self._logger.info(f"{block_id} {tx_id}")
+            # self._logger.info(f"{block_id} {tx_id}")
             return BlockchainData(block_id=block_id, transaction_id=tx_id)
 
         except Exception as e:

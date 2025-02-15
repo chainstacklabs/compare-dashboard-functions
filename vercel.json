@@ -1,21 +1,27 @@
 {
   "functions": {
     "api/read/ethereum.py": {
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/base.py": {
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/solana.py": {
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/ton.py": {
+      "memory": 200,
       "maxDuration": 59
     },
     "api/write/solana.py": {
-      "maxDuration": 59
+      "memory": 200,
+      "maxDuration": 90
     },
     "api/support/update_state.py": {
+      "memory": 200,
       "maxDuration": 120
     }
   },

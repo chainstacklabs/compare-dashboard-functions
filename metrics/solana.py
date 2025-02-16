@@ -83,7 +83,12 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
         """Get parameters using block slot from state."""
         return [
             int(state_data["block"]),
-            {"encoding": "jsonParsed", "maxSupportedTransactionVersion": 0},
+            {
+                "encoding": "jsonParsed",
+                "maxSupportedTransactionVersion": 0,
+                "transactionDetails": "none",  # Reduce response size
+                "rewards": False  # Further reduce response size
+            }
         ]
 
 

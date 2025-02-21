@@ -14,6 +14,7 @@ from solders.compute_budget import set_compute_unit_limit, set_compute_unit_pric
 from solders.instruction import Instruction
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
+from solders.rpc.responses import GetSignatureStatusesResp
 from solders.transaction import Transaction
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
@@ -72,7 +73,7 @@ class SolanaLandingMetric(HttpMetric):
 
     async def _confirm_transaction(
         self, client: AsyncClient, signature: str, timeout: int
-    ) -> None:
+    ) -> GetSignatureStatusesResp:
         try:
             confirmation_task = asyncio.create_task(
                 client.confirm_transaction(
@@ -81,7 +82,10 @@ class SolanaLandingMetric(HttpMetric):
                     sleep_seconds=0.3,
                 )
             )
-            await asyncio.wait_for(confirmation_task, timeout=timeout)
+            confirmation = await asyncio.wait_for(confirmation_task, timeout=timeout)
+            if not confirmation or not confirmation.context:
+                raise ValueError("Invalid confirmation response")
+            return confirmation
         except asyncio.TimeoutError:
             raise ValueError(f"Transaction confirmation timeout after {timeout}s")
 
@@ -114,15 +118,6 @@ class SolanaLandingMetric(HttpMetric):
             blockhash.value.blockhash,
         )
 
-    async def _update_slot_diff(
-        self, client: AsyncClient, signature: str, start_slot: int
-    ) -> None:
-        status = await client.get_signature_statuses([signature])
-        if not status or not status.value[0] or not status.value[0].slot:
-            raise ValueError(f"Failed to get signature status: {status}")
-        confirmed_slot = status.value[0].slot
-        self._slot_diff = max(confirmed_slot - start_slot, 0)
-
     async def _check_health(self, client: AsyncClient) -> None:
         """Check node health via getHealth RPC."""
         try:
@@ -154,21 +149,15 @@ class SolanaLandingMetric(HttpMetric):
             if not signature_response or not signature_response.value:
                 raise ValueError("Failed to send transaction")
 
-            await self._confirm_transaction(
+            confirmation = await self._confirm_transaction(
                 client,
                 signature_response.value,
                 self.config.timeout,
             )
 
             response_time = time.monotonic() - start_time
-
-            await asyncio.sleep(1)
-            await self._update_slot_diff(client, signature_response.value, start_slot)
+            self._slot_diff = max(confirmation.context.slot - start_slot, 0)
             self.update_metric_value(self._slot_diff, "slot_latency")
-
-            # It doesn't make sense to measure response/confirmation time
-            # since slots in Solana always take 400 ms each. The main
-            # metric here is the slot latency/delay.
             return response_time
 
         finally:

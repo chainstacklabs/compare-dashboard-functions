@@ -22,6 +22,9 @@ class MetricsServiceConfig:
         "dev_" if os.getenv("VERCEL_ENV") != "production" else ""
     )  # System env var, standard name
 
+    # Block offset configuration (N blocks back from latest)
+    BLOCK_OFFSET = {"ethereum": 20, "base": 20, "solana": 100, "ton": 10}
+
 
 class BlobStorageConfig:
     """Default configuration for blob storage."""

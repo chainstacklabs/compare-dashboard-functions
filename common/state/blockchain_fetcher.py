@@ -66,15 +66,15 @@ class BlockchainDataFetcher:
             latest_number = int(latest_block["number"], 16)
             offset = MetricsServiceConfig.BLOCK_OFFSET.get(blockchain.lower(), 20)
             old_number = max(0, latest_number - offset)
-            old_block = await self._make_rpc_request(
-                "eth_getBlockByNumber", [hex(old_number), False]
-            )
+            # old_block = await self._make_rpc_request(
+            #    "eth_getBlockByNumber", [hex(old_number), False]
+            # )
 
             if not isinstance(latest_block, dict):
                 return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
-            block_hash = latest_block.get("hash", "")
-            old_block_hash = old_block.get("hash", "") if old_block else ""
+            # block_hash = latest_block.get("hash", "")
+            # old_block_hash = old_block.get("hash", "") if old_block else ""
             tx_hash = ""
 
             transactions = latest_block.get("transactions", [])
@@ -86,7 +86,9 @@ class BlockchainDataFetcher:
                 )
 
             return BlockchainData(
-                block_id=block_hash, transaction_id=tx_hash, old_block_id=old_block_hash
+                block_id=latest_block["number"],
+                transaction_id=tx_hash,
+                old_block_id=hex(old_number),
             )
 
         except Exception as e:

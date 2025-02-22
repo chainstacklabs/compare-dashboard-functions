@@ -202,7 +202,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         )
 
         if response.status == 429 and retry_count < MAX_RETRIES:
-            wait_time = int(response.headers.get("Retry-After", 10))
+            wait_time = int(response.headers.get("Retry-After", 15))
             await response.release()
             await asyncio.sleep(wait_time)
             return await self._send_request(session, endpoint, retry_count + 1)

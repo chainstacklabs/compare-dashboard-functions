@@ -175,23 +175,42 @@ class HttpCallLatencyMetricBase(HttpMetric):
         endpoint = self.config.endpoints.get_endpoint(self.method)
 
         async with aiohttp.ClientSession() as session:
-            start_time = time.monotonic()
-            async with await self._send_request(session, endpoint, 0) as response:  # type: ignore
+            response_time = 0.0  # Do not include retried requests after 429 error
+            response = None
+
+            for retry_count in range(MAX_RETRIES):
+                start_time = time.monotonic()
+                response = await self._send_request(session, endpoint, retry_count)
+                response_time = time.monotonic() - start_time
+
+                if response.status == 429 and retry_count < MAX_RETRIES - 1:
+                    wait_time = int(response.headers.get("Retry-After", 15))
+                    await response.release()  # Release before retry
+                    await asyncio.sleep(wait_time)
+                    continue
+
+                break
+
+            if not response:
+                raise ValueError("No response received")
+
+            try:
                 if response.status != 200:
                     raise ValueError(f"Status code: {response.status}")
+
                 json_response = await response.json()
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
-                return time.monotonic() - start_time
+
+                return response_time
+            finally:
+                await response.release()
 
     async def _send_request(
         self, session: aiohttp.ClientSession, endpoint: str, retry_count: int
     ) -> aiohttp.ClientResponse:
-        """Send the request and handle rate limiting with retries."""
-        if retry_count >= MAX_RETRIES:
-            raise ValueError("Status code: 429. Max retries exceeded")
-
-        response = await session.post(
+        """Send the request without retry logic."""
+        return await session.post(
             endpoint,
             headers={
                 "Accept": "application/json",
@@ -200,14 +219,6 @@ class HttpCallLatencyMetricBase(HttpMetric):
             json=self._base_request,
             timeout=self.config.timeout,  # type: ignore
         )
-
-        if response.status == 429 and retry_count < MAX_RETRIES:
-            wait_time = int(response.headers.get("Retry-After", 10))
-            await response.release()
-            await asyncio.sleep(wait_time)
-            return await self._send_request(session, endpoint, retry_count + 1)
-
-        return response
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""

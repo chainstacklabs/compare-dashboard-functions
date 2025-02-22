@@ -35,12 +35,12 @@ class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
     @staticmethod
     def validate_state(state_data: dict) -> bool:
         """Validates that required block identifier exists in state data."""
-        return bool(state_data and state_data.get("block"))
+        return bool(state_data and state_data.get("old_block"))
 
     @staticmethod
     def get_params_from_state(state_data: dict) -> dict:
         """Returns parameters using TON block identifier components."""
-        workchain, shard, seqno = state_data["block"].split(":")
+        workchain, shard, seqno = state_data["old_block"].split(":")
         return {
             "workchain": int(workchain),
             "shard": shard,

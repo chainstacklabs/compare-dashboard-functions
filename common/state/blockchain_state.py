@@ -49,7 +49,14 @@ class BlockchainState:
         async with session.get(blob_url, headers=headers) as response:
             if response.status != 200:
                 raise ValueError(f"Failed to fetch state: {response.status}")
-            return await response.json()
+            data = await response.json()
+
+            # Ensure backward compatibility for old state data
+            for chain in data:
+                if isinstance(data[chain], dict) and "old_block" not in data[chain]:
+                    data[chain]["old_block"] = ""
+
+            return data
 
     @staticmethod
     async def get_data(blockchain: str) -> dict:

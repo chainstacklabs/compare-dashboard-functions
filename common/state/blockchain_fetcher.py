@@ -2,10 +2,13 @@
 
 import asyncio
 import logging
+import random
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 
 import aiohttp
+
+from config.defaults import MetricsServiceConfig
 
 
 @dataclass
@@ -14,6 +17,7 @@ class BlockchainData:
 
     block_id: str
     transaction_id: str
+    old_block_id: str = ""
 
 
 class BlockchainDataFetcher:
@@ -54,19 +58,25 @@ class BlockchainDataFetcher:
                     self._logger.error(f"All {self._max_retries} attempts failed")
                     raise
 
-    async def _fetch_evm_data(self) -> BlockchainData:
+    async def _fetch_evm_data(self, blockchain: str) -> BlockchainData:
         try:
-            block = await self._make_rpc_request(
+            latest_block = await self._make_rpc_request(
                 "eth_getBlockByNumber", ["latest", True]
             )
-            if not isinstance(block, dict):
-                self._logger.error(f"Invalid block format: {type(block)}")
-                return BlockchainData(block_id="", transaction_id="")
 
-            block_hash = block.get("hash", "")
+            latest_number = int(latest_block["number"], 16)
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
+                blockchain.lower(), (20, 100)
+            )
+            offset = random.randint(offset_range[0], offset_range[1])
+            old_number = max(0, latest_number - offset)
+
+            if not isinstance(latest_block, dict):
+                return BlockchainData(block_id="", transaction_id="", old_block_id="")
+
             tx_hash = ""
 
-            transactions = block.get("transactions", [])
+            transactions = latest_block.get("transactions", [])
             if transactions and isinstance(transactions[0], (dict, str)):
                 tx_hash = (
                     transactions[0].get("hash", "")
@@ -74,12 +84,15 @@ class BlockchainDataFetcher:
                     else transactions[0]
                 )
 
-            # self._logger.info(f"{block_hash} {tx_hash}")
-            return BlockchainData(block_id=block_hash, transaction_id=tx_hash)
+            return BlockchainData(
+                block_id=latest_block["number"],
+                transaction_id=tx_hash,
+                old_block_id=hex(old_number),
+            )
 
         except Exception as e:
             self._logger.error(f"EVM fetch failed: {e!s}")
-            return BlockchainData(block_id="", transaction_id="")
+            return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
     async def _fetch_solana_data(self) -> BlockchainData:
         try:
@@ -87,16 +100,16 @@ class BlockchainDataFetcher:
                 "getLatestBlockhash", [{"commitment": "finalized"}]
             )
             if not isinstance(block_info, dict):
-                return BlockchainData(block_id="", transaction_id="")
+                return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
-            block_slot = block_info.get("context", {}).get("slot", "")
-            if not block_slot:
-                return BlockchainData(block_id="", transaction_id="")
+            latest_slot = block_info.get("context", {}).get("slot", "")
+            if not latest_slot:
+                return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
-            block = await self._make_rpc_request(
+            latest_block = await self._make_rpc_request(
                 "getBlock",
                 [
-                    block_slot,
+                    latest_slot,
                     {
                         "encoding": "json",
                         "maxSupportedTransactionVersion": 0,
@@ -107,17 +120,49 @@ class BlockchainDataFetcher:
             )
 
             tx_sig = ""
-            if isinstance(block, dict):
-                signatures = block.get("signatures", [])
+            if isinstance(latest_block, dict):
+                signatures = latest_block.get("signatures", [])
                 if signatures:
                     tx_sig = signatures[0]
 
-            # self._logger.info(f"{block_slot} {tx_sig}")
-            return BlockchainData(block_id=str(block_slot), transaction_id=tx_sig)
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
+                "solana", (100, 1000)
+            )
+            offset = random.randint(offset_range[0], offset_range[1])
+            target_slot = max(0, latest_slot - offset)
+            old_slot = None
+
+            for slot in range(target_slot - 100, target_slot):
+                try:
+                    block_exists = await self._make_rpc_request(
+                        "getBlock",
+                        [
+                            slot,
+                            {
+                                "encoding": "json",
+                                "maxSupportedTransactionVersion": 0,
+                                "transactionDetails": "none",
+                                "rewards": False,
+                            },
+                        ],
+                    )
+                    if block_exists:
+                        old_slot = slot
+                        break
+                except Exception as e:
+                    if "Block not available" not in str(e):
+                        self._logger.warning(f"Error checking slot {slot}: {e}")
+                    continue
+
+            return BlockchainData(
+                block_id=str(latest_slot),
+                transaction_id=tx_sig,
+                old_block_id=str(old_slot) if old_slot is not None else "",
+            )
 
         except Exception as e:
             self._logger.error(f"Solana fetch failed: {e!s}")
-            return BlockchainData(block_id="", transaction_id="")
+            return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
     async def _fetch_ton_data(self) -> BlockchainData:
         try:
@@ -129,8 +174,15 @@ class BlockchainDataFetcher:
             if not isinstance(last_block, dict):
                 raise ValueError("Invalid last block format")
 
-            block_id = (
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get("ton", (10, 50))
+            offset = random.randint(offset_range[0], offset_range[1])
+            old_seqno = max(0, last_block["seqno"] - offset)
+
+            latest_block_id = (
                 f"{last_block['workchain']}:{last_block['shard']}:{last_block['seqno']}"
+            )
+            old_block_id = (
+                f"{last_block['workchain']}:{last_block['shard']}:{old_seqno}"
             )
 
             block = await self._make_rpc_request(
@@ -147,17 +199,20 @@ class BlockchainDataFetcher:
             if isinstance(block, dict) and block.get("transactions"):
                 tx_id = block["transactions"][0].get("hash", "")
 
-            # self._logger.info(f"{block_id} {tx_id}")
-            return BlockchainData(block_id=block_id, transaction_id=tx_id)
+            return BlockchainData(
+                block_id=latest_block_id,
+                transaction_id=tx_id,
+                old_block_id=old_block_id,
+            )
 
         except Exception as e:
             self._logger.error(f"TON fetch failed: {e!s}")
-            return BlockchainData(block_id="", transaction_id="")
+            return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
     async def fetch_latest_data(self, blockchain: str) -> BlockchainData:
         try:
             if blockchain in ("ethereum", "base"):
-                return await self._fetch_evm_data()
+                return await self._fetch_evm_data(blockchain)
             elif blockchain == "solana":
                 return await self._fetch_solana_data()
             elif blockchain == "ton":

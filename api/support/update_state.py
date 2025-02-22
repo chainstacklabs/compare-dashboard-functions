@@ -89,6 +89,7 @@ class StateUpdateManager:
                     return blockchain, {
                         "block": data.block_id,
                         "tx": data.transaction_id,
+                        "old_block": data.old_block_id,  # Add new field
                     }
 
                 if blockchain in previous_data:
@@ -96,7 +97,7 @@ class StateUpdateManager:
                     return blockchain, previous_data[blockchain]
 
                 self.logger.warning(f"Returning empty data for {blockchain}")
-                return blockchain, {"block": "", "tx": ""}
+                return blockchain, {"block": "", "tx": "", "old_block": ""}
             except Exception as e:
                 self.logger.error(f"Failed to fetch {blockchain} data: {e}")
                 if blockchain in previous_data:
@@ -105,7 +106,7 @@ class StateUpdateManager:
                     )
                     return blockchain, previous_data[blockchain]
                 self.logger.warning(f"Returning empty data for {blockchain}")
-                return blockchain, {"block": "", "tx": ""}
+                return blockchain, {"block": "", "tx": "", "old_block": ""}
 
         tasks = [
             fetch_single(blockchain, endpoint)

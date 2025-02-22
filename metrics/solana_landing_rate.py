@@ -1,10 +1,10 @@
 """Solana landing rate metrics with priority fees."""
 
 import asyncio
-import logging
 import os
 import random
 import time
+from enum import Enum
 from typing import Optional
 
 import base58
@@ -16,6 +16,7 @@ from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 from solders.rpc.responses import GetSignatureStatusesResp
 from solders.transaction import Transaction
+from solders.transaction_status import TransactionConfirmationStatus, TransactionStatus
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpMetric
@@ -23,21 +24,27 @@ from common.metrics_handler import MetricsHandler
 from config.defaults import MetricsServiceConfig
 
 
+class RegionCode(str, Enum):
+    """Region codes for memo text generation."""
+
+    SFO1 = "01"
+    FRA1 = "02"
+    SIN1 = "03"
+    DEFAULT = "00"
+
+
 def generate_fixed_memo(region: str) -> str:
     """Generate fixed-length memo text with region identifier."""
-    region_map = {
-        "sfo1": "01",
-        "fra1": "02",
-        "sin1": "03",
-        "default": "00",
-    }
-    region_id = region_map.get(region, "00")
+    region_id = getattr(RegionCode, region.upper(), RegionCode.DEFAULT)
     timestamp = int(time.time() * 1000)
     random_id = random.randint(0, 999)
     return f"{region_id}_{random_id:03d}_{timestamp:013d}"
 
 
 class SolanaLandingMetric(HttpMetric):
+    POLL_INTERVAL = 5.0  # seconds for polling getSignatureStatuses
+    MEMO_PROGRAM_ID = "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo"
+
     def __init__(
         self,
         handler: "MetricsHandler",
@@ -71,23 +78,38 @@ class SolanaLandingMetric(HttpMetric):
             raise ValueError("Failed to get current slot")
         return response.value
 
-    async def _confirm_transaction(
+    async def _check_status(self, client: AsyncClient, signature: str) -> int:
+        """Check single transaction status."""
+        response: GetSignatureStatusesResp = await client.get_signature_statuses(
+            [signature]
+        )
+        if not response or not response.value:
+            return None
+
+        status: TransactionStatus | None = response.value[0]
+        if not status:
+            return None
+
+        if status.confirmation_status in [
+            TransactionConfirmationStatus.Confirmed,
+            TransactionConfirmationStatus.Finalized,
+        ]:
+            return status.slot
+
+        return None
+
+    async def _wait_for_confirmation(
         self, client: AsyncClient, signature: str, timeout: int
-    ) -> GetSignatureStatusesResp:
-        try:
-            confirmation_task = asyncio.create_task(
-                client.confirm_transaction(
-                    signature,
-                    commitment=MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL,
-                    sleep_seconds=0.3,
-                )
-            )
-            confirmation = await asyncio.wait_for(confirmation_task, timeout=timeout)
-            if not confirmation or not confirmation.context:
-                raise ValueError("Invalid confirmation response")
-            return confirmation
-        except asyncio.TimeoutError:
-            raise ValueError(f"Transaction confirmation timeout after {timeout}s")
+    ) -> int:
+        """Wait for transaction confirmation using direct status checks."""
+        end_time = time.monotonic() + timeout
+        while time.monotonic() < end_time:
+            status = await self._check_status(client, signature)
+            if status:
+                return status
+            await asyncio.sleep(self.POLL_INTERVAL)
+
+        raise ValueError(f"Transaction confirmation timeout after {timeout}s")
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
         memo_text = generate_fixed_memo(
@@ -100,9 +122,7 @@ class SolanaLandingMetric(HttpMetric):
         )
 
         memo_ix = Instruction(
-            program_id=Pubkey.from_string(
-                "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo"
-            ),
+            program_id=Pubkey.from_string(self.MEMO_PROGRAM_ID),
             accounts=[],
             data=memo_text.encode(),
         )
@@ -118,16 +138,6 @@ class SolanaLandingMetric(HttpMetric):
             blockhash.value.blockhash,
         )
 
-    async def _check_health(self, client: AsyncClient) -> None:
-        """Check node health via getHealth RPC."""
-        try:
-            response = await client.is_connected()
-            if not response:
-                raise ValueError(response)
-        except Exception as e:
-            # raise ValueError(f"Health check failed: {e!s}")
-            logging.warning(f"Node health check failed: {e!s}")
-
     async def fetch_data(self) -> Optional[float]:
         # Since we use here an additional value (metric_type),
         # let's initialize all used metric types.
@@ -137,7 +147,6 @@ class SolanaLandingMetric(HttpMetric):
         client = None
         try:
             client = await self._create_client()
-            await self._check_health(client)
             tx = await self._prepare_memo_transaction(client)
 
             start_slot = await self._get_slot(client)
@@ -149,14 +158,16 @@ class SolanaLandingMetric(HttpMetric):
             if not signature_response or not signature_response.value:
                 raise ValueError("Failed to send transaction")
 
-            confirmation = await self._confirm_transaction(
+            confirmation_slot = await self._wait_for_confirmation(
                 client,
                 signature_response.value,
                 self.config.timeout,
             )
 
+            # `response_time` is not representative,
+            # we don't use it in the visualizations
             response_time = time.monotonic() - start_time
-            self._slot_diff = max(confirmation.context.slot - start_slot, 0)
+            self._slot_diff = max(confirmation_slot - start_slot, 0)
             self.update_metric_value(self._slot_diff, "slot_latency")
             return response_time
 

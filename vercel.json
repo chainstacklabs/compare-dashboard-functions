@@ -18,7 +18,7 @@
     },
     "api/write/solana.py": {
       "memory": 200,
-      "maxDuration": 90
+      "maxDuration": 70
     },
     "api/support/update_state.py": {
       "memory": 200,

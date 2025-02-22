@@ -79,7 +79,9 @@ class SolanaLandingMetric(HttpMetric):
                 client.confirm_transaction(
                     signature,
                     commitment=MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL,
-                    sleep_seconds=0.3,
+                    # We don't use response time in visualizations,
+                    # let's decrease number of polling requests.
+                    sleep_seconds=5,
                 )
             )
             confirmation = await asyncio.wait_for(confirmation_task, timeout=timeout)
@@ -125,7 +127,6 @@ class SolanaLandingMetric(HttpMetric):
             if not response:
                 raise ValueError(response)
         except Exception as e:
-            # raise ValueError(f"Health check failed: {e!s}")
             logging.warning(f"Node health check failed: {e!s}")
 
     async def fetch_data(self) -> Optional[float]:
@@ -137,7 +138,7 @@ class SolanaLandingMetric(HttpMetric):
         client = None
         try:
             client = await self._create_client()
-            await self._check_health(client)
+            # await self._check_health(client)
             tx = await self._prepare_memo_transaction(client)
 
             start_slot = await self._get_slot(client)

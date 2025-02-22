@@ -13,7 +13,7 @@ from common.base_metric import BaseMetric
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
 
-MAX_RETRIES = 2
+MAX_RETRIES = 3
 
 
 class WebSocketMetric(BaseMetric):
@@ -66,8 +66,6 @@ class WebSocketMetric(BaseMetric):
             if data is not None:
                 latency = self.process_data(data)
                 self.update_metric_value(latency)
-                # if latency > self.config.max_latency:
-                #     raise ValueError(f"Invalid latency: {latency}s")
                 self.mark_success()
                 return
             raise ValueError("No data in response")
@@ -102,8 +100,6 @@ class HttpMetric(BaseMetric):
             if data is not None:
                 latency = self.process_data(data)
                 self.update_metric_value(latency)
-                # if latency > self.config.max_latency:
-                #     raise ValueError(f"Invalid latency: {latency}s")
                 self.mark_success()
                 return
             raise ValueError("No data in response")

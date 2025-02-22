@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import random
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
 
@@ -64,17 +65,15 @@ class BlockchainDataFetcher:
             )
 
             latest_number = int(latest_block["number"], 16)
-            offset = MetricsServiceConfig.BLOCK_OFFSET.get(blockchain.lower(), 20)
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
+                blockchain.lower(), (20, 100)
+            )
+            offset = random.randint(offset_range[0], offset_range[1])
             old_number = max(0, latest_number - offset)
-            # old_block = await self._make_rpc_request(
-            #    "eth_getBlockByNumber", [hex(old_number), False]
-            # )
 
             if not isinstance(latest_block, dict):
                 return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
-            # block_hash = latest_block.get("hash", "")
-            # old_block_hash = old_block.get("hash", "") if old_block else ""
             tx_hash = ""
 
             transactions = latest_block.get("transactions", [])
@@ -126,7 +125,10 @@ class BlockchainDataFetcher:
                 if signatures:
                     tx_sig = signatures[0]
 
-            offset = MetricsServiceConfig.BLOCK_OFFSET.get("solana", 100)
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
+                "solana", (100, 1000)
+            )
+            offset = random.randint(offset_range[0], offset_range[1])
             target_slot = max(0, latest_slot - offset)
             old_slot = None
 
@@ -172,7 +174,8 @@ class BlockchainDataFetcher:
             if not isinstance(last_block, dict):
                 raise ValueError("Invalid last block format")
 
-            offset = MetricsServiceConfig.BLOCK_OFFSET.get("ton", 10)
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get("ton", (10, 50))
+            offset = random.randint(offset_range[0], offset_range[1])
             old_seqno = max(0, last_block["seqno"] - offset)
 
             latest_block_id = (

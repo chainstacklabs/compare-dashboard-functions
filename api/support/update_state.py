@@ -142,6 +142,7 @@ class StateUpdateManager:
 
             blob_handler = BlobStorageHandler(self.blob_config)
             await blob_handler.update_data(blockchain_data)
+            print(blockchain_data)
 
             return "State updated successfully"
 

@@ -23,7 +23,12 @@ class MetricsServiceConfig:
     )  # System env var, standard name
 
     # Block offset configuration (N blocks back from latest)
-    BLOCK_OFFSET = {"ethereum": 20, "base": 20, "solana": 100, "ton": 10}
+    BLOCK_OFFSET_RANGES = {
+        "ethereum": (20, 100),  # ~5-25 minutes back
+        "base": (20, 100),  # ~5-25 minutes back
+        "solana": (100, 1000),  # ~50-500 seconds back
+        "ton": (10, 50),  # ~50-250 seconds back
+    }
 
 
 class BlobStorageConfig:

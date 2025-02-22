@@ -24,10 +24,10 @@ class MetricsServiceConfig:
 
     # Block offset configuration (N blocks back from latest)
     BLOCK_OFFSET_RANGES = {
-        "ethereum": (20, 100),  # ~5-25 minutes back
-        "base": (20, 100),  # ~5-25 minutes back
-        "solana": (100, 1000),  # ~50-500 seconds back
-        "ton": (10, 50),  # ~50-250 seconds back
+        "ethereum": (200, 1024),
+        "base": (200, 1024),
+        "solana": (324000, 334000),
+        "ton": (1600000, 1610000),
     }
 
 

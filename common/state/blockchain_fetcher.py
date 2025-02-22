@@ -4,7 +4,7 @@ import asyncio
 import logging
 import random
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import aiohttp
 
@@ -48,15 +48,29 @@ class BlockchainDataFetcher:
                     ) as response:
                         data = await response.json()
                         if "error" in data:
-                            raise Exception(f"RPC error: {data['error']}")
+                            error = data["error"]
+                            if error.get("code") == -32004:
+                                raise Exception(f"Block not available: {error}")
+
+                            if attempt < self._max_retries:
+                                self._logger.warning(
+                                    f"Attempt {attempt} failed: {error}"
+                                )
+                                await asyncio.sleep(self._retry_delay)
+                                continue
+
+                            raise Exception(f"RPC error after all retries: {error}")
+
                         return data.get("result")
+
             except Exception as e:
-                self._logger.warning(f"Attempt {attempt} failed: {e}")
-                if attempt < self._max_retries:
-                    await asyncio.sleep(self._retry_delay)
-                else:
-                    self._logger.error(f"All {self._max_retries} attempts failed")
+                if "Block not available" in str(e):
                     raise
+                if attempt < self._max_retries:
+                    self._logger.warning(f"Attempt {attempt} failed: {e}")
+                    await asyncio.sleep(self._retry_delay)
+                    continue
+                raise
 
     async def _fetch_evm_data(self, blockchain: str) -> BlockchainData:
         try:
@@ -94,6 +108,34 @@ class BlockchainDataFetcher:
             self._logger.error(f"EVM fetch failed: {e!s}")
             return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
+    async def _get_block_in_range(
+        self, slot_start: int, slot_end: int, get_signatures: bool = False
+    ) -> Tuple[Optional[int], Optional[Dict]]:
+        for slot in range(slot_start, slot_end + 1):
+            try:
+                block = await self._make_rpc_request(
+                    "getBlock",
+                    [
+                        slot,
+                        {
+                            "encoding": "json",
+                            "maxSupportedTransactionVersion": 0,
+                            "transactionDetails": (
+                                "signatures" if get_signatures else "none"
+                            ),
+                            "rewards": False,
+                        },
+                    ],
+                )
+                if block:
+                    return slot, block
+            except Exception as e:
+                if "Block not available" in str(e):
+                    continue
+                self._logger.warning(f"Unexpected error checking slot {slot}: {e}")
+                raise
+        raise Exception(f"No blocks found in range {slot_start} to {slot_end}")
+
     async def _fetch_solana_data(self) -> BlockchainData:
         try:
             block_info = await self._make_rpc_request(
@@ -106,21 +148,12 @@ class BlockchainDataFetcher:
             if not latest_slot:
                 return BlockchainData(block_id="", transaction_id="", old_block_id="")
 
-            latest_block = await self._make_rpc_request(
-                "getBlock",
-                [
-                    latest_slot,
-                    {
-                        "encoding": "json",
-                        "maxSupportedTransactionVersion": 0,
-                        "transactionDetails": "signatures",
-                        "rewards": False,
-                    },
-                ],
+            _, latest_block = await self._get_block_in_range(
+                latest_slot, latest_slot, get_signatures=True
             )
 
             tx_sig = ""
-            if isinstance(latest_block, dict):
+            if latest_block:
                 signatures = latest_block.get("signatures", [])
                 if signatures:
                     tx_sig = signatures[0]
@@ -130,29 +163,7 @@ class BlockchainDataFetcher:
             )
             offset = random.randint(offset_range[0], offset_range[1])
             target_slot = max(0, latest_slot - offset)
-            old_slot = None
-
-            for slot in range(target_slot - 100, target_slot):
-                try:
-                    block_exists = await self._make_rpc_request(
-                        "getBlock",
-                        [
-                            slot,
-                            {
-                                "encoding": "json",
-                                "maxSupportedTransactionVersion": 0,
-                                "transactionDetails": "none",
-                                "rewards": False,
-                            },
-                        ],
-                    )
-                    if block_exists:
-                        old_slot = slot
-                        break
-                except Exception as e:
-                    if "Block not available" not in str(e):
-                        self._logger.warning(f"Error checking slot {slot}: {e}")
-                    continue
+            old_slot, _ = await self._get_block_in_range(target_slot - 100, target_slot)
 
             return BlockchainData(
                 block_id=str(latest_slot),

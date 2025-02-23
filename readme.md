@@ -4,7 +4,7 @@
 
 A serverless solution for monitoring RPC nodes response time across different blockchains and regions using Vercel Functions and Grafana Cloud. The project collects metrics from HTTP/WS endpoints for multiple blockchains and pushes them to Grafana Cloud.
 
-📊 [Live Dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/public-rpc-dashboard)
+📊 [Live Dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/chainstack-compare-dashboard)
 
 ## Table of Contents
 - [Features](#features)

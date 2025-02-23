@@ -1,6 +1,6 @@
 # Chainstack Compare Dashboard
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,ENDPOINTS,SKIP_AUTH,METRIC_NAME)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,SKIP_AUTH,SOLANA_PRIVATE_KEY,ENDPOINTS,STORE_ID,VERCEL_BLOB_TOKEN)
 
 A serverless solution for monitoring RPC nodes response time across different blockchains and regions using Vercel Functions and Grafana Cloud. The project collects metrics from HTTP/WS endpoints for multiple blockchains and pushes them to Grafana Cloud.
 
@@ -75,18 +75,24 @@ flowchart TB
 - RPC node endpoints
 
 ### 2. One-Click Deploy
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,ENDPOINTS,SKIP_AUTH,METRIC_NAME)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,SKIP_AUTH,SOLANA_PRIVATE_KEY,ENDPOINTS,STORE_ID,VERCEL_BLOB_TOKEN)
 
 Configure required environment variables:
    ```env
-   GRAFANA_URL=your_grafana_url
-   GRAFANA_USER=your_user_id
-   GRAFANA_API_KEY=your_api_key
-   CRON_SECRET=your_secret
-   ```
-Deploy!
+   GRAFANA_URL=Grafana Cloud URL for pushing metrics
+   GRAFANA_USER=Grafana Cloud user ID
+   GRAFANA_API_KEY=Grafana Cloud API key
 
-### 3. Configure RPC Endpoints
+   CRON_SECRET=Generate secret to protect API, it's used by CRON jobs
+   SKIP_AUTH=Set False for non-production deployments
+
+   SOLANA_PRIVATE_KEY=Set it if you'd like to measure transaction landing
+   ENDPOINTS=Read below
+
+   STORE_ID=Vercel Blob Storage ID
+   VERCEL_BLOB_TOKEN=Vercel Blob Storage token for reading/writing data to the storage
+   ```
+
 Update the `ENDPOINTS` environment variable with your RPC configuration:
 ```json
 {
@@ -108,14 +114,14 @@ You can leave `data` empty. If a provider has a separate endpoint for sending tr
 
 ### Multi-Region Deployment
 1. Create three Vercel projects:
-   - `your-project-iad1` (US East)
+   - `your-project-sin1` (Singapore)
    - `your-project-fra1` (EU)
    - `your-project-sfo1` (US West)
 
 2. Configure each project:
    ```bash
    # Project Settings → Functions
-   Function Region: [Select corresponding region]
+   Function Regions: [Select corresponding region]
    ```
 
 3. Link environment variables:
@@ -123,6 +129,8 @@ You can leave `data` empty. If a provider has a separate endpoint for sending tr
    # Team Settings → Environment Variables
    Link to all three projects
    ```
+
+   It is recommended to have separate environment variables for production and preview for at least `ENDPOINTS`, `SOLANA_PRIVATE_KEY` and `SKIP_AUTH`. You can create two environment variables with the same name, but linked to different environments.
 
 ### Blob Storage Setup
 1. Create a Vercel Blob store
@@ -154,11 +162,6 @@ GRAFANA_API_KEY=your_api_key
 # Security
 CRON_SECRET=your_secret
 SKIP_AUTH=FALSE
-
-# Metrics
-METRIC_NAME=response_latency_seconds
-METRIC_REQUEST_TIMEOUT=35
-METRIC_MAX_LATENCY=35
 
 # Storage
 VERCEL_BLOB_TOKEN=your_blob_token

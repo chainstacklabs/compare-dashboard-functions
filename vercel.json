@@ -28,19 +28,19 @@
   "crons": [
     {
       "path": "/api/read/ethereum",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/2 * * * *"
     },
     {
       "path": "/api/read/base",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/2 * * * *"
     },
     {
       "path": "/api/read/solana",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/2 * * * *"
     },
     {
       "path": "/api/read/ton",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/2 * * * *"
     },
     {
       "path": "/api/write/solana",
@@ -48,7 +48,7 @@
     },
     {
       "path": "/api/support/update_state",
-      "schedule": "*/30 * * * *"
+      "schedule": "*/20 * * * *"
     }
   ]
 }

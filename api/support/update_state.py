@@ -4,42 +4,54 @@ import asyncio
 import json
 import logging
 import os
+from collections.abc import Coroutine
 from http.server import BaseHTTPRequestHandler
-from typing import Any, Dict, Set, Tuple
+from typing import Any
 
 from common.state.blob_storage import BlobConfig, BlobStorageHandler
 from common.state.blockchain_fetcher import BlockchainData, BlockchainDataFetcher
 from common.state.blockchain_state import BlockchainState
 
-SUPPORTED_BLOCKCHAINS = ["ethereum", "solana", "ton", "base"]
-ALLOWED_PROVIDERS = {"Chainstack"}
-ALLOWED_REGIONS = {"fra1"}
+SUPPORTED_BLOCKCHAINS: list[str] = ["ethereum", "solana", "ton", "base"]
+ALLOWED_PROVIDERS: set[str] = {
+    "Chainstack"
+}  # To reduce number of RPC calls, use only one provider here
+ALLOWED_REGIONS: set[str] = {
+    "fra1"
+}  # To reduce number of RPC calls, use only one region here
 
 
 class MissingEndpointsError(Exception):
     """Raised when required blockchain endpoints are not found."""
 
-    def __init__(self, missing_chains: Set[str]):
-        self.missing_chains = missing_chains
-        chains = ", ".join(missing_chains)
+    def __init__(self, missing_chains: set[str]) -> None:
+        self.missing_chains: set[str] = missing_chains
+        chains: str = ", ".join(missing_chains)
         super().__init__(f"Missing Chainstack endpoints for: {chains}")
 
 
 class StateUpdateManager:
-    def __init__(self):
-        store_id = os.getenv("STORE_ID")
-        token = os.getenv("VERCEL_BLOB_TOKEN")
+    """Manages the collection, processing, and storage of blockchain state data.
+
+    This class orchestrates the retrieval of blockchain state data from configured endpoints,
+    handles fallback to previous data in case of errors, and updates the centralized blob storage.
+    It enforces provider and region filtering to optimize RPC calls and ensures data consistency.
+    """
+
+    def __init__(self) -> None:
+        store_id: str | None = os.getenv("STORE_ID")
+        token: str | None = os.getenv("VERCEL_BLOB_TOKEN")
         if not all([store_id, token]):
             raise ValueError("Missing required blob storage configuration")
 
         self.blob_config = BlobConfig(store_id=store_id, token=token)  # type: ignore
-        self.logger = logging.getLogger(__name__)
+        self.logger: logging.Logger = logging.getLogger(__name__)
 
-    async def _get_chainstack_endpoints(self) -> Dict[str, str]:
+    async def _get_chainstack_endpoints(self) -> dict[str, str]:
         """Get Chainstack endpoints for supported blockchains."""
         endpoints = json.loads(os.getenv("ENDPOINTS", "{}"))
-        chainstack_endpoints: Dict[str, str] = {}
-        missing_chains: Set[str] = set(SUPPORTED_BLOCKCHAINS)
+        chainstack_endpoints: dict[str, str] = {}
+        missing_chains: set[str] = set(SUPPORTED_BLOCKCHAINS)
 
         for provider in endpoints.get("providers", []):
             blockchain = provider["blockchain"].lower()
@@ -56,8 +68,8 @@ class StateUpdateManager:
 
         return chainstack_endpoints
 
-    async def _get_previous_data(self) -> Dict[str, Any]:
-        """Fetch previous blockchain state data"""
+    async def _get_previous_data(self) -> dict[str, Any]:
+        """Fetch previous blockchain state data."""
         try:
             state = BlockchainState()
             previous_data = {}
@@ -76,11 +88,11 @@ class StateUpdateManager:
             return {}
 
     async def _collect_blockchain_data(
-        self, providers: Dict[str, str], previous_data: Dict[str, Any]
-    ) -> Dict[str, dict]:
+        self, providers: dict[str, str], previous_data: dict[str, Any]
+    ) -> dict[str, dict]:
         async def fetch_single(
             blockchain: str, endpoint: str
-        ) -> Tuple[str, Dict[str, str]]:
+        ) -> tuple[str, dict[str, str]]:
             try:
                 fetcher = BlockchainDataFetcher(endpoint)
                 data: BlockchainData = await fetcher.fetch_latest_data(blockchain)
@@ -89,7 +101,7 @@ class StateUpdateManager:
                     return blockchain, {
                         "block": data.block_id,
                         "tx": data.transaction_id,
-                        "old_block": data.old_block_id,  # Add new field
+                        "old_block": data.old_block_id,
                     }
 
                 if blockchain in previous_data:
@@ -108,7 +120,7 @@ class StateUpdateManager:
                 self.logger.warning(f"Returning empty data for {blockchain}")
                 return blockchain, {"block": "", "tx": "", "old_block": ""}
 
-        tasks = [
+        tasks: list[Coroutine[Any, Any, tuple[str, dict[str, str]]]] = [
             fetch_single(blockchain, endpoint)
             for blockchain, endpoint in providers.items()
         ]
@@ -125,9 +137,11 @@ class StateUpdateManager:
             return "Region not authorized for state updates"
 
         try:
-            previous_data = await self._get_previous_data()
+            previous_data: dict[str, Any] = await self._get_previous_data()
 
-            chainstack_endpoints = await self._get_chainstack_endpoints()
+            chainstack_endpoints: dict[str, str] = (
+                await self._get_chainstack_endpoints()
+            )
             blockchain_data = await self._collect_blockchain_data(
                 chainstack_endpoints, previous_data
             )
@@ -136,7 +150,7 @@ class StateUpdateManager:
             if not blockchain_data:
                 if previous_data:
                     self.logger.warning("Using complete previous state as fallback")
-                    blockchain_data = previous_data
+                    blockchain_data: dict[str, Any] = previous_data
                 else:
                     return "No blockchain data collected and no previous data available"
 
@@ -157,21 +171,21 @@ class handler(BaseHTTPRequestHandler):
     def _check_auth(self) -> bool:
         if os.getenv("SKIP_AUTH", "").lower() == "true":
             return True
-        token = self.headers.get("Authorization", "")
+        token: str = self.headers.get("Authorization", "")
         return token == f"Bearer {os.getenv('CRON_SECRET', '')}"
 
-    def do_GET(self):
+    def do_GET(self) -> None:
         if not self._check_auth():
             self.send_response(401)
             self.end_headers()
             self.wfile.write(b"Unauthorized")
             return
 
-        loop = asyncio.new_event_loop()
+        loop: asyncio.AbstractEventLoop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
         try:
-            result = loop.run_until_complete(StateUpdateManager().update())
+            result: str = loop.run_until_complete(StateUpdateManager().update())
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()

@@ -6,7 +6,6 @@ import logging
 import os
 import time
 from http.server import BaseHTTPRequestHandler
-from typing import List, Tuple, Type
 
 import aiohttp
 
@@ -20,10 +19,10 @@ from config.defaults import MetricsServiceConfig
 class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
 
-    def __init__(self, blockchain: str, metrics: List[Tuple[Type, str]]):
-        self._instances: List[BaseMetric] = []
-        self.blockchain = blockchain
-        self.metrics = metrics
+    def __init__(self, blockchain: str, metrics: list[tuple[type, str]]) -> None:
+        self._instances: list[BaseMetric] = []
+        self.blockchain: str = blockchain
+        self.metrics: list[tuple[type, str]] = metrics
         self.grafana_config = {
             "current_region": os.getenv(
                 "VERCEL_REGION"
@@ -38,7 +37,7 @@ class MetricsHandler:
             "metric_max_latency": MetricsServiceConfig.METRIC_MAX_LATENCY,
         }
 
-    def get_metrics_influx_format(self) -> List[str]:
+    def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""
         metrics = []
         for instance in self._instances:
@@ -48,10 +47,12 @@ class MetricsHandler:
 
     def get_metrics_text(self) -> str:
         current_time = int(time.time_ns())
-        metrics = self.get_metrics_influx_format()
+        metrics: list[str] = self.get_metrics_influx_format()
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
 
-    async def collect_metrics(self, provider: dict, config: dict, state_data: dict):
+    async def collect_metrics(
+        self, provider: dict, config: dict, state_data: dict
+    ) -> None:
         metric_config = MetricConfig(
             timeout=self.grafana_config["metric_request_timeout"],
             max_latency=self.grafana_config["metric_max_latency"],
@@ -59,21 +60,21 @@ class MetricsHandler:
             extra_params={"tx_data": provider.get("data")},
         )
 
-        metrics = MetricFactory.create_metrics(
+        metrics: list[BaseMetric] = MetricFactory.create_metrics(
             blockchain_name=self.blockchain,
             metrics_handler=self,
             config=metric_config,
             provider=provider["name"],
             source_region=self.grafana_config["current_region"],
             target_region=config.get("region", "default"),
-            ws_endpoint=provider.get("websocket_endpoint"),
-            http_endpoint=provider.get("http_endpoint"),
-            tx_endpoint=provider.get("tx_endpoint"),
+            ws_endpoint=provider.get("websocket_endpoint"),  # type: ignore
+            http_endpoint=provider.get("http_endpoint"),  # type: ignore
+            tx_endpoint=provider.get("tx_endpoint"),  # type: ignore
             state_data=state_data,
         )
         await asyncio.gather(*(m.collect_metric() for m in metrics))
 
-    async def push_to_grafana(self, metrics_text: str):
+    async def push_to_grafana(self, metrics_text: str) -> None:
         if not all(
             [
                 self.grafana_config["url"],
@@ -102,11 +103,11 @@ class MetricsHandler:
                 if attempt < self.grafana_config["push_retries"]:
                     await asyncio.sleep(self.grafana_config["push_retry_delay"])
 
-    async def handle(self) -> Tuple[str, str]:
+    async def handle(self) -> tuple[str, str]:
         """Main handler for metric collection and pushing."""
         self._instances = []
         try:
-            config = json.loads(os.getenv("ENDPOINTS"))
+            config = json.loads(os.getenv("ENDPOINTS"))  # type: ignore
             MetricFactory._registry.clear()
             MetricFactory.register({self.blockchain: self.metrics})
             rpc_providers = [
@@ -123,7 +124,7 @@ class MetricsHandler:
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)
 
-            metrics_text = self.get_metrics_text()
+            metrics_text: str = self.get_metrics_text()
             if metrics_text:
                 await self.push_to_grafana(metrics_text)
             else:
@@ -139,15 +140,17 @@ class MetricsHandler:
 class BaseVercelHandler(BaseHTTPRequestHandler):
     """HTTP handler for Vercel serverless endpoint."""
 
-    metrics_handler: MetricsHandler = None
+    metrics_handler: MetricsHandler = None  # type: ignore
 
-    def validate_token(self):
-        auth_token = self.headers.get("Authorization")
-        expected_token = os.environ.get("CRON_SECRET")  # System env var, standard name
+    def validate_token(self) -> bool:
+        auth_token: str | None = self.headers.get("Authorization")
+        expected_token: str | None = os.environ.get(
+            "CRON_SECRET"
+        )  # System env var, standard name
         return auth_token == f"Bearer {expected_token}"
 
-    def do_GET(self):
-        skip_auth = os.environ.get("SKIP_AUTH", "false").lower() == "true"
+    def do_GET(self) -> None:
+        skip_auth: bool = os.environ.get("SKIP_AUTH", "false").lower() == "true"
         if not skip_auth and not self.validate_token():
             self.send_response(401)
             self.send_header("Content-type", "text/plain")
@@ -155,7 +158,7 @@ class BaseVercelHandler(BaseHTTPRequestHandler):
             self.wfile.write(b"Unauthorized")
             return
 
-        loop = asyncio.new_event_loop()
+        loop: asyncio.AbstractEventLoop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
         try:
@@ -163,7 +166,7 @@ class BaseVercelHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            response = (
+            response: str = (
                 f"{self.metrics_handler.blockchain} metrics collection "
                 f"completed\n\nMetrics:\n{metrics_text}"
             )

@@ -1,3 +1,5 @@
+"""Default configuration."""
+
 import os
 
 
@@ -23,7 +25,7 @@ class MetricsServiceConfig:
     )  # System env var, standard name
 
     # Block offset configuration (N blocks back from latest)
-    BLOCK_OFFSET_RANGES = {
+    BLOCK_OFFSET_RANGES = {  # noqa: RUF012
         "ethereum": (7200, 14400),
         "base": (7200, 14400),
         "solana": (432000, 648000),

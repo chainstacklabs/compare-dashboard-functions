@@ -14,7 +14,12 @@ from solders.compute_budget import set_compute_unit_limit, set_compute_unit_pric
 from solders.instruction import Instruction
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
-from solders.rpc.responses import GetSignatureStatusesResp
+from solders.rpc.responses import (
+    GetLatestBlockhashResp,
+    GetSignatureStatusesResp,
+    GetSlotResp,
+    SendTransactionResp,
+)
 from solders.transaction import Transaction
 from solders.transaction_status import TransactionConfirmationStatus, TransactionStatus
 
@@ -64,24 +69,24 @@ class SolanaLandingMetric(HttpMetric):
         self.method = "sendTransaction"
         self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
 
-        self.private_key = base58.b58decode(os.environ["SOLANA_PRIVATE_KEY"])
-        self.keypair = Keypair.from_bytes(self.private_key)
+        self.private_key: bytes = base58.b58decode(os.environ["SOLANA_PRIVATE_KEY"])
+        self.keypair: Keypair = Keypair.from_bytes(self.private_key)
         self._slot_diff = 0
 
     async def _create_client(self) -> AsyncClient:
-        endpoint = self.get_endpoint("sendTransaction")
+        endpoint: str = self.get_endpoint()
         return AsyncClient(endpoint)
 
     async def _get_slot(self, client: AsyncClient) -> int:
-        response = await client.get_slot(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)
+        response: GetSlotResp = await client.get_slot(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)  # type: ignore
         if not response or response.value is None:
             raise ValueError("Failed to get current slot")
         return response.value
 
-    async def _check_status(self, client: AsyncClient, signature: str) -> int:
+    async def _check_status(self, client: AsyncClient, signature: str) -> int | None:
         """Check single transaction status."""
         response: GetSignatureStatusesResp = await client.get_signature_statuses(
-            [signature]
+            [signature]  # type: ignore
         )
         if not response or not response.value:
             return None
@@ -102,9 +107,9 @@ class SolanaLandingMetric(HttpMetric):
         self, client: AsyncClient, signature: str, timeout: int
     ) -> int:
         """Wait for transaction confirmation using direct status checks."""
-        end_time = time.monotonic() + timeout
+        end_time: float = time.monotonic() + timeout
         while time.monotonic() < end_time:
-            status = await self._check_status(client, signature)
+            status: int | None = await self._check_status(client, signature)
             if status:
                 return status
             await asyncio.sleep(self.POLL_INTERVAL)
@@ -112,12 +117,14 @@ class SolanaLandingMetric(HttpMetric):
         raise ValueError(f"Transaction confirmation timeout after {timeout}s")
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
-        memo_text = generate_fixed_memo(
-            self.labels.get_label(MetricLabelKey.SOURCE_REGION)
+        memo_text: str = generate_fixed_memo(
+            self.labels.get_label(MetricLabelKey.SOURCE_REGION)  # type: ignore
         )
 
-        compute_limit_ix = set_compute_unit_limit(MetricsServiceConfig.COMPUTE_LIMIT)
-        compute_price_ix = set_compute_unit_price(
+        compute_limit_ix: Instruction = set_compute_unit_limit(
+            MetricsServiceConfig.COMPUTE_LIMIT
+        )
+        compute_price_ix: Instruction = set_compute_unit_price(
             MetricsServiceConfig.PRIORITY_FEE_MICROLAMPORTS
         )
 
@@ -127,7 +134,7 @@ class SolanaLandingMetric(HttpMetric):
             data=memo_text.encode(),
         )
 
-        blockhash = await client.get_latest_blockhash()
+        blockhash: GetLatestBlockhashResp = await client.get_latest_blockhash()
         if not blockhash or not blockhash.value:
             raise ValueError("Failed to get latest blockhash")
 
@@ -144,30 +151,30 @@ class SolanaLandingMetric(HttpMetric):
         self.update_metric_value(0, "response_time")
         self.update_metric_value(0, "slot_latency")
 
-        client = None
+        client = None  # type: ignore
         try:
-            client = await self._create_client()
-            tx = await self._prepare_memo_transaction(client)
+            client: AsyncClient = await self._create_client()
+            tx: Transaction = await self._prepare_memo_transaction(client)
 
-            start_slot = await self._get_slot(client)
-            start_time = time.monotonic()
+            start_slot: int = await self._get_slot(client)
+            start_time: float = time.monotonic()
 
-            signature_response = await client.send_transaction(
+            signature_response: SendTransactionResp = await client.send_transaction(
                 tx, TxOpts(skip_preflight=True, max_retries=0)
             )
             if not signature_response or not signature_response.value:
                 raise ValueError("Failed to send transaction")
 
-            confirmation_slot = await self._wait_for_confirmation(
+            confirmation_slot: int = await self._wait_for_confirmation(
                 client,
-                signature_response.value,
+                signature_response.value,  # type: ignore
                 self.config.timeout,
             )
 
             # `response_time` is not representative,
             # we don't use it in the visualizations
-            response_time = time.monotonic() - start_time
-            self._slot_diff = max(confirmation_slot - start_slot, 0)
+            response_time: float = time.monotonic() - start_time
+            self._slot_diff: int = max(confirmation_slot - start_slot, 0)
             self.update_metric_value(self._slot_diff, "slot_latency")
             return response_time
 

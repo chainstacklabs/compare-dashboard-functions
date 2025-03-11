@@ -25,9 +25,9 @@ class EndpointConfig:
         tx_endpoint: Optional[str] = None,
         ws_endpoint: Optional[str] = None,
     ) -> None:
-        self.main_endpoint = main_endpoint
-        self.tx_endpoint = tx_endpoint
-        self.ws_endpoint = ws_endpoint
+        self.main_endpoint: str | None = main_endpoint
+        self.tx_endpoint: str | None = tx_endpoint
+        self.ws_endpoint: str | None = ws_endpoint
 
     def get_endpoint(self) -> Optional[str]:
         """Returns appropriate endpoint based on method."""
@@ -44,10 +44,10 @@ class MetricConfig:
         extra_params: Optional[dict[str, Any]] = None,
         endpoints: Optional[EndpointConfig] = None,
     ) -> None:
-        self.timeout = timeout
-        self.max_latency = max_latency
-        self.endpoints = endpoints or EndpointConfig()
-        self.extra_params = extra_params or {}
+        self.timeout: int = timeout
+        self.max_latency: int = max_latency
+        self.endpoints: EndpointConfig = endpoints or EndpointConfig()
+        self.extra_params: dict[str, Any] = extra_params or {}
 
 
 class MetricLabel:
@@ -58,8 +58,8 @@ class MetricLabel:
             raise ValueError(
                 f"Invalid key, must be an instance of MetricLabelKey Enum: {key}"
             )
-        self.key = key
-        self.value = value
+        self.key: MetricLabelKey = key
+        self.value: str = value
 
 
 class MetricLabels:
@@ -74,7 +74,7 @@ class MetricLabels:
         api_method: str = "default",
         response_status: str = "pending",
     ) -> None:
-        self.labels = [
+        self.labels: list[MetricLabel] = [
             MetricLabel(MetricLabelKey.SOURCE_REGION, source_region),
             MetricLabel(MetricLabelKey.TARGET_REGION, target_region),
             MetricLabel(MetricLabelKey.BLOCKCHAIN, blockchain),

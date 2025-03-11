@@ -90,9 +90,9 @@ class HttpMetric(BaseMetric):
     async def fetch_data(self) -> Optional[Any]:
         """Fetches HTTP endpoint data."""
 
-    def get_endpoint(self, method: str) -> str:
+    def get_endpoint(self) -> str:
         """Returns appropriate endpoint based on method."""
-        return self.config.endpoints.get_endpoint(method)  # type: ignore
+        return str(self.config.endpoints.get_endpoint())
 
     async def collect_metric(self) -> None:
         try:

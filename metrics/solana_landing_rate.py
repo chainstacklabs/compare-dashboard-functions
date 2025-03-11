@@ -17,6 +17,7 @@ from solders.pubkey import Pubkey
 from solders.rpc.responses import (
     GetLatestBlockhashResp,
     GetSignatureStatusesResp,
+    GetSlotResp,
     SendTransactionResp,
 )
 from solders.transaction import Transaction
@@ -73,11 +74,11 @@ class SolanaLandingMetric(HttpMetric):
         self._slot_diff = 0
 
     async def _create_client(self) -> AsyncClient:
-        endpoint = self.get_endpoint("sendTransaction")
+        endpoint: str = self.get_endpoint()
         return AsyncClient(endpoint)
 
     async def _get_slot(self, client: AsyncClient) -> int:
-        response = await client.get_slot(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)  # type: ignore
+        response: GetSlotResp = await client.get_slot(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)  # type: ignore
         if not response or response.value is None:
             raise ValueError("Failed to get current slot")
         return response.value
@@ -116,7 +117,7 @@ class SolanaLandingMetric(HttpMetric):
         raise ValueError(f"Transaction confirmation timeout after {timeout}s")
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
-        memo_text = generate_fixed_memo(
+        memo_text: str = generate_fixed_memo(
             self.labels.get_label(MetricLabelKey.SOURCE_REGION)  # type: ignore
         )
 
@@ -164,7 +165,7 @@ class SolanaLandingMetric(HttpMetric):
             if not signature_response or not signature_response.value:
                 raise ValueError("Failed to send transaction")
 
-            confirmation_slot = await self._wait_for_confirmation(
+            confirmation_slot: int = await self._wait_for_confirmation(
                 client,
                 signature_response.value,  # type: ignore
                 self.config.timeout,

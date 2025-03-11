@@ -9,12 +9,19 @@ from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
 
 @dataclass
 class MetricRegistration:
+    """Stores metadata for registering a metric, including its class and name."""
+
     metric_class: type[BaseMetric]
     metric_name: str
 
 
 class MetricFactory:
-    """Creates metric instances for blockchains."""
+    """Creates metric instances for blockchains.
+
+    For SolanaLandingMetric, a special logic is applied where both the default http endpoint
+    and an enhanced transaction endpoint (if available) are used to create separate metric
+    instances, allowing for differentiated provider names and richer data collection.
+    """
 
     _registry: dict[str, list[MetricRegistration]] = {}
 
@@ -131,7 +138,7 @@ class MetricFactory:
 
         # Second instance using tx_endpoint as main endpoint and updated provider name
         if kwargs.get("tx_endpoint"):
-            config_copy = copy.deepcopy(config)
+            config_copy: MetricConfig = copy.deepcopy(config)
             config_copy.endpoints.main_endpoint = kwargs.get("tx_endpoint")
             metrics.append(
                 MetricFactory._create_single_metric(

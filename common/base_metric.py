@@ -32,11 +32,11 @@ class BaseMetric(ABC):
         http_endpoint: Optional[str] = None,
     ) -> None:
         self.metric_id = str(uuid.uuid4())
-        self.metric_name = metric_name
-        self.labels = labels
-        self.config = config
-        self.ws_endpoint = ws_endpoint
-        self.http_endpoint = http_endpoint
+        self.metric_name: str = metric_name
+        self.labels: MetricLabels = labels
+        self.config: MetricConfig = config
+        self.ws_endpoint: str | None = ws_endpoint
+        self.http_endpoint: str | None = http_endpoint
         self.values: dict[str, MetricValue] = {}
         handler._instances.append(self)
 
@@ -54,18 +54,18 @@ class BaseMetric(ABC):
             raise ValueError("No metric values set")
 
         metrics = []
-        base_tags = ",".join(
+        base_tags: str = ",".join(
             [f"{label.key.value}={label.value}" for label in self.labels.labels]
         )
 
         for value_type, metric_value in self.values.items():
-            tags = base_tags
+            tags: str = base_tags
             if tags:
                 tags = f"{base_tags},metric_type={value_type}"
             else:
                 tags = f"metric_type={value_type}"
 
-            metric_line = f"{self.metric_name}"
+            metric_line: str = f"{self.metric_name}"
             if tags:
                 metric_line += f",{tags}"
             metric_line += f" value={metric_value.value}"
@@ -101,7 +101,7 @@ class BaseMetric(ABC):
         if not self.values:
             self.update_metric_value(0)
 
-        error_type = error.__class__.__name__
+        error_type: str = error.__class__.__name__
         error_details = getattr(error, "error_msg", str(error))
 
         logging.error(

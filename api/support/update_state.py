@@ -13,8 +13,12 @@ from common.state.blockchain_fetcher import BlockchainData, BlockchainDataFetche
 from common.state.blockchain_state import BlockchainState
 
 SUPPORTED_BLOCKCHAINS: list[str] = ["ethereum", "solana", "ton", "base"]
-ALLOWED_PROVIDERS: set[str] = {"Chainstack"}
-ALLOWED_REGIONS: set[str] = {"fra1"}
+ALLOWED_PROVIDERS: set[str] = {
+    "Chainstack"
+}  # To reduce number of RPC calls, use only one provider here
+ALLOWED_REGIONS: set[str] = {
+    "fra1"
+}  # To reduce number of RPC calls, use only one region here
 
 
 class MissingEndpointsError(Exception):
@@ -27,6 +31,13 @@ class MissingEndpointsError(Exception):
 
 
 class StateUpdateManager:
+    """Manages the collection, processing, and storage of blockchain state data.
+
+    This class orchestrates the retrieval of blockchain state data from configured endpoints,
+    handles fallback to previous data in case of errors, and updates the centralized blob storage.
+    It enforces provider and region filtering to optimize RPC calls and ensures data consistency.
+    """
+
     def __init__(self) -> None:
         store_id: str | None = os.getenv("STORE_ID")
         token: str | None = os.getenv("VERCEL_BLOB_TOKEN")
@@ -90,7 +101,7 @@ class StateUpdateManager:
                     return blockchain, {
                         "block": data.block_id,
                         "tx": data.transaction_id,
-                        "old_block": data.old_block_id,  # Add new field
+                        "old_block": data.old_block_id,
                     }
 
                 if blockchain in previous_data:
@@ -174,7 +185,7 @@ class handler(BaseHTTPRequestHandler):
         asyncio.set_event_loop(loop)
 
         try:
-            result = loop.run_until_complete(StateUpdateManager().update())
+            result: str = loop.run_until_complete(StateUpdateManager().update())
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()

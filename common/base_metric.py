@@ -4,7 +4,7 @@ import logging
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 
@@ -16,7 +16,7 @@ class MetricValue:
     """Container for a single metric value and its specific labels."""
 
     value: Union[int, float]
-    labels: Optional[Dict[str, str]] = None
+    labels: Optional[dict[str, str]] = None
 
 
 class BaseMetric(ABC):
@@ -24,7 +24,7 @@ class BaseMetric(ABC):
 
     def __init__(
         self,
-        handler: "MetricsHandler",  # type: ignore
+        handler: "MetricsHandler",  # type: ignore  # noqa: F821
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
@@ -37,7 +37,7 @@ class BaseMetric(ABC):
         self.config = config
         self.ws_endpoint = ws_endpoint
         self.http_endpoint = http_endpoint
-        self.values: Dict[str, MetricValue] = {}
+        self.values: dict[str, MetricValue] = {}
         handler._instances.append(self)
 
     @abstractmethod
@@ -48,7 +48,7 @@ class BaseMetric(ABC):
     def process_data(self, data: Any) -> Union[int, float]:
         """Processes raw data into metric value."""
 
-    def get_influx_format(self) -> List[str]:
+    def get_influx_format(self) -> list[str]:
         """Returns metrics in Influx line protocol format."""
         if not self.values:
             raise ValueError("No metric values set")
@@ -78,7 +78,7 @@ class BaseMetric(ABC):
         self,
         value: Union[int, float],
         value_type: str = "response_time",
-        labels: Optional[Dict[str, str]] = None,
+        labels: Optional[dict[str, str]] = None,
     ) -> None:
         """Updates metric value, preserving existing labels if present."""
         if value_type in self.values:

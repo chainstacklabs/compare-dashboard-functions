@@ -2,7 +2,7 @@
 
 import logging
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 
 class MetricLabelKey(Enum):
@@ -29,10 +29,8 @@ class EndpointConfig:
         self.tx_endpoint = tx_endpoint
         self.ws_endpoint = ws_endpoint
 
-    def get_endpoint(self, method: str) -> Optional[str]:
+    def get_endpoint(self) -> Optional[str]:
         """Returns appropriate endpoint based on method."""
-        if method == "NOT_USED_ANYMORE" and self.tx_endpoint:
-            return self.tx_endpoint
         return self.main_endpoint
 
 
@@ -43,7 +41,7 @@ class MetricConfig:
         self,
         timeout: int,
         max_latency: int,
-        extra_params: Optional[Dict[str, Any]] = None,
+        extra_params: Optional[dict[str, Any]] = None,
         endpoints: Optional[EndpointConfig] = None,
     ) -> None:
         self.timeout = timeout

@@ -7,6 +7,8 @@ venv
 *.env
 *.local
 
+.vscode
+
 api/test
 endpoints*.json
 endpoints

@@ -2,28 +2,25 @@
 
 import copy
 from dataclasses import dataclass
-from typing import Dict, List, Tuple, Type
 
 from common.base_metric import BaseMetric
 from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
 
 
 @dataclass
-class MetricRegistration:  # Added: Type-safe registration container
-    metric_class: Type[BaseMetric]
+class MetricRegistration:
+    metric_class: type[BaseMetric]
     metric_name: str
 
 
 class MetricFactory:
     """Creates metric instances for blockchains."""
 
-    _registry: Dict[str, List[MetricRegistration]] = (
-        {}
-    )  # Modified: Using type-safe registration
+    _registry: dict[str, list[MetricRegistration]] = {}
 
     @classmethod
     def register(
-        cls, blockchain_metrics: Dict[str, List[Tuple[Type[BaseMetric], str]]]
+        cls, blockchain_metrics: dict[str, list[tuple[type[BaseMetric], str]]]
     ) -> None:
         """Registers metric classes for blockchains."""
         for blockchain_name, metrics in blockchain_metrics.items():
@@ -46,8 +43,8 @@ class MetricFactory:
         blockchain_name: str,
         metrics_handler: "MetricsHandler",  # type: ignore  # noqa: F821
         config: MetricConfig,
-        **kwargs: Dict,
-    ) -> List[BaseMetric]:
+        **kwargs: dict,
+    ) -> list[BaseMetric]:
         """Creates metric instances for a specific blockchain."""
         if blockchain_name not in cls._registry:
             available = list(cls._registry.keys())
@@ -55,12 +52,11 @@ class MetricFactory:
                 f"No metric classes registered for blockchain '{blockchain_name}'. Available blockchains: {available}"
             )
 
-        # Added: Extracted config setup to separate method
         cls._setup_endpoint_config(config, kwargs)
 
-        source_region = kwargs.get("source_region", "default")
-        target_region = kwargs.get("target_region", "default")
-        provider = kwargs.get("provider", "default")
+        source_region: str = str(kwargs.get("source_region", "default"))
+        target_region: str = str(kwargs.get("target_region", "default"))
+        provider: str = str(kwargs.get("provider", "default"))
 
         metrics = []
         for registration in cls._registry[blockchain_name]:
@@ -96,9 +92,7 @@ class MetricFactory:
         return metrics
 
     @staticmethod
-    def _setup_endpoint_config(
-        config: MetricConfig, kwargs: Dict
-    ) -> None:  # Added: Extracted method
+    def _setup_endpoint_config(config: MetricConfig, kwargs: dict) -> None:
         """Sets up endpoint configuration from kwargs."""
         config.endpoints = EndpointConfig(
             main_endpoint=kwargs.get("http_endpoint"),
@@ -107,16 +101,16 @@ class MetricFactory:
 
     @staticmethod
     def _create_solana_metrics(
-        blockchain_name: str,  # Added: Type hints
-        metric_class: Type[BaseMetric],
+        blockchain_name: str,
+        metric_class: type[BaseMetric],
         metric_name: str,
-        metrics_handler: "MetricsHandler",
+        metrics_handler: "MetricsHandler",  # noqa: F821 # type: ignore
         config: MetricConfig,
-        kwargs: Dict,
+        kwargs: dict,
         source_region: str,
         target_region: str,
         provider: str,
-    ) -> List[BaseMetric]:
+    ) -> list[BaseMetric]:
         """Creates SolanaLandingMetric-specific instances."""
         metrics = []
 
@@ -157,12 +151,12 @@ class MetricFactory:
 
     @staticmethod
     def _create_single_metric(
-        blockchain_name: str,  # Added: Type hints
-        metric_class: Type[BaseMetric],
+        blockchain_name: str,
+        metric_class: type[BaseMetric],
         metric_name: str,
-        metrics_handler: "MetricsHandler",
+        metrics_handler: "MetricsHandler",  # noqa: F821 # type: ignore
         config: MetricConfig,
-        kwargs: Dict,
+        kwargs: dict,
         source_region: str,
         target_region: str,
         provider: str,

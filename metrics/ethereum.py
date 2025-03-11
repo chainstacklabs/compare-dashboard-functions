@@ -149,7 +149,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         Raises:
             ValueError: If subscription to newHeads fails
         """
-        subscription_msg = json.dumps(
+        subscription_msg: str = json.dumps(
             {
                 "id": 1,
                 "jsonrpc": "2.0",
@@ -204,7 +204,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         """
         block_timestamp_hex = block.get("timestamp", "0x0")
         block_timestamp = int(block_timestamp_hex, 16)
-        block_time = datetime.fromtimestamp(block_timestamp, timezone.utc)
-        current_time = datetime.now(timezone.utc)
-        latency = (current_time - block_time).total_seconds()
+        block_time: datetime = datetime.fromtimestamp(block_timestamp, timezone.utc)
+        current_time: datetime = datetime.now(timezone.utc)
+        latency: float = (current_time - block_time).total_seconds()
         return latency

@@ -4,7 +4,7 @@ import asyncio
 import logging
 import random
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import aiohttp
 
@@ -28,8 +28,8 @@ class BlockchainDataFetcher:
     """Fetches blockchain data from RPC nodes using JSON-RPC protocol."""
 
     def __init__(self, http_endpoint: str) -> None:
-        self.http_endpoint = http_endpoint
-        self._headers = {"Content-Type": "application/json"}
+        self.http_endpoint: str = http_endpoint
+        self._headers: dict[str, str] = {"Content-Type": "application/json"}
         self._timeout = aiohttp.ClientTimeout(total=15)
         self._max_retries = 3
         self._retry_delay = 5
@@ -37,10 +37,10 @@ class BlockchainDataFetcher:
         logging.basicConfig(
             level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
         )
-        self._logger = logging.getLogger(__name__)
+        self._logger: logging.Logger = logging.getLogger(__name__)
 
     async def _make_rpc_request(
-        self, method: str, params: Optional[Union[List, Dict]] = None
+        self, method: str, params: Optional[Union[list, dict]] = None
     ) -> Any:
         """Makes a JSON-RPC request with retries."""
         request = {"jsonrpc": "2.0", "method": method, "params": params or [], "id": 1}
@@ -78,7 +78,7 @@ class BlockchainDataFetcher:
 
     async def _get_block_in_range(
         self, slot_start: int, slot_end: int
-    ) -> Tuple[Optional[int], Optional[Dict]]:
+    ) -> tuple[Optional[int], Optional[dict]]:
         """Search for available block in given slot range."""
         current_slot = slot_end
         while current_slot >= slot_start:

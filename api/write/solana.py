@@ -8,7 +8,7 @@ metric_name = f"{MetricsServiceConfig.METRIC_PREFIX}transaction_landing_latency"
 target_region = "fra1"
 
 # Run this metric only in EU (fra1)
-METRICS = (
+METRICS: list[tuple[type[SolanaLandingMetric], str]] = (
     []
     if os.getenv("VERCEL_REGION") != target_region  # System env var, standard name
     else [(SolanaLandingMetric, metric_name)]

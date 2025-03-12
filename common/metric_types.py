@@ -4,7 +4,7 @@ import asyncio
 import logging
 import time
 from abc import abstractmethod
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 import aiohttp
 import websockets
@@ -47,8 +47,8 @@ class WebSocketMetric(BaseMetric):
 
     async def connect(self) -> Any:
         """Creates WebSocket connection."""
-        websocket = await websockets.connect(
-            self.ws_endpoint,
+        websocket: websockets.WebSocketClientProtocol = await websockets.connect(
+            self.ws_endpoint,  # type: ignore
             ping_timeout=self.config.timeout,
             close_timeout=self.config.timeout,
         )
@@ -64,7 +64,7 @@ class WebSocketMetric(BaseMetric):
             data = await self.listen_for_data(websocket)
 
             if data is not None:
-                latency = self.process_data(data)
+                latency: int | float = self.process_data(data)
                 self.update_metric_value(latency)
                 self.mark_success()
                 return
@@ -90,15 +90,15 @@ class HttpMetric(BaseMetric):
     async def fetch_data(self) -> Optional[Any]:
         """Fetches HTTP endpoint data."""
 
-    def get_endpoint(self, method: str) -> str:
+    def get_endpoint(self) -> str:
         """Returns appropriate endpoint based on method."""
-        return self.config.endpoints.get_endpoint(method)  # type: ignore
+        return str(self.config.endpoints.get_endpoint())
 
     async def collect_metric(self) -> None:
         try:
             data = await self.fetch_data()
             if data is not None:
-                latency = self.process_data(data)
+                latency: int | float = self.process_data(data)
                 self.update_metric_value(latency)
                 self.mark_success()
                 return
@@ -127,7 +127,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        method_params: Optional[Dict[str, Any]] = None,
+        method_params: Optional[dict[str, Any]] = None,
         **kwargs: Any,
     ) -> None:
         state_data = kwargs.get("state_data", {})
@@ -141,7 +141,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
             config=config,
         )
 
-        self.method_params = (
+        self.method_params: dict[str, Any] = (
             self.get_params_from_state(state_data)
             if method_params is None
             else method_params
@@ -149,7 +149,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
         self._base_request = self._build_base_request()
 
-    def _build_base_request(self) -> Dict[str, Any]:
+    def _build_base_request(self) -> dict[str, Any]:
         """Build the base JSON-RPC request object."""
         request = {
             "id": 1,
@@ -161,27 +161,27 @@ class HttpCallLatencyMetricBase(HttpMetric):
         return request
 
     @staticmethod
-    def validate_state(state_data: Dict[str, Any]) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validate blockchain state data."""
         return True
 
     @staticmethod
-    def get_params_from_state(state_data: Dict[str, Any]) -> Dict[str, Any]:
+    def get_params_from_state(state_data: dict[str, Any]) -> dict[str, Any]:
         """Get RPC method parameters from state data."""
         return {}
 
     async def fetch_data(self) -> float:
         """Measure single request latency with a retry on 429 error."""
-        endpoint = self.config.endpoints.get_endpoint(self.method)
+        endpoint: str | None = self.config.endpoints.get_endpoint()
 
         async with aiohttp.ClientSession() as session:
             response_time = 0.0  # Do not include retried requests after 429 error
-            response = None
+            response = None  # type: ignore
 
             for retry_count in range(MAX_RETRIES):
-                start_time = time.monotonic()
-                response = await self._send_request(session, endpoint, retry_count)
-                response_time = time.monotonic() - start_time
+                start_time: float = time.monotonic()
+                response: aiohttp.ClientResponse = await self._send_request(session, endpoint)  # type: ignore
+                response_time: float = time.monotonic() - start_time
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     wait_time = int(response.headers.get("Retry-After", 15))
@@ -207,7 +207,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 await response.release()
 
     async def _send_request(
-        self, session: aiohttp.ClientSession, endpoint: str, retry_count: int
+        self, session: aiohttp.ClientSession, endpoint: str
     ) -> aiohttp.ClientResponse:
         """Send the request without retry logic."""
         return await session.post(

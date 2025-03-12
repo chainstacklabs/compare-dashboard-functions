@@ -1,7 +1,9 @@
+"""Blob storage handler for managing blobs in Vercel Blob Storage."""
+
 import json
 import time
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Optional
 
 import aiohttp
 
@@ -21,8 +23,8 @@ class BlobConfig:
 
 class BlobStorageHandler:
     def __init__(self, config: BlobConfig):
-        self.config = config
-        self._headers = {
+        self.config: BlobConfig = config
+        self._headers: dict[str, str] = {
             "Authorization": f"Bearer {config.token}",
             "Content-Type": "application/json",
             "x-store-id": config.store_id,
@@ -33,8 +35,8 @@ class BlobStorageHandler:
         }
 
     async def _make_request(
-        self, method: str, url: str, data: Optional[Dict] = None
-    ) -> Dict:
+        self, method: str, url: str, data: Optional[dict] = None
+    ) -> dict:
         async with aiohttp.ClientSession() as session:
             async with session.request(
                 method,
@@ -47,25 +49,27 @@ class BlobStorageHandler:
                     raise Exception(f"Blob operation failed: {resp.status} - {text}")
                 return await resp.json()
 
-    async def list_files(self) -> List[Dict[str, str]]:
-        list_url = f"{self.config.base_url}?prefix={self.config.folder}/"
+    async def list_files(self) -> list[dict[str, str]]:
+        list_url: str = f"{self.config.base_url}?prefix={self.config.folder}/"
         response = await self._make_request("GET", list_url)
         return response.get("blobs", [])
 
-    async def delete_blobs(self, urls: List[str]) -> None:
+    async def delete_blobs(self, urls: list[str]) -> None:
         if not urls:
             return
         delete_url = f"{self.config.base_url}/delete"
         await self._make_request("POST", delete_url, {"urls": urls})
 
     async def delete_all_files(self) -> None:
-        files = await self.list_files()
+        files: list[dict[str, str]] = await self.list_files()
         if files:
-            urls = [file["url"] for file in files]
+            urls: list[str] = [file["url"] for file in files]
             await self.delete_blobs(urls)
 
-    async def update_data(self, blockchain_data: Dict[str, Dict[str, str]]) -> None:
+    async def update_data(self, blockchain_data: dict[str, dict[str, str]]) -> None:
         await self.delete_all_files()
         data = {**blockchain_data, "updated_at": int(time.time())}
-        blob_url = f"{self.config.base_url}/{self.config.folder}/{self.config.filename}"
+        blob_url: str = (
+            f"{self.config.base_url}/{self.config.folder}/{self.config.filename}"
+        )
         await self._make_request("PUT", blob_url, data)

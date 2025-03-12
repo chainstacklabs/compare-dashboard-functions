@@ -48,7 +48,7 @@
     },
     {
       "path": "/api/support/update_state",
-      "schedule": "*/20 * * * *"
+      "schedule": "*/30 * * * *"
     }
   ]
 }

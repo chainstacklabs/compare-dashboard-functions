@@ -26,4 +26,4 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
-    metrics_handler = MetricsHandler("BNB Smart Chain", METRICS)
+    metrics_handler = MetricsHandler("BNB", METRICS)

@@ -18,7 +18,7 @@ SUPPORTED_BLOCKCHAINS: list[str] = [
     "ton",
     "base",
     "arbitrum",
-    "bnb smart chain",
+    "bnb",
 ]
 ALLOWED_PROVIDERS: set[str] = {
     "Chainstack"

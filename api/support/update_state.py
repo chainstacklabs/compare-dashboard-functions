@@ -12,7 +12,14 @@ from common.state.blob_storage import BlobConfig, BlobStorageHandler
 from common.state.blockchain_fetcher import BlockchainData, BlockchainDataFetcher
 from common.state.blockchain_state import BlockchainState
 
-SUPPORTED_BLOCKCHAINS: list[str] = ["ethereum", "solana", "ton", "base"]
+SUPPORTED_BLOCKCHAINS: list[str] = [
+    "ethereum",
+    "solana",
+    "ton",
+    "base",
+    "arbitrum",
+    "bnb smart chain",
+]
 ALLOWED_PROVIDERS: set[str] = {
     "Chainstack"
 }  # To reduce number of RPC calls, use only one provider here

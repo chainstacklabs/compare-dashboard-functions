@@ -118,7 +118,7 @@ class BlockchainDataFetcher:
 
             latest_number = int(latest_block["number"], 16)
             offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
-                blockchain.lower(), (20, 100)
+                blockchain.lower(), (7200, 14400)
             )
             offset = random.randint(offset_range[0], offset_range[1])
             old_number = max(0, latest_number - offset)
@@ -162,7 +162,7 @@ class BlockchainDataFetcher:
             tx_sig = latest_block.get("signatures", [""])[0]
 
             offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
-                "solana", (100, 1000)
+                "solana", (432000, 648000)
             )
             offset = random.randint(offset_range[0], offset_range[1])
             target_slot = max(0, actual_latest_slot - offset)
@@ -189,7 +189,9 @@ class BlockchainDataFetcher:
             if not isinstance(last_block, dict):
                 return BlockchainData.empty()
 
-            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get("ton", (10, 50))
+            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
+                "ton", (1555200, 1572480)
+            )
             offset = random.randint(offset_range[0], offset_range[1])
             old_seqno = max(0, last_block["seqno"] - offset)
 
@@ -229,7 +231,12 @@ class BlockchainDataFetcher:
     async def fetch_latest_data(self, blockchain: str) -> BlockchainData:
         """Fetches latest block and transaction data for specified blockchain."""
         try:
-            if blockchain.lower() in ("ethereum", "base"):
+            if blockchain.lower() in (
+                "ethereum",
+                "base",
+                "arbitrum",
+                "bnb smart chain",
+            ):
                 return await self._fetch_evm_data(blockchain)
             elif blockchain.lower() == "solana":
                 return await self._fetch_solana_data()

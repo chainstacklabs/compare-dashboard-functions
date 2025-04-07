@@ -16,6 +16,14 @@
       "memory": 200,
       "maxDuration": 59
     },
+    "api/read/arbitrum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/bnbsc.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
     "api/write/solana.py": {
       "memory": 200,
       "maxDuration": 70
@@ -40,6 +48,14 @@
     },
     {
       "path": "/api/read/ton",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/read/arbitrum",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/read/bnbsc",
       "schedule": "* * * * *"
     },
     {

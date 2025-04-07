@@ -16,6 +16,14 @@
       "memory": 200,
       "maxDuration": 59
     },
+    "api/read/arbitrum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/bnbsc.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
     "api/write/solana.py": {
       "memory": 200,
       "maxDuration": 70
@@ -28,19 +36,27 @@
   "crons": [
     {
       "path": "/api/read/ethereum",
-      "schedule": "*/2 * * * *"
+      "schedule": "* * * * *"
     },
     {
       "path": "/api/read/base",
-      "schedule": "*/2 * * * *"
+      "schedule": "* * * * *"
     },
     {
       "path": "/api/read/solana",
-      "schedule": "*/2 * * * *"
+      "schedule": "* * * * *"
     },
     {
       "path": "/api/read/ton",
-      "schedule": "*/2 * * * *"
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/read/arbitrum",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/read/bnbsc",
+      "schedule": "* * * * *"
     },
     {
       "path": "/api/write/solana",

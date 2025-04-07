@@ -31,7 +31,7 @@ class MetricsServiceConfig:
         "solana": (432000, 648000),
         "ton": (1555200, 1572480),
         "arbitrum": (7200, 14400),
-        "bnb smart chain": (7200, 14400),
+        "bnb": (7200, 14400),
     }
 
 

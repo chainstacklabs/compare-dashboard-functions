@@ -235,7 +235,7 @@ class BlockchainDataFetcher:
                 "ethereum",
                 "base",
                 "arbitrum",
-                "bnb smart chain",
+                "bnb",
             ):
                 return await self._fetch_evm_data(blockchain)
             elif blockchain.lower() == "solana":

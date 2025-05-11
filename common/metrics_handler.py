@@ -72,6 +72,7 @@ class MetricsHandler:
             tx_endpoint=provider.get("tx_endpoint"),  # type: ignore
             state_data=state_data,
         )
+
         await asyncio.gather(*(m.collect_metric() for m in metrics))
 
     async def push_to_grafana(self, metrics_text: str) -> None:

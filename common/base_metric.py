@@ -6,7 +6,11 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Optional, Union
 
+import aiohttp
+import websockets
+
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
+from config.defaults import MetricsServiceConfig
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -98,6 +102,22 @@ class BaseMetric(ABC):
 
     def handle_error(self, error: Exception) -> None:
         """Logs error and sets default value if none exists."""
+        if isinstance(error, aiohttp.ClientResponseError):
+            status_code: int = error.status
+            if status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
+                logging.warning(
+                    f"Ignoring HTTP error [{status_code}] for {self.labels.get_prometheus_labels()}"
+                )
+                return  # Skip metric submission for ignored errors
+
+        if isinstance(error, websockets.exceptions.InvalidStatusCode):
+            status_code = error.status_code
+            if status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
+                logging.warning(
+                    f"Ignoring WebSocket connection error [{status_code}] for {self.labels.get_prometheus_labels()}"
+                )
+                return  # Skip metric submission for ignored errors
+
         if not self.values:
             self.update_metric_value(0)
 

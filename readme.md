@@ -18,7 +18,7 @@ A serverless solution for monitoring RPC nodes response time across different bl
 
 ## Features
 
-- :chains: Supported blockchains: Ethereum, Base, Solana, TON
+- :chains: Supported blockchains: Ethereum, Arbitrum, Base, BNB Smart Chain, Solana, TON
 - :globe_with_meridians: Multi-region deployment (US, EU, Asia)
 - :zap: Real-time metrics collection
 

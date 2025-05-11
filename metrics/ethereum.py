@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import logging
 from datetime import datetime, timezone
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
@@ -162,14 +163,27 @@ class WSBlockLatencyMetric(WebSocketMetric):
         subscription_data = json.loads(response)
         if subscription_data.get("result") is None:
             raise ValueError("Subscription to newHeads failed")
+        self.subscription_id = subscription_data["result"]
 
     async def unsubscribe(self, websocket) -> None:
-        """Clean up WebSocket subscription.
+        """Unsubscribe from the WebSocket connection.
 
         Args:
             websocket: WebSocket connection instance
         """
-        pass
+        if self.subscription_id is None:
+            logging.warning("No subscription ID available, skipping unsubscribe.")
+            return
+
+        unsubscribe_msg: str = json.dumps(
+            {
+                "id": 2,
+                "jsonrpc": "2.0",
+                "method": "eth_unsubscribe",
+                "params": [self.subscription_id],
+            }
+        )
+        await websocket.send(unsubscribe_msg)
 
     async def listen_for_data(self, websocket):
         """Listen for a single data message from the WebSocket and process block latency.

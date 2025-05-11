@@ -7,9 +7,11 @@ class MetricsServiceConfig:
     """Default configuration for metrics collection and processing."""
 
     IGNORED_HTTP_ERRORS = [
-        403,
-        429,
-    ]  # Define the errors to ignore (data will not be submitted to Grafana)  # noqa: RUF012
+        403,  # Forbidden - usually related to plan restrictions
+        429,  # Too Many Requests - rate limit exceeded
+        401,  # Unauthorized - if authentication failure is plan-related
+        404,  # Not Found - endpoint deprecation or incorrect endpoint
+    ]
 
     # Grafana push settings
     GRAFANA_PUSH_MAX_RETRIES = 3

@@ -8,6 +8,7 @@ import time
 from http.server import BaseHTTPRequestHandler
 
 import aiohttp
+import websockets
 
 from common.base_metric import BaseMetric
 from common.factory import MetricFactory
@@ -72,7 +73,36 @@ class MetricsHandler:
             tx_endpoint=provider.get("tx_endpoint"),  # type: ignore
             state_data=state_data,
         )
-        await asyncio.gather(*(m.collect_metric() for m in metrics))
+
+        for metric in metrics:
+            try:
+                await metric.collect_metric()
+            except (
+                aiohttp.ClientResponseError,
+                websockets.exceptions.InvalidStatusCode,
+            ) as e:
+                if (
+                    isinstance(e, websockets.exceptions.InvalidStatusCode)
+                    and e.status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS
+                ):
+                    logging.warning(
+                        f"WebSocket connection rejected: HTTP {e.status_code} for {provider['name']}"
+                    )
+                    raise ValueError(
+                        f"WebSocket connection rejected: HTTP {e.status_code} for {provider['name']}"
+                    )
+                elif (
+                    isinstance(e, aiohttp.ClientResponseError)
+                    and e.status in MetricsServiceConfig.IGNORED_HTTP_ERRORS
+                ):
+                    logging.warning(
+                        f"Skipping metric for provider {provider['name']} due to ignored HTTP error {e.status}"
+                    )
+                    continue
+                else:
+                    raise ValueError(
+                        f"Metric collection failed for {provider['name']}: {e!s}"
+                    )
 
     async def push_to_grafana(self, metrics_text: str) -> None:
         if not all(

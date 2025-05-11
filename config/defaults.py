@@ -6,6 +6,11 @@ import os
 class MetricsServiceConfig:
     """Default configuration for metrics collection and processing."""
 
+    IGNORED_HTTP_ERRORS = [
+        403,
+        429,
+    ]  # Define the errors to ignore (data will not be submitted to Grafana)  # noqa: RUF012
+
     # Grafana push settings
     GRAFANA_PUSH_MAX_RETRIES = 3
     GRAFANA_PUSH_RETRY_DELAY = 1

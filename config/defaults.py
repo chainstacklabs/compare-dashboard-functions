@@ -6,6 +6,13 @@ import os
 class MetricsServiceConfig:
     """Default configuration for metrics collection and processing."""
 
+    IGNORED_HTTP_ERRORS = [
+        403,  # Forbidden - usually related to plan restrictions
+        429,  # Too Many Requests - rate limit exceeded
+        401,  # Unauthorized - if authentication failure is plan-related
+        404,  # Not Found - endpoint deprecation or incorrect endpoint
+    ]
+
     # Grafana push settings
     GRAFANA_PUSH_MAX_RETRIES = 3
     GRAFANA_PUSH_RETRY_DELAY = 1

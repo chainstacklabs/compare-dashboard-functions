@@ -196,7 +196,14 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
             try:
                 if response.status != 200:
-                    raise ValueError(f"Status code: {response.status}")
+                    # Let the error propagate with status code
+                    raise aiohttp.ClientResponseError(
+                        request_info=response.request_info,
+                        history=(),
+                        status=response.status,
+                        message=f"Status code: {response.status}",
+                        headers=response.headers,
+                    )
 
                 json_response = await response.json()
                 if "error" in json_response:

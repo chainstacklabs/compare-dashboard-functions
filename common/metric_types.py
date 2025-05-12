@@ -49,8 +49,9 @@ class WebSocketMetric(BaseMetric):
         """Creates WebSocket connection."""
         websocket: websockets.WebSocketClientProtocol = await websockets.connect(
             self.ws_endpoint,  # type: ignore
-            ping_timeout=self.config.timeout,
-            close_timeout=self.config.timeout,
+            ping_timeout=10,  # self.config.timeout,
+            open_timeout=10,  # self.config.timeout,
+            close_timeout=10,  # self.config.timeout,
         )
         return websocket
 

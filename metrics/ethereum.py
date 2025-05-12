@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpCallLatencyMetricBase, WebSocketMetric
 
+WS_DEFAULT_TIMEOUT = 10
+
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
     """Collects transaction latency for eth_call simulation."""
@@ -141,6 +143,24 @@ class WSBlockLatencyMetric(WebSocketMetric):
         )
         self.labels.update_label(MetricLabelKey.API_METHOD, "eth_subscribe")
 
+    async def send_with_timeout(self, websocket, message: str, timeout: float) -> None:
+        """Send a message with a timeout."""
+        try:
+            await asyncio.wait_for(websocket.send(message), timeout)
+        except asyncio.TimeoutError:
+            raise TimeoutError(
+                f"WebSocket message send timed out after {timeout} seconds"
+            )
+
+    async def recv_with_timeout(self, websocket, timeout: float) -> str:
+        """Receive a message with a timeout."""
+        try:
+            return await asyncio.wait_for(websocket.recv(), timeout)
+        except asyncio.TimeoutError:
+            raise TimeoutError(
+                f"WebSocket message reception timed out after {timeout} seconds"
+            )
+
     async def subscribe(self, websocket) -> None:
         """Subscribe to the newHeads event on the WebSocket endpoint.
 
@@ -158,8 +178,8 @@ class WSBlockLatencyMetric(WebSocketMetric):
                 "params": ["newHeads"],
             }
         )
-        await websocket.send(subscription_msg)
-        response = await websocket.recv()
+        await self.send_with_timeout(websocket, subscription_msg, WS_DEFAULT_TIMEOUT)
+        response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
         subscription_data = json.loads(response)
         if subscription_data.get("result") is None:
             raise ValueError("Subscription to newHeads failed")
@@ -183,7 +203,8 @@ class WSBlockLatencyMetric(WebSocketMetric):
                 "params": [self.subscription_id],
             }
         )
-        await websocket.send(unsubscribe_msg)
+        await self.send_with_timeout(websocket, unsubscribe_msg, WS_DEFAULT_TIMEOUT)
+        await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
 
     async def listen_for_data(self, websocket):
         """Listen for a single data message from the WebSocket and process block latency.
@@ -197,7 +218,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         Raises:
             asyncio.TimeoutError: If no message received within timeout period
         """
-        response = await asyncio.wait_for(websocket.recv(), timeout=self.config.timeout)
+        response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
         response_data = json.loads(response)
         if "params" in response_data:
             block = response_data["params"]["result"]

@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpCallLatencyMetricBase, WebSocketMetric
 
-WS_DEFAULT_TIMEOUT = 10
+WS_DEFAULT_TIMEOUT = 20
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):

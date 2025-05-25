@@ -2,10 +2,8 @@ from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.solana import (
     HTTPGetBalanceLatencyMetric,
-    HTTPGetBlockLatencyMetric,
     HTTPGetProgramAccsLatencyMetric,
     HTTPGetRecentBlockhashLatencyMetric,
-    HTTPGetTxLatencyMetric,
     HTTPSimulateTxLatencyMetric,
 )
 
@@ -15,8 +13,6 @@ METRICS = [
     (HTTPGetRecentBlockhashLatencyMetric, metric_name),
     (HTTPSimulateTxLatencyMetric, metric_name),
     (HTTPGetBalanceLatencyMetric, metric_name),
-    (HTTPGetBlockLatencyMetric, metric_name),
-    (HTTPGetTxLatencyMetric, metric_name),
     (HTTPGetProgramAccsLatencyMetric, metric_name),
 ]
 

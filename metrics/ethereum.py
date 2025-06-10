@@ -155,7 +155,13 @@ class WSBlockLatencyMetric(WebSocketMetric):
     async def recv_with_timeout(self, websocket, timeout: float) -> str:
         """Receive a message with a timeout."""
         try:
-            return await asyncio.wait_for(websocket.recv(), timeout)
+            message = await asyncio.wait_for(websocket.recv(), timeout)
+            # Log incoming message size in bytes
+            message_size: int = len(message.encode("utf-8"))
+            logging.warning(
+                f"WebSocket received {message_size} bytes from {self.labels.get_prometheus_labels()}"
+            )
+            return message
         except asyncio.TimeoutError:
             raise TimeoutError(
                 f"WebSocket message reception timed out after {timeout} seconds"

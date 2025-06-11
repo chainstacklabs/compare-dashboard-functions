@@ -33,7 +33,7 @@
             "region": "Global",
             "websocket_endpoint": "wss://mainnet.helius-rpc.com/?api-key=...",
             "http_endpoint": "https://mainnet.helius-rpc.com/?api-key=...",
-            "tx_endpoint": "https://staked.helius-rpc.com/?api-key=...",
+            "tx_endpoint": "",
             "data": {}
         },
         {

@@ -8,6 +8,7 @@ from typing import Any, Optional, Union
 
 import aiohttp
 import websockets
+import websockets.exceptions
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from config.defaults import MetricsServiceConfig

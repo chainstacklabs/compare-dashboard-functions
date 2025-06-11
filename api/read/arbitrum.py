@@ -9,13 +9,15 @@ from metrics.arbitrum import (
     HTTPTxReceiptLatencyMetric,
 )
 from metrics.ethereum import (
-    WSBlockLatencyMetric,
+    # WSBlockLatencyMetric,
+    WSLogLatencyMetric,
 )
 
 metric_name = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
 
 METRICS = [
-    (WSBlockLatencyMetric, metric_name),
+    # (WSBlockLatencyMetric, metric_name),
+    (WSLogLatencyMetric, metric_name),
     (HTTPBlockNumberLatencyMetric, metric_name),
     (HTTPEthCallLatencyMetric, metric_name),
     (HTTPAccBalanceLatencyMetric, metric_name),

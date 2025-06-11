@@ -175,7 +175,9 @@ class HttpCallLatencyMetricBase(HttpMetric):
         """Measure single request latency with a retry on 429 error."""
         endpoint: str | None = self.config.endpoints.get_endpoint()
 
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=self.config.timeout)
+        ) as session:
             response_time = 0.0  # Do not include retried requests after 429 error
             response = None  # type: ignore
 

@@ -161,7 +161,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
             message = await asyncio.wait_for(websocket.recv(), timeout)
             # Log incoming message size in bytes
             message_size: int = len(message.encode("utf-8"))
-            logging.warning(
+            logging.info(
                 f"WebSocket received {message_size} bytes from {self.labels.get_prometheus_labels()}"
             )
             return message
@@ -319,7 +319,7 @@ class WSLogLatencyMetric(WebSocketMetric):
             message = await asyncio.wait_for(websocket.recv(), timeout)
             # Log incoming message size in bytes
             message_size: int = len(message.encode("utf-8"))
-            logging.warning(
+            logging.info(
                 f"WebSocket received {message_size} bytes from {self.labels.get_prometheus_labels()}"
             )
             return message

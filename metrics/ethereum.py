@@ -179,20 +179,49 @@ class WSBlockLatencyMetric(WebSocketMetric):
         Raises:
             ValueError: If subscription to newHeads fails
         """
+        # First attempt: with False flag, not all providers support this
         subscription_msg: str = json.dumps(
             {
                 "id": 1,
                 "jsonrpc": "2.0",
                 "method": "eth_subscribe",
-                "params": ["newHeads"],
+                "params": ["newHeads", False],
             }
         )
+
         await self.send_with_timeout(websocket, subscription_msg, WS_DEFAULT_TIMEOUT)
         response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
         subscription_data = json.loads(response)
+
+        # If subscription failed, try without the False flag
         if subscription_data.get("result") is None:
-            raise ValueError("Subscription to newHeads failed")
-        self.subscription_id = subscription_data["result"]
+            logging.warning(
+                "Subscription with False flag failed, retrying without flag"
+            )
+
+            fallback_subscription_msg: str = json.dumps(
+                {
+                    "id": 1,
+                    "jsonrpc": "2.0",
+                    "method": "eth_subscribe",
+                    "params": ["newHeads"],
+                }
+            )
+
+            await self.send_with_timeout(
+                websocket, fallback_subscription_msg, WS_DEFAULT_TIMEOUT
+            )
+            fallback_response: str = await self.recv_with_timeout(
+                websocket, WS_DEFAULT_TIMEOUT
+            )
+            fallback_subscription_data = json.loads(fallback_response)
+
+            if fallback_subscription_data.get("result") is None:
+                raise ValueError("Subscription to newHeads failed even without flag")
+
+            self.subscription_id = fallback_subscription_data["result"]
+        else:
+            self.subscription_id = subscription_data["result"]
 
     async def unsubscribe(self, websocket) -> None:
         """Unsubscribe from the WebSocket connection.

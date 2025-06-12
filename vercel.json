@@ -21,7 +21,7 @@
       "maxDuration": 59
     },
     "api/read/bnbsc.py": {
-      "memory": 400,
+      "memory": 300,
       "maxDuration": 59
     },
     "api/read/test_blockchain.py": {

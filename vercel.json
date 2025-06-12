@@ -33,7 +33,7 @@
       "maxDuration": 59
     },
     "api/support/update_state.py": {
-      "memory": 100,
+      "memory": 128,
       "maxDuration": 59
     }
   },

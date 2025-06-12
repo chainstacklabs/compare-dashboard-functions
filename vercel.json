@@ -1,15 +1,15 @@
 {
   "functions": {
     "api/read/ethereum.py": {
-      "memory": 400,
+      "memory": 300,
       "maxDuration": 59
     },
     "api/read/base.py": {
-      "memory": 400,
+      "memory": 300,
       "maxDuration": 59
     },
     "api/read/solana.py": {
-      "memory": 400,
+      "memory": 300,
       "maxDuration": 59
     },
     "api/read/ton.py": {
@@ -17,7 +17,7 @@
       "maxDuration": 59
     },
     "api/read/arbitrum.py": {
-      "memory": 400,
+      "memory": 300,
       "maxDuration": 59
     },
     "api/read/bnbsc.py": {
@@ -25,16 +25,16 @@
       "maxDuration": 59
     },
     "api/read/test_blockchain.py": {
-      "memory": 200,
+      "memory": 150,
       "maxDuration": 59
     },
     "api/write/solana.py": {
-      "memory": 200,
-      "maxDuration": 70
+      "memory": 160,
+      "maxDuration": 59
     },
     "api/support/update_state.py": {
-      "memory": 200,
-      "maxDuration": 120
+      "memory": 100,
+      "maxDuration": 59
     }
   },
   "crons": [

@@ -374,21 +374,34 @@ class WSLogLatencyMetric(WebSocketMetric):
 
     async def listen_for_data(self, websocket) -> Optional[Any]:
         """Listen for the FIRST WETH deposit event and immediately unsubscribe."""
-        response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
-
-        # Immediately unsubscribe as soon as we get ANY message
         try:
-            await self.unsubscribe(websocket)
-        except Exception as e:
-            logging.warning(f"Failed to unsubscribe immediately: {e}")
+            response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
 
-        response_data = json.loads(response)
+            # Immediately unsubscribe as soon as we get ANY message
+            try:
+                await self.unsubscribe(websocket)
+            except Exception as e:
+                logging.warning(f"Failed to unsubscribe immediately: {e}")
 
-        if "params" in response_data and "result" in response_data["params"]:
-            log_data = response_data["params"]["result"]
-            return log_data
+            response_data = json.loads(response)
 
-        return None
+            if "params" in response_data and "result" in response_data["params"]:
+                log_data = response_data["params"]["result"]
+                return log_data
+
+            return None
+
+        except TimeoutError as e:
+            # Timeout is expected when no events occur - log as warning but don't raise
+            logging.warning(f"No WETH deposit events received within timeout: {e}")
+
+            # Ensure we unsubscribe even on timeout
+            try:
+                await self.unsubscribe(websocket)
+            except Exception as unsub_error:
+                logging.warning(f"Failed to unsubscribe after timeout: {unsub_error}")
+
+            return None
 
     async def collect_metric(self) -> None:
         """Collects single WebSocket message and calculates timestamp-based latency."""
@@ -405,11 +418,20 @@ class WSLogLatencyMetric(WebSocketMetric):
                 self.update_metric_value(latency)
                 self.mark_success()
                 return
-            raise ValueError("No data in response")
+            else:
+                # No event received (timeout) - this is acceptable, don't mark as failure
+                logging.info(
+                    "No WETH deposit event received - skipping metric collection"
+                )
+                return
 
         except Exception as e:
-            self.mark_failure()
-            self.handle_error(e)
+            # Only mark failure for actual errors, not timeouts
+            if not isinstance(e, TimeoutError):
+                self.mark_failure()
+                self.handle_error(e)
+            else:
+                logging.warning(f"Timeout in collect_metric: {e}")
 
         finally:
             if websocket:

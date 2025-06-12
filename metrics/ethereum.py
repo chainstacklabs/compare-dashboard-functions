@@ -255,23 +255,23 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
 
 class WSLogLatencyMetric(WebSocketMetric):
-    """Collects log latency for EVM providers using Transfer events.
+    """Collects log latency using minimal-byte log events.
 
-    This metric subscribes to Transfer events from major token contracts,
-    gets the first event, immediately unsubscribes, and calculates latency.
+    Uses a very specific event that happens predictably but rarely,
+    minimizing both frequency and byte count for cost optimization.
     """
 
-    # Use major tokens which have frequent but not overwhelming transfer activity
-    TOKEN_CONTRACTS: dict[str, str] = {
-        "ethereum": "0xdAC17F958D2ee523a2206206994597C13D831ec7",  # USDT
-        "base": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",  # USDC
-        "arbitrum": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",  # USDT
-        "bnb": "0x55d398326f99059fF775485246999027B3197955",  # BSC-USD
+    # WETH Deposit events - happen regularly but not too frequently
+    WETH_CONTRACTS: dict[str, str] = {
+        "ethereum": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",  # WETH
+        "base": "0x4200000000000000000000000000000000000006",  # WETH on Base
+        "arbitrum": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",  # WETH on Arbitrum
+        "bnb": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # WBNB
     }
 
-    # Transfer event signature: Transfer(address,address,uint256)
-    TRANSFER_SIGNATURE = (
-        "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
+    # Deposit event signature: Deposit(address,uint256) - smaller than Transfer
+    DEPOSIT_SIGNATURE = (
+        "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c"
     )
 
     def __init__(
@@ -293,13 +293,12 @@ class WSLogLatencyMetric(WebSocketMetric):
             http_endpoint=http_endpoint,
         )
 
-        # Get blockchain name from labels and determine token contract
+        # Get WETH contract for the specific blockchain
         blockchain: str | None = labels.get_label(MetricLabelKey.BLOCKCHAIN)
         if blockchain:
-            self.token_contract = self.TOKEN_CONTRACTS.get(blockchain.lower())  # type: ignore
+            self.weth_contract = self.WETH_CONTRACTS.get(blockchain.lower())
         else:
-            # Fallback to Ethereum USDT if blockchain not specified
-            self.token_contract: str = self.TOKEN_CONTRACTS["ethereum"]
+            self.weth_contract = self.WETH_CONTRACTS["ethereum"]
 
         self.labels.update_label(MetricLabelKey.API_METHOD, "eth_subscribe_logs")
 
@@ -328,7 +327,7 @@ class WSLogLatencyMetric(WebSocketMetric):
             )
 
     async def subscribe(self, websocket) -> None:
-        """Subscribe to Transfer logs from major token contracts."""
+        """Subscribe to WETH Deposit events - minimal bytes, moderate frequency."""
         subscription_msg: str = json.dumps(
             {
                 "id": 1,
@@ -336,10 +335,7 @@ class WSLogLatencyMetric(WebSocketMetric):
                 "method": "eth_subscribe",
                 "params": [
                     "logs",
-                    {
-                        "address": self.token_contract,
-                        "topics": [self.TRANSFER_SIGNATURE],
-                    },
+                    {"address": self.weth_contract, "topics": [self.DEPOSIT_SIGNATURE]},
                 ],
             }
         )
@@ -349,7 +345,9 @@ class WSLogLatencyMetric(WebSocketMetric):
         subscription_data = json.loads(response)
 
         if subscription_data.get("result") is None:
-            raise ValueError(f"Subscription to logs failed: {subscription_data}")
+            raise ValueError(
+                f"Subscription to WETH deposits failed: {subscription_data}"
+            )
 
         self.subscription_id = subscription_data["result"]
 
@@ -375,17 +373,35 @@ class WSLogLatencyMetric(WebSocketMetric):
             logging.warning(f"Error during unsubscribe: {e}")
 
     async def listen_for_data(self, websocket) -> Optional[Any]:
-        """Listen for the FIRST log event only and immediately unsubscribe."""
-        response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
-        response_data = json.loads(response)
+        """Listen for the FIRST WETH deposit event and immediately unsubscribe."""
+        try:
+            response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
 
-        if "params" in response_data and "result" in response_data["params"]:
-            log_data = response_data["params"]["result"]
-            # Immediately unsubscribe after getting first event
-            await self.unsubscribe(websocket)
-            return log_data
+            # Immediately unsubscribe as soon as we get ANY message
+            try:
+                await self.unsubscribe(websocket)
+            except Exception as e:
+                logging.warning(f"Failed to unsubscribe immediately: {e}")
 
-        return None
+            response_data = json.loads(response)
+
+            if "params" in response_data and "result" in response_data["params"]:
+                log_data = response_data["params"]["result"]
+                return log_data
+
+            return None
+
+        except TimeoutError as e:
+            # Timeout is expected when no events occur - log as warning but don't raise
+            logging.warning(f"No WETH deposit events received within timeout: {e}")
+
+            # Ensure we unsubscribe even on timeout
+            try:
+                await self.unsubscribe(websocket)
+            except Exception as unsub_error:
+                logging.warning(f"Failed to unsubscribe after timeout: {unsub_error}")
+
+            return None
 
     async def collect_metric(self) -> None:
         """Collects single WebSocket message and calculates timestamp-based latency."""
@@ -402,11 +418,20 @@ class WSLogLatencyMetric(WebSocketMetric):
                 self.update_metric_value(latency)
                 self.mark_success()
                 return
-            raise ValueError("No data in response")
+            else:
+                # No event received (timeout) - this is acceptable, don't mark as failure
+                logging.info(
+                    "No WETH deposit event received - skipping metric collection"
+                )
+                return
 
         except Exception as e:
-            self.mark_failure()
-            self.handle_error(e)
+            # Only mark failure for actual errors, not timeouts
+            if not isinstance(e, TimeoutError):
+                self.mark_failure()
+                self.handle_error(e)
+            else:
+                logging.warning(f"Timeout in collect_metric: {e}")
 
         finally:
             if websocket:
@@ -418,9 +443,7 @@ class WSLogLatencyMetric(WebSocketMetric):
 
     async def calculate_timestamp_latency_http(self, log_data: dict) -> float:
         """Calculate latency between block timestamp and current time using HTTP."""
-        current_time: datetime = datetime.now(
-            timezone.utc
-        )  # Get current time before making HTTP request
+        current_time: datetime = datetime.now(timezone.utc)
 
         block_number = log_data.get("blockNumber")
         if not block_number:
@@ -431,7 +454,7 @@ class WSLogLatencyMetric(WebSocketMetric):
             "id": 1,
             "jsonrpc": "2.0",
             "method": "eth_getBlockByNumber",
-            "params": [block_number, False],  # False = don't include full transactions
+            "params": [block_number, False],  # False = don't include transactions
         }
 
         async with aiohttp.ClientSession() as session:
@@ -470,5 +493,4 @@ class WSLogLatencyMetric(WebSocketMetric):
 
     def process_data(self, log_data: dict) -> float:
         """This method is not used in the updated flow."""
-        # The latency calculation is now handled in calculate_timestamp_latency_http
         return 0.0

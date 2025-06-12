@@ -255,16 +255,16 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
 
 class WSLogLatencyMetric(WebSocketMetric):
-    """Collects log latency for EVM providers using predictable log events.
+    """Collects log latency for EVM providers using Transfer events.
 
-    This metric subscribes to Transfer events from USDT contracts, which have
-    predictable, consistent message sizes across all supported chains.
+    This metric subscribes to Transfer events from major token contracts,
+    gets the first event, immediately unsubscribes, and calculates latency.
     """
 
-    # Use USDT (Tether) which is available on all chains
+    # Use major tokens which have frequent but not overwhelming transfer activity
     TOKEN_CONTRACTS: dict[str, str] = {
         "ethereum": "0xdAC17F958D2ee523a2206206994597C13D831ec7",  # USDT
-        "base": "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2",  # USDT
+        "base": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",  # USDC
         "arbitrum": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",  # USDT
         "bnb": "0x55d398326f99059fF775485246999027B3197955",  # BSC-USD
     }
@@ -302,7 +302,6 @@ class WSLogLatencyMetric(WebSocketMetric):
             self.token_contract: str = self.TOKEN_CONTRACTS["ethereum"]
 
         self.labels.update_label(MetricLabelKey.API_METHOD, "eth_subscribe_logs")
-        self.first_event_received = False  # Flag to track first event
 
     async def send_with_timeout(self, websocket, message: str, timeout: float) -> None:
         """Send a message with a timeout."""
@@ -329,7 +328,7 @@ class WSLogLatencyMetric(WebSocketMetric):
             )
 
     async def subscribe(self, websocket) -> None:
-        """Subscribe to Transfer logs from USDT contract."""
+        """Subscribe to Transfer logs from major token contracts."""
         subscription_msg: str = json.dumps(
             {
                 "id": 1,
@@ -376,15 +375,15 @@ class WSLogLatencyMetric(WebSocketMetric):
             logging.warning(f"Error during unsubscribe: {e}")
 
     async def listen_for_data(self, websocket) -> Optional[Any]:
-        """Listen for the FIRST log event only and extract block information."""
-        while not self.first_event_received:
-            response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
-            response_data = json.loads(response)
+        """Listen for the FIRST log event only and immediately unsubscribe."""
+        response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
+        response_data = json.loads(response)
 
-            if "params" in response_data and "result" in response_data["params"]:
-                log_data = response_data["params"]["result"]
-                self.first_event_received = True  # Mark that we got the first event
-                return log_data
+        if "params" in response_data and "result" in response_data["params"]:
+            log_data = response_data["params"]["result"]
+            # Immediately unsubscribe after getting first event
+            await self.unsubscribe(websocket)
+            return log_data
 
         return None
 
@@ -412,7 +411,7 @@ class WSLogLatencyMetric(WebSocketMetric):
         finally:
             if websocket:
                 try:
-                    await self.unsubscribe(websocket)
+                    # Don't call unsubscribe here since it's already called in listen_for_data
                     await websocket.close()
                 except Exception as e:
                     logging.error(f"Error closing websocket: {e!s}")

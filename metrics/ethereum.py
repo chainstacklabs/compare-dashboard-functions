@@ -269,10 +269,28 @@ class WSLogLatencyMetric(WebSocketMetric):
         "bnb": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # WBNB
     }
 
-    # Deposit event signature: Deposit(address,uint256) - smaller than Transfer
-    DEPOSIT_SIGNATURE = (
-        "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c"
-    )
+    # Event signatures by chain (Arbitrum uses Transfer from zero address for WETH wrapping)
+    EVENT_SIGNATURES: dict[str, tuple[str, list]] = {
+        "ethereum": (
+            "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c",
+            [],
+        ),  # Deposit(address,uint256)
+        "base": (
+            "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c",
+            [],
+        ),  # Deposit(address,uint256)
+        "arbitrum": (
+            "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+            [  # Transfer(address,address,uint256)
+                "0x0000000000000000000000000000000000000000000000000000000000000000",  # from: zero address (wrapping ETH)
+                None,  # to: any address
+            ],
+        ),
+        "bnb": (
+            "0xe1fffcc4923d04b559f4d29a8bfc6cda04eb5b0d3c460751c2402c5c5cc9109c",
+            [],
+        ),  # Deposit(address,uint256)
+    }
 
     def __init__(
         self,
@@ -293,12 +311,16 @@ class WSLogLatencyMetric(WebSocketMetric):
             http_endpoint=http_endpoint,
         )
 
-        # Get WETH contract for the specific blockchain
+        # Get WETH contract and event signature for the specific blockchain
         blockchain: str | None = labels.get_label(MetricLabelKey.BLOCKCHAIN)
         if blockchain:
-            self.weth_contract = self.WETH_CONTRACTS.get(blockchain.lower())
+            self.weth_contract: str | None = self.WETH_CONTRACTS.get(blockchain.lower())
+            self.event_signature, self.event_topics = self.EVENT_SIGNATURES.get(
+                blockchain.lower(), self.EVENT_SIGNATURES["ethereum"]
+            )
         else:
             self.weth_contract = self.WETH_CONTRACTS["ethereum"]
+            self.event_signature, self.event_topics = self.EVENT_SIGNATURES["ethereum"]
 
         self.labels.update_label(MetricLabelKey.API_METHOD, "eth_subscribe_logs")
 
@@ -327,7 +349,10 @@ class WSLogLatencyMetric(WebSocketMetric):
             )
 
     async def subscribe(self, websocket) -> None:
-        """Subscribe to WETH Deposit events - minimal bytes, moderate frequency."""
+        """Subscribe to WETH events - Deposit for most chains, Transfer from zero for Arbitrum."""
+        # Build topics array: [signature] + additional topics for filtering
+        topics: list[str] = [self.event_signature] + self.event_topics
+
         subscription_msg: str = json.dumps(
             {
                 "id": 1,
@@ -335,7 +360,7 @@ class WSLogLatencyMetric(WebSocketMetric):
                 "method": "eth_subscribe",
                 "params": [
                     "logs",
-                    {"address": self.weth_contract, "topics": [self.DEPOSIT_SIGNATURE]},
+                    {"address": self.weth_contract, "topics": topics},
                 ],
             }
         )

@@ -5,7 +5,7 @@
       "maxDuration": 59
     },
     "api/read/base.py": {
-      "memory": 300,
+      "memory": 320,
       "maxDuration": 59
     },
     "api/read/solana.py": {
@@ -30,7 +30,7 @@
     },
     "api/write/solana.py": {
       "memory": 160,
-      "maxDuration": 59
+      "maxDuration": 65
     },
     "api/support/update_state.py": {
       "memory": 128,

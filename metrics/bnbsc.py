@@ -111,7 +111,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
 
     @staticmethod
     def get_params_from_state(state_data: dict) -> list:
-        """Get parameters for USDC transfer logs from latest block."""
+        """Get parameters for Wrapped BNB transfer logs from latest block."""
         return [
             {
                 "fromBlock": "latest",

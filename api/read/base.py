@@ -6,6 +6,7 @@ from metrics.base import (
     HTTPDebugTraceBlockByNumberLatencyMetric,
     HTTPDebugTraceTxLatencyMetric,
     HTTPEthCallLatencyMetric,
+    HTTPGetLogsLatencyMetric,
     HTTPTxReceiptLatencyMetric,
 )
 from metrics.ethereum import (
@@ -24,6 +25,7 @@ METRICS = [
     (HTTPDebugTraceBlockByNumberLatencyMetric, metric_name),
     (HTTPDebugTraceTxLatencyMetric, metric_name),
     (HTTPTxReceiptLatencyMetric, metric_name),
+    (HTTPGetLogsLatencyMetric, metric_name),
 ]
 
 

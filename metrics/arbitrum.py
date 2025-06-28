@@ -100,3 +100,24 @@ class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
     def get_params_from_state(state_data: dict) -> list:
         """Get empty parameter list for block number query."""
         return []
+
+
+class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
+    """Collects call latency for the eth_getLogs method."""
+
+    @property
+    def method(self) -> str:
+        return "eth_getLogs"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get parameters for USDC transfer logs from latest block."""
+        return [
+            {
+                "fromBlock": "latest",
+                "address": "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",  # USDC on Arbitrum
+                "topics": [
+                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event
+                ],
+            }
+        ]

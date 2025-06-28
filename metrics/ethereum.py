@@ -113,6 +113,27 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
         return [state_data["tx"], {"tracer": "callTracer"}]
 
 
+class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
+    """Collects call latency for the eth_getLogs method."""
+
+    @property
+    def method(self) -> str:
+        return "eth_getLogs"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        """Get parameters for USDC transfer logs from latest block."""
+        return [
+            {
+                "fromBlock": "latest",
+                "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",  # USDC
+                "topics": [
+                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event
+                ],
+            }
+        ]
+
+
 class WSBlockLatencyMetric(WebSocketMetric):
     """Collects block latency for EVM providers using a WebSocket connection.
 

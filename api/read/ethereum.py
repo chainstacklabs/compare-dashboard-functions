@@ -6,9 +6,10 @@ from metrics.ethereum import (
     HTTPDebugTraceBlockByNumberLatencyMetric,
     HTTPDebugTraceTxLatencyMetric,
     HTTPEthCallLatencyMetric,
+    # WSLogLatencyMetric,
+    HTTPGetLogsLatencyMetric,
     HTTPTxReceiptLatencyMetric,
     WSBlockLatencyMetric,
-    # WSLogLatencyMetric,
 )
 
 metric_name = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
@@ -22,6 +23,7 @@ METRICS = [
     (HTTPDebugTraceBlockByNumberLatencyMetric, metric_name),
     (HTTPDebugTraceTxLatencyMetric, metric_name),
     (HTTPTxReceiptLatencyMetric, metric_name),
+    (HTTPGetLogsLatencyMetric, metric_name),
 ]
 
 

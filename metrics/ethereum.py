@@ -213,9 +213,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
         # If subscription failed, try without the False flag
         if subscription_data.get("result") is None:
-            logging.warning(
-                "Subscription with False flag failed, retrying without flag"
-            )
+            logging.info("Subscription with False flag failed, retrying without flag")
 
             fallback_subscription_msg: str = json.dumps(
                 {

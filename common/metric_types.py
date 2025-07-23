@@ -172,34 +172,85 @@ class HttpCallLatencyMetricBase(HttpMetric):
         return {}
 
     async def fetch_data(self) -> float:
-        """Measure single request latency with a retry on 429 error."""
+        """Measure single request latency with detailed timing."""
         endpoint: str | None = self.config.endpoints.get_endpoint()
 
+        # Add trace config for detailed timing
+        trace_config = aiohttp.TraceConfig()
+        timing = {}
+
+        async def on_request_start(session, context, params):
+            timing["start"] = time.monotonic()
+
+        async def on_dns_resolvehost_start(session, context, params):
+            timing["dns_start"] = time.monotonic()
+
+        async def on_dns_resolvehost_end(session, context, params):
+            timing["dns_end"] = time.monotonic()
+
+        async def on_connection_create_start(session, context, params):
+            timing["conn_start"] = time.monotonic()
+
+        async def on_connection_create_end(session, context, params):
+            timing["conn_end"] = time.monotonic()
+
+        async def on_request_end(session, context, params):
+            timing["end"] = time.monotonic()
+
+        trace_config.on_request_start.append(on_request_start)
+        trace_config.on_dns_resolvehost_start.append(on_dns_resolvehost_start)
+        trace_config.on_dns_resolvehost_end.append(on_dns_resolvehost_end)
+        trace_config.on_connection_create_start.append(on_connection_create_start)
+        trace_config.on_connection_create_end.append(on_connection_create_end)
+        trace_config.on_request_end.append(on_request_end)
+
         async with aiohttp.ClientSession(
-            timeout=aiohttp.ClientTimeout(total=self.config.timeout)
+            timeout=aiohttp.ClientTimeout(total=self.config.timeout),
+            trace_configs=[trace_config],
         ) as session:
-            response_time = 0.0  # Do not include retried requests after 429 error
-            response = None  # type: ignore
+            response_time = 0.0
+            response = None
 
             for retry_count in range(MAX_RETRIES):
                 start_time: float = time.monotonic()
-                response: aiohttp.ClientResponse = await self._send_request(session, endpoint)  # type: ignore
+                response: aiohttp.ClientResponse = await self._send_request(
+                    session, endpoint
+                )
                 response_time: float = time.monotonic() - start_time
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     wait_time = int(response.headers.get("Retry-After", 15))
-                    await response.release()  # Release before retry
+                    await response.release()
                     await asyncio.sleep(wait_time)
                     continue
 
                 break
+
+            # Log timing breakdown
+            if "dns_start" in timing and "dns_end" in timing:
+                dns_time = (timing["dns_end"] - timing["dns_start"]) * 1000
+            else:
+                dns_time = 0
+
+            if "conn_start" in timing and "conn_end" in timing:
+                conn_time = (timing["conn_end"] - timing["conn_start"]) * 1000
+            else:
+                conn_time = 0
+
+            total_time = response_time * 1000
+
+            # Log breakdown
+            provider = self.labels.get_label(MetricLabelKey.PROVIDER)
+            method = self.labels.get_label(MetricLabelKey.API_METHOD)
+            print(
+                f"[{provider}] {method} timing: DNS={dns_time:.0f}ms, Connect={conn_time:.0f}ms, Total={total_time:.0f}ms, Endpoint={endpoint}"
+            )
 
             if not response:
                 raise ValueError("No response received")
 
             try:
                 if response.status != 200:
-                    # Let the error propagate with status code
                     raise aiohttp.ClientResponseError(
                         request_info=response.request_info,
                         history=(),
@@ -212,7 +263,8 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
-                return response_time
+                # Return RPC time only (exclude connection time)
+                return response_time - (conn_time / 1000)
             finally:
                 await response.release()
 

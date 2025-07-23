@@ -246,19 +246,6 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 f"[{provider}] {method} timing: DNS={dns_time:.0f}ms, Connect={conn_time:.0f}ms, Total={total_time:.0f}ms, Endpoint={endpoint}"
             )
 
-            # Log IP address
-            if response and hasattr(response, "connection") and response.connection:
-                try:
-                    transport = response.connection.transport
-                    if transport and hasattr(transport, "get_extra_info"):
-                        peername = transport.get_extra_info("peername")
-                        if peername:
-                            print(
-                                f"[{provider}] Connected to IP: {peername[0]} (port {peername[1]})"
-                            )
-                except Exception as e:
-                    print(f"[{provider}] Could not get IP: {e}")
-
             if not response:
                 raise ValueError("No response received")
 
@@ -276,7 +263,8 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
-                return response_time
+                # Return RPC time only (exclude connection time)
+                return response_time - (conn_time / 1000)
             finally:
                 await response.release()
 

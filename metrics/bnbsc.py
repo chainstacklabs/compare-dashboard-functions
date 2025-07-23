@@ -110,11 +110,22 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getLogs"
 
     @staticmethod
+    def validate_state(state_data: dict) -> bool:
+        """Validates that required old block number exists in state data."""
+        return bool(state_data and state_data.get("block"))
+
+    @staticmethod
     def get_params_from_state(state_data: dict) -> list:
-        """Get parameters for Wrapped BNB transfer logs from latest block."""
+        """Get parameters for Wrapped BNB transfer logs from recent block range."""
+        from_block_hex = state_data["old_block"]
+        from_block_int = int(from_block_hex, 16)
+        to_block_int: int = max(0, from_block_int + 100)
+        to_block_hex: str = hex(to_block_int)
+
         return [
             {
-                "fromBlock": "latest",
+                "fromBlock": from_block_hex,
+                "toBlock": to_block_hex,
                 "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # Wrapped BNB on BSC
                 "topics": [
                     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event

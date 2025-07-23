@@ -111,10 +111,16 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
 
     @staticmethod
     def get_params_from_state(state_data: dict) -> list:
-        """Get parameters for USDC transfer logs from latest block."""
+        """Get parameters for USDC transfer logs from recent block range."""
+        from_block_hex = state_data["old_block"]
+        from_block_int = int(from_block_hex, 16)
+        to_block_int: int = max(0, from_block_int + 100)
+        to_block_hex: str = hex(to_block_int)
+
         return [
             {
-                "fromBlock": "latest",
+                "fromBlock": from_block_hex,
+                "toBlock": to_block_hex,
                 "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",  # USDC on Base
                 "topics": [
                     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event

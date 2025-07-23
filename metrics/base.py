@@ -110,22 +110,11 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getLogs"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
-        """Validates that required old block number exists in state data."""
-        return bool(state_data and state_data.get("block"))
-
-    @staticmethod
     def get_params_from_state(state_data: dict) -> list:
-        """Get parameters for USDC transfer logs from recent block range."""
-        # Get latest block and subtract N blocks
-        latest_block_hex = state_data["block"]
-        latest_block_int = int(latest_block_hex, 16)
-        from_block_int: int = max(0, latest_block_int - 300)
-        from_block_hex: str = hex(from_block_int)
-
+        """Get parameters for USDC transfer logs from latest block."""
         return [
             {
-                "fromBlock": from_block_hex,
+                "fromBlock": "latest",
                 "address": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",  # USDC on Base
                 "topics": [
                     "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event

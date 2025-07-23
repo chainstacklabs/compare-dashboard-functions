@@ -33,12 +33,12 @@ class MetricsServiceConfig:
 
     # Block offset configuration (N blocks back from latest)
     BLOCK_OFFSET_RANGES = {  # noqa: RUF012
-        "ethereum": (7200, 14400),
-        "base": (7200, 14400),
+        "ethereum": (7200, 10000),
+        "base": (7200, 10000),
         "solana": (432000, 648000),
         "ton": (1555200, 1572480),
-        "arbitrum": (7200, 14400),
-        "bnb": (7200, 14400),
+        "arbitrum": (7200, 10000),
+        "bnb": (7200, 10000),
     }
 
 

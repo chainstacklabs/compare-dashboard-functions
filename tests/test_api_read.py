@@ -29,7 +29,7 @@ def main() -> None:
     setup_environment()
 
     # Import handler after environment setup
-    from api.read.bnbsc import handler
+    from api.read.ethereum import handler
 
     server = HTTPServer(("localhost", 8000), handler)
     print("Server started at http://localhost:8000")

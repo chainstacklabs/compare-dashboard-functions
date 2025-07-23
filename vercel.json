@@ -1,11 +1,11 @@
 {
   "functions": {
     "api/read/ethereum.py": {
-      "memory": 300,
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/base.py": {
-      "memory": 320,
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/solana.py": {
@@ -17,11 +17,11 @@
       "maxDuration": 59
     },
     "api/read/arbitrum.py": {
-      "memory": 300,
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/bnbsc.py": {
-      "memory": 300,
+      "memory": 400,
       "maxDuration": 59
     },
     "api/read/test_blockchain.py": {

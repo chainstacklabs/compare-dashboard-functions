@@ -1,3 +1,5 @@
+import os  # noqa: D100
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.base import (
@@ -13,18 +15,28 @@ from metrics.ethereum import (
     WSBlockLatencyMetric,
 )
 
-metric_name = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
-
-METRICS = [
-    (WSBlockLatencyMetric, metric_name),
-    (HTTPBlockNumberLatencyMetric, metric_name),
-    (HTTPEthCallLatencyMetric, metric_name),
-    (HTTPAccBalanceLatencyMetric, metric_name),
-    (HTTPDebugTraceBlockByNumberLatencyMetric, metric_name),
-    (HTTPDebugTraceTxLatencyMetric, metric_name),
-    (HTTPTxReceiptLatencyMetric, metric_name),
-    (HTTPGetLogsLatencyMetric, metric_name),
+METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
+ALLOWED_REGIONS: list[str] = [
+    "fra1",  # Frankfurt (EU)
+    "sfo1",  # San Francisco (US West)
+    # "sin1", # Singapore
+    "kix1",  # Osaka (JP)
 ]
+
+METRICS = (
+    [
+        (WSBlockLatencyMetric, METRIC_NAME),
+        (HTTPBlockNumberLatencyMetric, METRIC_NAME),
+        (HTTPEthCallLatencyMetric, METRIC_NAME),
+        (HTTPAccBalanceLatencyMetric, METRIC_NAME),
+        (HTTPDebugTraceBlockByNumberLatencyMetric, METRIC_NAME),
+        (HTTPDebugTraceTxLatencyMetric, METRIC_NAME),
+        (HTTPTxReceiptLatencyMetric, METRIC_NAME),
+        (HTTPGetLogsLatencyMetric, METRIC_NAME),
+    ]
+    if os.getenv("VERCEL_REGION") in ALLOWED_REGIONS  # System env var, standard name
+    else []
+)
 
 
 class handler(BaseVercelHandler):

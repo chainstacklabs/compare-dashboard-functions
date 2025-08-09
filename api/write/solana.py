@@ -1,17 +1,17 @@
-import os
+import os  # noqa: D100
 
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.solana_landing_rate import SolanaLandingMetric
 
-metric_name = f"{MetricsServiceConfig.METRIC_PREFIX}transaction_landing_latency"
-target_region = "fra1"
+METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}transaction_landing_latency"
+ALLOWED_REGIONS = ["fra1"]
 
-# Run this metric only in EU (fra1)
+# Run this metric only in allowed regions
 METRICS: list[tuple[type[SolanaLandingMetric], str]] = (
-    []
-    if os.getenv("VERCEL_REGION") != target_region  # System env var, standard name
-    else [(SolanaLandingMetric, metric_name)]
+    [(SolanaLandingMetric, METRIC_NAME)]
+    if os.getenv("VERCEL_REGION") in ALLOWED_REGIONS  # System env var, standard name
+    else []
 )
 
 

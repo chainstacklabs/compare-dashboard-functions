@@ -15,6 +15,7 @@ ALLOWED_REGIONS: list[str] = [
     "sfo1",  # San Francisco (US West)
     "sin1",  # Singapore
     # "kix1",  # Osaka (JP)
+    # "hnd1", "Tokyo" (JP)
 ]
 
 METRICS = (

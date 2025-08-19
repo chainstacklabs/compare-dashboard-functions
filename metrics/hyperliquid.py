@@ -76,8 +76,13 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getLogs"
 
     @staticmethod
+    def validate_state(state_data: dict) -> bool:
+        """Validates that required block number exists in state data."""
+        return bool(state_data and state_data.get("old_block"))
+
+    @staticmethod
     def get_params_from_state(state_data: dict) -> list:
-        """Get parameters for USDC transfer logs from recent block range."""
+        """Get parameters for Wrapped HYPE logs from a recent block range."""
         from_block_hex = state_data["old_block"]
         from_block_int = int(from_block_hex, 16)
         to_block_int: int = max(0, from_block_int + 100)

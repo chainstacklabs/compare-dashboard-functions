@@ -18,7 +18,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
                 "to": "0x5555555555555555555555555555555555555555",
                 "data": "0x18160ddd",
             },
-            "latest",
+            "latest", # Only latest block is supported
         ]
 
 
@@ -48,45 +48,11 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getBalance"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
-        """Validates that required block number (hex) exists in state data."""
-        return bool(state_data and state_data.get("old_block"))
-
-    @staticmethod
     def get_params_from_state(state_data: dict) -> list:
         """Get parameters with fixed monitoring address."""
-        return ["0xFC1286EeddF81d6955eDAd5C8D99B8Aa32F3D2AA", state_data["old_block"]]
-
-
-class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects latency for transaction tracing."""
-
-    @property
-    def method(self) -> str:
-        return "debug_traceTransaction"
-
-    @staticmethod
-    def validate_state(state_data: dict) -> bool:
-        """Validate blockchain state contains transaction hash."""
-        return bool(state_data and state_data.get("tx"))
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Get parameters using transaction hash from state."""
-        return [state_data["tx"], {"tracer": "callTracer"}]
-
-
-class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `debug_traceBlockByNumber` method."""
-
-    @property
-    def method(self) -> str:
-        return "debug_traceBlockByNumber"
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Get fixed parameters for latest block tracing."""
-        return ["latest", {"tracer": "callTracer"}]
+        return ["0xFC1286EeddF81d6955eDAd5C8D99B8Aa32F3D2AA",
+                #state_data["old_block"],
+                "latest"] # Only latest block is supported
 
 
 class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
@@ -122,8 +88,8 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
                 "fromBlock": from_block_hex,
                 "toBlock": to_block_hex,
                 "address": "0x5555555555555555555555555555555555555555",  # Wrapped HYPE
-                "topics": [
-                    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # Withdrawal event
-                ],
+                #"topics": [
+                #    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # Withdrawal event
+                #],
             }
         ]

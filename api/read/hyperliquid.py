@@ -2,11 +2,9 @@ import os  # noqa: D100
 
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
-from metrics.arbitrum import (
+from metrics.hyperliquid import (
     HTTPAccBalanceLatencyMetric,
     HTTPBlockNumberLatencyMetric,
-    HTTPDebugTraceBlockByNumberLatencyMetric,
-    HTTPDebugTraceTxLatencyMetric,
     HTTPEthCallLatencyMetric,
     HTTPGetLogsLatencyMetric,
     HTTPTxReceiptLatencyMetric,
@@ -26,8 +24,6 @@ METRICS = (
         (HTTPBlockNumberLatencyMetric, METRIC_NAME),
         (HTTPEthCallLatencyMetric, METRIC_NAME),
         (HTTPAccBalanceLatencyMetric, METRIC_NAME),
-        (HTTPDebugTraceBlockByNumberLatencyMetric, METRIC_NAME),
-        (HTTPDebugTraceTxLatencyMetric, METRIC_NAME),
         (HTTPTxReceiptLatencyMetric, METRIC_NAME),
         (HTTPGetLogsLatencyMetric, METRIC_NAME),
     ]

@@ -24,6 +24,10 @@
       "memory": 400,
       "maxDuration": 59
     },
+    "api/read/hyperliquid.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
     "api/read/test_blockchain.py": {
       "memory": 150,
       "maxDuration": 59
@@ -60,6 +64,10 @@
     },
     {
       "path": "/api/read/bnbsc",
+      "schedule": "*/2 * * * *"
+    },
+    {
+      "path": "/api/read/hyperliquid",
       "schedule": "*/2 * * * *"
     },
     {

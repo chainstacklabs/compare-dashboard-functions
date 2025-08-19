@@ -39,6 +39,7 @@ class MetricsServiceConfig:
         "ton": (1555200, 1572480),
         "arbitrum": (7200, 10000),
         "bnb": (7200, 10000),
+        "hyperliquid": (3600, 7200),
     }
 
 

@@ -51,7 +51,7 @@ When adding new features, maintain the existing structure:
 * `/api/` - Vercel Functions entry points only
 * `/common/` - Shared utilities and base classes
 * `/metrics/` - Blockchain-specific metric implementations
-* `/tests/` - Test scripts and unit tests
+* `/tests/` - Test scripts
 
 ## 7. Environment Variables
 

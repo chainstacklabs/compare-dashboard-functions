@@ -47,7 +47,7 @@ class BlockchainDataFetcher:
 
         for attempt in range(1, self._max_retries + 1):
             try:
-                async with aiohttp.ClientSession(timeout=self._timeout) as session:
+                async with aiohttp.ClientSession() as session:
                     async with session.post(
                         self.http_endpoint, headers=self._headers, json=request
                     ) as response:

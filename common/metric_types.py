@@ -89,8 +89,9 @@ class WebSocketMetric(BaseMetric):
         finally:
             if websocket:
                 try:
-                    await self.unsubscribe(websocket)
-                    await websocket.close()
+                    # Shield cleanup from cancellation to ensure proper resource cleanup
+                    await asyncio.shield(self.unsubscribe(websocket))
+                    await asyncio.shield(websocket.close())
                 except Exception as e:
                     logging.error(f"Error closing websocket: {e!s}")
 
@@ -255,12 +256,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
             total_time = response_time * 1000
 
-            # Log breakdown
-            provider = self.labels.get_label(MetricLabelKey.PROVIDER)
-            method = self.labels.get_label(MetricLabelKey.API_METHOD)
-            print(
-                f"[{provider}] {method} timing: DNS={dns_time:.0f}ms, Connect={conn_time:.0f}ms, Total={total_time:.0f}ms, Endpoint={endpoint}"
-            )
+            # Log breakdown removed - use proper logging if needed
 
             if not response:
                 raise ValueError("No response received")

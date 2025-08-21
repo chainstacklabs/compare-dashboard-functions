@@ -59,7 +59,7 @@ Never commit credentials or secrets. Always use environment variables:
 
 * Development: `.env.local` (git-ignored)
 * Production: Configured in Vercel dashboard
-* Use `VERCEL_ENV=development` to add dev prefix to metrics during testing
+* Metrics are automatically prefixed using the `METRIC_PREFIX` constant from `config/defaults.py` which reads `os.getenv("VERCEL_ENV")` (e.g., "dev_" for non-production and "" for production)
 
 ---
 

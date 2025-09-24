@@ -1,4 +1,8 @@
-"""Hyperliquid EVM metrics implementation for HTTP endpoints."""
+"""Hyperliquid EVM metrics implementation for HTTP endpoints.
+
+For Hyperliquid Info API metrics (clearinghouseState, openOrders, etc.),
+see metrics.hyperliquid_info module.
+"""
 
 from common.metric_types import HttpCallLatencyMetricBase
 
@@ -18,7 +22,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
                 "to": "0x5555555555555555555555555555555555555555",
                 "data": "0x18160ddd",
             },
-            "latest", # Only latest block is supported
+            "latest",  # Only latest block is supported
         ]
 
 
@@ -50,9 +54,11 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
     @staticmethod
     def get_params_from_state(state_data: dict) -> list:
         """Get parameters with fixed monitoring address."""
-        return ["0xFC1286EeddF81d6955eDAd5C8D99B8Aa32F3D2AA",
-                #state_data["old_block"],
-                "latest"] # Only latest block is supported
+        return [
+            "0xFC1286EeddF81d6955eDAd5C8D99B8Aa32F3D2AA",
+            # state_data["old_block"],
+            "latest",
+        ]  # Only latest block is supported
 
 
 class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
@@ -93,8 +99,8 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
                 "fromBlock": from_block_hex,
                 "toBlock": to_block_hex,
                 "address": "0x5555555555555555555555555555555555555555",  # Wrapped HYPE
-                #"topics": [
+                # "topics": [
                 #    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # Withdrawal event
-                #],
+                # ],
             }
         ]

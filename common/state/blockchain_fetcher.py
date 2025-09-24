@@ -127,7 +127,9 @@ class BlockchainDataFetcher:
             tx_hash = (
                 transactions[0].get("hash", "")
                 if isinstance(transactions[0], dict)
-                else transactions[0] if transactions else ""
+                else transactions[0]
+                if transactions
+                else ""
             )
 
             return BlockchainData(

@@ -2,7 +2,6 @@
 
 import asyncio
 import logging
-import time
 from abc import abstractmethod
 from typing import Any, Optional
 
@@ -10,6 +9,7 @@ import aiohttp
 import websockets
 
 from common.base_metric import BaseMetric
+from common.http_timing import measure_http_request_timing
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
 
@@ -64,15 +64,14 @@ class WebSocketMetric(BaseMetric):
             websocket = await self.connect()
             await self.subscribe(websocket)
             data = await self.listen_for_data(websocket)
-            
+
             if data is not None:
                 return data
             raise ValueError("No data in response")
 
         try:
             data = await asyncio.wait_for(
-                _collect_ws_data(),
-                timeout=self.config.timeout
+                _collect_ws_data(), timeout=self.config.timeout
             )
             latency: int | float = self.process_data(data)
             self.update_metric_value(latency)
@@ -80,7 +79,11 @@ class WebSocketMetric(BaseMetric):
 
         except asyncio.TimeoutError:
             self.mark_failure()
-            self.handle_error(TimeoutError(f"WebSocket metric collection exceeded {self.config.timeout}s timeout"))
+            self.handle_error(
+                TimeoutError(
+                    f"WebSocket metric collection exceeded {self.config.timeout}s timeout"
+                )
+            )
 
         except Exception as e:
             self.mark_failure()
@@ -110,8 +113,7 @@ class HttpMetric(BaseMetric):
     async def collect_metric(self) -> None:
         try:
             data = await asyncio.wait_for(
-                self.fetch_data(),
-                timeout=self.config.timeout
+                self.fetch_data(), timeout=self.config.timeout
             )
             if data is not None:
                 latency: int | float = self.process_data(data)
@@ -121,7 +123,11 @@ class HttpMetric(BaseMetric):
             raise ValueError("No data in response")
         except asyncio.TimeoutError:
             self.mark_failure()
-            self.handle_error(TimeoutError(f"Metric collection exceeded {self.config.timeout}s timeout"))
+            self.handle_error(
+                TimeoutError(
+                    f"Metric collection exceeded {self.config.timeout}s timeout"
+                )
+            )
         except Exception as e:
             self.mark_failure()
             self.handle_error(e)
@@ -190,76 +196,23 @@ class HttpCallLatencyMetricBase(HttpMetric):
         return {}
 
     async def fetch_data(self) -> float:
-        """Measure single request latency with detailed timing."""
+        """Measure single request latency using shared timing utilities."""
         endpoint: str | None = self.config.endpoints.get_endpoint()
 
-        # Add trace config for detailed timing
-        trace_config = aiohttp.TraceConfig()
-        timing = {}
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+        }
 
-        async def on_request_start(session, context, params):
-            timing["start"] = time.monotonic()
-
-        async def on_dns_resolvehost_start(session, context, params):
-            timing["dns_start"] = time.monotonic()
-
-        async def on_dns_resolvehost_end(session, context, params):
-            timing["dns_end"] = time.monotonic()
-
-        async def on_connection_create_start(session, context, params):
-            timing["conn_start"] = time.monotonic()
-
-        async def on_connection_create_end(session, context, params):
-            timing["conn_end"] = time.monotonic()
-
-        async def on_request_end(session, context, params):
-            timing["end"] = time.monotonic()
-
-        trace_config.on_request_start.append(on_request_start)
-        trace_config.on_dns_resolvehost_start.append(on_dns_resolvehost_start)
-        trace_config.on_dns_resolvehost_end.append(on_dns_resolvehost_end)
-        trace_config.on_connection_create_start.append(on_connection_create_start)
-        trace_config.on_connection_create_end.append(on_connection_create_end)
-        trace_config.on_request_end.append(on_request_end)
-
-        async with aiohttp.ClientSession(
-            trace_configs=[trace_config],
-        ) as session:
-            response_time = 0.0
-            response = None
-
-            for retry_count in range(MAX_RETRIES):
-                start_time: float = time.monotonic()
-                response: aiohttp.ClientResponse = await self._send_request(
-                    session, endpoint
-                )
-                response_time: float = time.monotonic() - start_time
-
-                if response.status == 429 and retry_count < MAX_RETRIES - 1:
-                    wait_time = int(response.headers.get("Retry-After", 3))
-                    await response.release()
-                    await asyncio.sleep(wait_time)
-                    continue
-
-                break
-
-            # Log timing breakdown
-            if "dns_start" in timing and "dns_end" in timing:
-                dns_time = (timing["dns_end"] - timing["dns_start"]) * 1000
-            else:
-                dns_time = 0
-
-            if "conn_start" in timing and "conn_end" in timing:
-                conn_time = (timing["conn_end"] - timing["conn_start"]) * 1000
-            else:
-                conn_time = 0
-
-            total_time = response_time * 1000
-
-            # Log breakdown removed - use proper logging if needed
-
-            if not response:
-                raise ValueError("No response received")
+        async with aiohttp.ClientSession() as session:
+            response_time, response = await measure_http_request_timing(
+                session=session,
+                method="POST",
+                url=endpoint,
+                headers=headers,
+                json_data=self._base_request,
+                exclude_connection_time=True,
+            )
 
             try:
                 if response.status != 200:
@@ -275,23 +228,9 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
-                # Return RPC time only (exclude connection time)
-                return response_time - (conn_time / 1000)
+                return response_time
             finally:
                 await response.release()
-
-    async def _send_request(
-        self, session: aiohttp.ClientSession, endpoint: str
-    ) -> aiohttp.ClientResponse:
-        """Send the request without retry logic."""
-        return await session.post(
-            endpoint,
-            headers={
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            json=self._base_request,
-        )
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""

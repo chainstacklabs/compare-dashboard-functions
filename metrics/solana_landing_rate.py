@@ -78,7 +78,9 @@ class SolanaLandingMetric(HttpMetric):
         return AsyncClient(endpoint)
 
     async def _get_slot(self, client: AsyncClient) -> int:
-        response: GetSlotResp = await client.get_slot(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)  # type: ignore
+        response: GetSlotResp = await client.get_slot(
+            MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL
+        )  # type: ignore
         if not response or response.value is None:
             raise ValueError("Failed to get current slot")
         return response.value

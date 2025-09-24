@@ -82,13 +82,17 @@ async def measure_http_request_timing(
             timing_collector.timing.clear()
 
             # Send request
-            if method.upper() == "POST":
-                response = await session.post(
-                    url, headers=headers, json=json_data
-                )
-            else:
-                response = await session.get(url, headers=headers)
+             # Prepare kwargs for any HTTP method, including optional JSON payload
+             request_kwargs: dict[str, Any] = {"headers": headers}
+             if json_data is not None:
+                 request_kwargs["json"] = json_data
 
+-            if method.upper() == "POST":
+-                response = await session.post(
+-                    url, headers=headers, json=json_data
+-                )
+-            else:
+            response = await session.request(method.upper(), url, **request_kwargs)
             # Handle rate limiting
             if response.status == 429 and retry_count < MAX_RETRIES - 1:
                 wait_time = int(response.headers.get("Retry-After", 3))

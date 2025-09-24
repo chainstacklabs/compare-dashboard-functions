@@ -5,7 +5,7 @@ from typing import Any
 
 import aiohttp
 
-from common.http_timing import measure_http_request_timing
+from common.http_timing import make_json_rpc_request
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpMetric
 from common.metrics_handler import MetricsHandler
@@ -44,8 +44,8 @@ class HyperliquidInfoMetricBase(HttpMetric):
             config=config,
         )
 
-        params = self.get_params_from_state(state_data)
-        self.user_address = params["user"]
+        params: dict[str, str] = self.get_params_from_state(state_data)
+        self.user_address: str = params["user"]
         self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
         self.request_payload = self._build_request_payload()
 
@@ -65,7 +65,7 @@ class HyperliquidInfoMetricBase(HttpMetric):
 
     def get_info_endpoint(self) -> str:
         """Transform EVM endpoint to info endpoint."""
-        base_endpoint = self.get_endpoint()
+        base_endpoint: str = self.get_endpoint()
 
         if base_endpoint.endswith("/evm"):
             return base_endpoint.replace("/evm", "/info")
@@ -78,40 +78,16 @@ class HyperliquidInfoMetricBase(HttpMetric):
 
     async def fetch_data(self) -> float:
         """Measure single request latency for Hyperliquid info API."""
-        endpoint = self.get_info_endpoint()
-
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-        }
+        endpoint: str = self.get_info_endpoint()
 
         async with aiohttp.ClientSession() as session:
-            response_time, response = await measure_http_request_timing(
+            response_time, _response_data = await make_json_rpc_request(
                 session=session,
-                method="POST",
                 url=endpoint,
-                headers=headers,
-                json_data=self.request_payload,
+                request_payload=self.request_payload,
                 exclude_connection_time=True,
             )
-
-            try:
-                # Validate response
-                if response.status != 200:
-                    raise aiohttp.ClientResponseError(
-                        request_info=response.request_info,
-                        history=(),
-                        status=response.status,
-                        message=f"Status code: {response.status}",
-                        headers=response.headers,
-                    )
-
-                response_data = await response.json()
-
-                return response_time
-
-            finally:
-                await response.release()
+            return response_time
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""

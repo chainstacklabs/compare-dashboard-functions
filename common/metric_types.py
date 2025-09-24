@@ -9,11 +9,15 @@ import aiohttp
 import websockets
 
 from common.base_metric import BaseMetric
-from common.http_timing import measure_http_request_timing
+
+# Import MAX_RETRIES from http_timing module for consistency
+# (though it's not used directly in this module)
+from common.http_timing import (
+    MAX_RETRIES,  # noqa: F401
+    make_json_rpc_request,
+)
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
-
-MAX_RETRIES = 2
 
 
 class WebSocketMetric(BaseMetric):
@@ -197,40 +201,18 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
     async def fetch_data(self) -> float:
         """Measure single request latency using shared timing utilities."""
-        endpoint: str | None = self.config.endpoints.get_endpoint()
-
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-        }
+        endpoint = self.config.endpoints.get_endpoint()
+        if endpoint is None:
+            raise ValueError("No endpoint configured")
 
         async with aiohttp.ClientSession() as session:
-            response_time, response = await measure_http_request_timing(
+            response_time, _json_response = await make_json_rpc_request(
                 session=session,
-                method="POST",
                 url=endpoint,
-                headers=headers,
-                json_data=self._base_request,
+                request_payload=self._base_request,
                 exclude_connection_time=True,
             )
-
-            try:
-                if response.status != 200:
-                    raise aiohttp.ClientResponseError(
-                        request_info=response.request_info,
-                        history=(),
-                        status=response.status,
-                        message=f"Status code: {response.status}",
-                        headers=response.headers,
-                    )
-
-                json_response = await response.json()
-                if "error" in json_response:
-                    raise ValueError(f"JSON-RPC error: {json_response['error']}")
-
-                return response_time
-            finally:
-                await response.release()
+            return response_time
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""

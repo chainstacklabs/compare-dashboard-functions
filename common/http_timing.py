@@ -101,13 +101,14 @@ async def measure_http_request_timing(
     """
     timing_collector = HttpTimingCollector()
     trace_config: aiohttp.TraceConfig = timing_collector.create_trace_config()
-
-    # Freeze trace config before adding to session
     trace_config.freeze()
-    # Add timing trace to session temporarily
-    session._trace_configs.append(trace_config)
 
-    try:
+    # Create new session with isolated trace config
+    connector = session._connector
+    timeout = session._timeout
+    async with aiohttp.ClientSession(
+        connector=connector, timeout=timeout, trace_configs=[trace_config]
+    ) as isolated_session:
         response = None
         last_exception = None
 
@@ -122,7 +123,7 @@ async def measure_http_request_timing(
                     request_kwargs["json"] = json_data
 
                 # Send request with consistent method handling
-                response = await session.request(method.upper(), url, **request_kwargs)
+                response = await isolated_session.request(method.upper(), url, **request_kwargs)
 
                 # Handle rate limiting with exponential backoff
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
@@ -154,11 +155,6 @@ async def measure_http_request_timing(
             exclude_connection_time
         )
         return response_time, response
-
-    finally:
-        # Remove trace config to avoid affecting other requests
-        if trace_config in session._trace_configs:
-            session._trace_configs.remove(trace_config)
 
 
 async def make_json_rpc_request(

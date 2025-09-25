@@ -102,6 +102,8 @@ async def measure_http_request_timing(
     timing_collector = HttpTimingCollector()
     trace_config: aiohttp.TraceConfig = timing_collector.create_trace_config()
 
+    # Freeze trace config before adding to session
+    trace_config.freeze()
     # Add timing trace to session temporarily
     session._trace_configs.append(trace_config)
 

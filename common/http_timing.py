@@ -104,10 +104,9 @@ async def measure_http_request_timing(
     trace_config.freeze()
 
     # Create new session with isolated trace config
-    connector = session._connector
     timeout = session._timeout
     async with aiohttp.ClientSession(
-        connector=connector, timeout=timeout, trace_configs=[trace_config]
+        timeout=timeout, trace_configs=[trace_config]
     ) as isolated_session:
         response = None
         last_exception = None

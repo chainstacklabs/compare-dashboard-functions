@@ -9,6 +9,10 @@ from metrics.hyperliquid import (
     HTTPGetLogsLatencyMetric,
     HTTPTxReceiptLatencyMetric,
 )
+from metrics.hyperliquid_info import (
+    HTTPClearinghouseStateLatencyMetric,
+    HTTPOpenOrdersLatencyMetric,
+)
 
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
 ALLOWED_REGIONS: list[str] = [
@@ -26,6 +30,8 @@ METRICS = (
         (HTTPAccBalanceLatencyMetric, METRIC_NAME),
         (HTTPTxReceiptLatencyMetric, METRIC_NAME),
         (HTTPGetLogsLatencyMetric, METRIC_NAME),
+        (HTTPClearinghouseStateLatencyMetric, METRIC_NAME),
+        (HTTPOpenOrdersLatencyMetric, METRIC_NAME),
     ]
     if os.getenv("VERCEL_REGION") in ALLOWED_REGIONS  # System env var, standard name
     else []

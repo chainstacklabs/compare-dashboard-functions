@@ -147,9 +147,9 @@ class StateUpdateManager:
         try:
             previous_data: dict[str, Any] = await self._get_previous_data()
 
-            chainstack_endpoints: dict[str, str] = (
-                await self._get_chainstack_endpoints()
-            )
+            chainstack_endpoints: dict[
+                str, str
+            ] = await self._get_chainstack_endpoints()
             blockchain_data = await self._collect_blockchain_data(
                 chainstack_endpoints, previous_data
             )

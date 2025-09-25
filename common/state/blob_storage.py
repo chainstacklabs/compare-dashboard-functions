@@ -22,7 +22,7 @@ class BlobConfig:
 
 
 class BlobStorageHandler:
-    def __init__(self, config: BlobConfig):
+    def __init__(self, config: BlobConfig) -> None:
         self.config: BlobConfig = config
         self._headers: dict[str, str] = {
             "Authorization": f"Bearer {config.token}",

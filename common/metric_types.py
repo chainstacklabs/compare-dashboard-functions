@@ -64,15 +64,14 @@ class WebSocketMetric(BaseMetric):
             websocket = await self.connect()
             await self.subscribe(websocket)
             data = await self.listen_for_data(websocket)
-            
+
             if data is not None:
                 return data
             raise ValueError("No data in response")
 
         try:
             data = await asyncio.wait_for(
-                _collect_ws_data(),
-                timeout=self.config.timeout
+                _collect_ws_data(), timeout=self.config.timeout
             )
             latency: int | float = self.process_data(data)
             self.update_metric_value(latency)
@@ -80,7 +79,11 @@ class WebSocketMetric(BaseMetric):
 
         except asyncio.TimeoutError:
             self.mark_failure()
-            self.handle_error(TimeoutError(f"WebSocket metric collection exceeded {self.config.timeout}s timeout"))
+            self.handle_error(
+                TimeoutError(
+                    f"WebSocket metric collection exceeded {self.config.timeout}s timeout"
+                )
+            )
 
         except Exception as e:
             self.mark_failure()
@@ -110,8 +113,7 @@ class HttpMetric(BaseMetric):
     async def collect_metric(self) -> None:
         try:
             data = await asyncio.wait_for(
-                self.fetch_data(),
-                timeout=self.config.timeout
+                self.fetch_data(), timeout=self.config.timeout
             )
             if data is not None:
                 latency: int | float = self.process_data(data)
@@ -121,7 +123,11 @@ class HttpMetric(BaseMetric):
             raise ValueError("No data in response")
         except asyncio.TimeoutError:
             self.mark_failure()
-            self.handle_error(TimeoutError(f"Metric collection exceeded {self.config.timeout}s timeout"))
+            self.handle_error(
+                TimeoutError(
+                    f"Metric collection exceeded {self.config.timeout}s timeout"
+                )
+            )
         except Exception as e:
             self.mark_failure()
             self.handle_error(e)
@@ -197,30 +203,14 @@ class HttpCallLatencyMetricBase(HttpMetric):
         trace_config = aiohttp.TraceConfig()
         timing = {}
 
-        async def on_request_start(session, context, params):
-            timing["start"] = time.monotonic()
-
-        async def on_dns_resolvehost_start(session, context, params):
-            timing["dns_start"] = time.monotonic()
-
-        async def on_dns_resolvehost_end(session, context, params):
-            timing["dns_end"] = time.monotonic()
-
-        async def on_connection_create_start(session, context, params):
+        async def on_connection_create_start(session, context, params) -> None:
             timing["conn_start"] = time.monotonic()
 
-        async def on_connection_create_end(session, context, params):
+        async def on_connection_create_end(session, context, params) -> None:
             timing["conn_end"] = time.monotonic()
 
-        async def on_request_end(session, context, params):
-            timing["end"] = time.monotonic()
-
-        trace_config.on_request_start.append(on_request_start)
-        trace_config.on_dns_resolvehost_start.append(on_dns_resolvehost_start)
-        trace_config.on_dns_resolvehost_end.append(on_dns_resolvehost_end)
         trace_config.on_connection_create_start.append(on_connection_create_start)
         trace_config.on_connection_create_end.append(on_connection_create_end)
-        trace_config.on_request_end.append(on_request_end)
 
         async with aiohttp.ClientSession(
             trace_configs=[trace_config],
@@ -243,20 +233,10 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
                 break
 
-            # Log timing breakdown
-            if "dns_start" in timing and "dns_end" in timing:
-                dns_time = (timing["dns_end"] - timing["dns_start"]) * 1000
-            else:
-                dns_time = 0
-
             if "conn_start" in timing and "conn_end" in timing:
-                conn_time = (timing["conn_end"] - timing["conn_start"]) * 1000
+                conn_time = timing["conn_end"] - timing["conn_start"]
             else:
                 conn_time = 0
-
-            total_time = response_time * 1000
-
-            # Log breakdown removed - use proper logging if needed
 
             if not response:
                 raise ValueError("No response received")
@@ -276,7 +256,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
                 # Return RPC time only (exclude connection time)
-                return response_time - (conn_time / 1000)
+                return response_time - conn_time
             finally:
                 await response.release()
 

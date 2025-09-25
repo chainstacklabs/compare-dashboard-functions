@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import time
 from abc import abstractmethod
 from typing import Any, Optional
 
@@ -9,15 +10,10 @@ import aiohttp
 import websockets
 
 from common.base_metric import BaseMetric
-
-# Import MAX_RETRIES from http_timing module for consistency
-# (though it's not used directly in this module)
-from common.http_timing import (
-    MAX_RETRIES,  # noqa: F401
-    make_json_rpc_request,
-)
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
+
+MAX_RETRIES = 2
 
 
 class WebSocketMetric(BaseMetric):
@@ -200,19 +196,82 @@ class HttpCallLatencyMetricBase(HttpMetric):
         return {}
 
     async def fetch_data(self) -> float:
-        """Measure single request latency using shared timing utilities."""
-        endpoint = self.config.endpoints.get_endpoint()
-        if endpoint is None:
-            raise ValueError("No endpoint configured")
+        """Measure single request latency with detailed timing."""
+        endpoint: str | None = self.config.endpoints.get_endpoint()
 
-        async with aiohttp.ClientSession() as session:
-            response_time, _json_response = await make_json_rpc_request(
-                session=session,
-                url=endpoint,
-                request_payload=self._base_request,
-                exclude_connection_time=True,
-            )
-            return response_time
+        # Add trace config for detailed timing
+        trace_config = aiohttp.TraceConfig()
+        timing = {}
+
+        async def on_connection_create_start(session, context, params):
+            timing["conn_start"] = time.monotonic()
+
+        async def on_connection_create_end(session, context, params):
+            timing["conn_end"] = time.monotonic()
+
+        trace_config.on_connection_create_start.append(on_connection_create_start)
+        trace_config.on_connection_create_end.append(on_connection_create_end)
+
+        async with aiohttp.ClientSession(
+            trace_configs=[trace_config],
+        ) as session:
+            response_time = 0.0
+            response = None
+
+            for retry_count in range(MAX_RETRIES):
+                start_time: float = time.monotonic()
+                response: aiohttp.ClientResponse = await self._send_request(
+                    session, endpoint
+                )
+                response_time: float = time.monotonic() - start_time
+
+                if response.status == 429 and retry_count < MAX_RETRIES - 1:
+                    wait_time = int(response.headers.get("Retry-After", 3))
+                    await response.release()
+                    await asyncio.sleep(wait_time)
+                    continue
+
+                break
+
+            if "conn_start" in timing and "conn_end" in timing:
+                conn_time = timing["conn_end"] - timing["conn_start"]
+            else:
+                conn_time = 0
+
+            if not response:
+                raise ValueError("No response received")
+
+            try:
+                if response.status != 200:
+                    raise aiohttp.ClientResponseError(
+                        request_info=response.request_info,
+                        history=(),
+                        status=response.status,
+                        message=f"Status code: {response.status}",
+                        headers=response.headers,
+                    )
+
+                json_response = await response.json()
+                if "error" in json_response:
+                    raise ValueError(f"JSON-RPC error: {json_response['error']}")
+
+                # Return RPC time only (exclude connection time)
+                return response_time - conn_time
+            finally:
+                await response.release()
+
+    async def _send_request(
+        self, session: aiohttp.ClientSession, endpoint: str
+    ) -> aiohttp.ClientResponse:
+        """Send the request without retry logic."""
+        return await session.post(
+            endpoint,
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            json=self._base_request,
+        )
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""

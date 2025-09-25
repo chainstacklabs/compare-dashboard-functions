@@ -5,13 +5,12 @@ from typing import Any
 
 import aiohttp
 
-from common.http_timing import make_json_rpc_request
-from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
-from common.metric_types import HttpMetric
+from common.metric_config import MetricConfig, MetricLabels
+from common.metric_types import HttpCallLatencyMetricBase
 from common.metrics_handler import MetricsHandler
 
 
-class HyperliquidInfoMetricBase(HttpMetric):
+class HyperliquidInfoMetricBase(HttpCallLatencyMetricBase):
     """Base class for Hyperliquid /info endpoint latency metrics.
 
     Handles request configuration, state validation, and response time
@@ -33,24 +32,24 @@ class HyperliquidInfoMetricBase(HttpMetric):
         **kwargs: Any,
     ) -> None:
         """Initialize Hyperliquid info metric with state-based parameters."""
+        # Extract state data before passing to parent
         state_data = kwargs.get("state_data", {})
-        if not self.validate_state(state_data):
-            raise ValueError(f"Invalid state data for {self.method}")
+        params: dict[str, str] = self.get_params_from_state(state_data)
+        self.user_address: str = params["user"]
 
+        # Call parent constructor with method_params set to None since we
+        # override _build_base_request
         super().__init__(
             handler=handler,
             metric_name=metric_name,
             labels=labels,
             config=config,
+            method_params=None,
+            **kwargs,
         )
 
-        params: dict[str, str] = self.get_params_from_state(state_data)
-        self.user_address: str = params["user"]
-        self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
-        self.request_payload = self._build_request_payload()
-
-    def _build_request_payload(self) -> dict[str, Any]:
-        """Build the Hyperliquid info API request payload."""
+    def _build_base_request(self) -> dict[str, Any]:
+        """Override to build Hyperliquid-specific request payload."""
         return {"type": self.method, "user": self.user_address}
 
     @staticmethod
@@ -65,30 +64,26 @@ class HyperliquidInfoMetricBase(HttpMetric):
 
     def get_info_endpoint(self) -> str:
         """Transform EVM endpoint to info endpoint."""
-        base_endpoint: str = self.get_endpoint()
+        base_endpoint = self.get_endpoint().rstrip("/")
+
+        if base_endpoint.endswith("/info"):
+            return base_endpoint
 
         if base_endpoint.endswith("/evm"):
-            return base_endpoint.replace("/evm", "/info")
-        else:
-            # Handle cases where endpoint doesn't end with /evm
-            if base_endpoint.endswith("/"):
-                return base_endpoint + "info"
-            else:
-                return base_endpoint + "/info"
+            base_endpoint = base_endpoint[:-4]
 
-    async def fetch_data(self) -> float:
-        """Measure single request latency for Hyperliquid info API."""
-        endpoint: str = self.get_info_endpoint()
+        return f"{base_endpoint}/info"
 
-        async with aiohttp.ClientSession() as session:
-            response_time, _response_data = await make_json_rpc_request(
-                session=session,
-                url=endpoint,
-                request_payload=self.request_payload,
-                exclude_connection_time=True,
-            )
-            return response_time
-
-    def process_data(self, value: float) -> float:
-        """Process raw latency measurement."""
-        return value
+    async def _send_request(
+        self, session: aiohttp.ClientSession, endpoint: str
+    ) -> aiohttp.ClientResponse:
+        """Override to use Hyperliquid info endpoint and request format."""
+        info_endpoint = self.get_info_endpoint()
+        return await session.post(
+            info_endpoint,
+            headers={
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            json=self._base_request,
+        )

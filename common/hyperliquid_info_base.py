@@ -64,7 +64,7 @@ class HyperliquidInfoMetricBase(HttpCallLatencyMetricBase):
 
     def get_info_endpoint(self) -> str:
         """Transform EVM endpoint to info endpoint."""
-        base_endpoint = self.get_endpoint().rstrip("/")
+        base_endpoint: str = self.get_endpoint().rstrip("/")
 
         if base_endpoint.endswith("/info"):
             return base_endpoint
@@ -78,7 +78,7 @@ class HyperliquidInfoMetricBase(HttpCallLatencyMetricBase):
         self, session: aiohttp.ClientSession, endpoint: str
     ) -> aiohttp.ClientResponse:
         """Override to use Hyperliquid info endpoint and request format."""
-        info_endpoint = self.get_info_endpoint()
+        info_endpoint: str = self.get_info_endpoint()
         return await session.post(
             info_endpoint,
             headers={

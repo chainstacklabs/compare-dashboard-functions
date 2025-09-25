@@ -203,10 +203,10 @@ class HttpCallLatencyMetricBase(HttpMetric):
         trace_config = aiohttp.TraceConfig()
         timing = {}
 
-        async def on_connection_create_start(session, context, params):
+        async def on_connection_create_start(session, context, params) -> None:
             timing["conn_start"] = time.monotonic()
 
-        async def on_connection_create_end(session, context, params):
+        async def on_connection_create_end(session, context, params) -> None:
             timing["conn_end"] = time.monotonic()
 
         trace_config.on_connection_create_start.append(on_connection_create_start)

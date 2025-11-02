@@ -92,11 +92,18 @@ class WebSocketMetric(BaseMetric):
         finally:
             if websocket:
                 try:
-                    # Shield cleanup from cancellation to ensure proper resource cleanup
                     await asyncio.shield(self.unsubscribe(websocket))
-                    await asyncio.shield(websocket.close())
+                except asyncio.CancelledError:
+                    logging.info("Unsubscribe completed despite cancellation")
                 except Exception as e:
-                    logging.error(f"Error closing websocket: {e!s}")
+                    logging.warning(f"Error during unsubscribe (non-critical): {e!s}")
+
+                try:
+                    await asyncio.shield(websocket.close())
+                except asyncio.CancelledError:
+                    logging.info("WebSocket close completed despite cancellation")
+                except Exception as e:
+                    logging.warning(f"Error closing websocket (non-critical): {e!s}")
 
 
 class HttpMetric(BaseMetric):

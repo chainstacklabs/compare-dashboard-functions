@@ -91,13 +91,16 @@ class WebSocketMetric(BaseMetric):
 
         finally:
             if websocket:
-                try:
-                    await asyncio.shield(self.unsubscribe(websocket))
-                except asyncio.CancelledError:
-                    logging.info("Unsubscribe completed despite cancellation")
-                except Exception as e:
-                    logging.warning(f"Error during unsubscribe (non-critical): {e!s}")
+                # Only try to unsubscribe if connection is still open
+                if websocket.open:
+                    try:
+                        await asyncio.shield(self.unsubscribe(websocket))
+                    except asyncio.CancelledError:
+                        logging.info("Unsubscribe completed despite cancellation")
+                    except Exception as e:
+                        logging.warning(f"Error during unsubscribe (non-critical): {e!s}")
 
+                # Close can be called even on closed connections (it's idempotent)
                 try:
                     await asyncio.shield(websocket.close())
                 except asyncio.CancelledError:

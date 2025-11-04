@@ -29,7 +29,7 @@ def main() -> None:
     setup_environment()
 
     # Import handler after environment setup
-    from api.read.hyperliquid import handler
+    from api.read.arbitrum import handler
 
     server = HTTPServer(("localhost", 8000), handler)
     print("Server started at http://localhost:8000")

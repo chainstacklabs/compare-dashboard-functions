@@ -91,14 +91,13 @@ class WebSocketMetric(BaseMetric):
 
         finally:
             if websocket:
-                # Only try to unsubscribe if connection is still open
-                if websocket.open:
-                    try:
-                        await asyncio.shield(self.unsubscribe(websocket))
-                    except asyncio.CancelledError:
-                        logging.info("Unsubscribe completed despite cancellation")
-                    except Exception as e:
-                        logging.warning(f"Error during unsubscribe (non-critical): {e!s}")
+                # Always attempt unsubscribe so provider knows to stop sending data
+                try:
+                    await asyncio.shield(self.unsubscribe(websocket))
+                except asyncio.CancelledError:
+                    logging.info("Unsubscribe completed despite cancellation")
+                except Exception as e:
+                    logging.debug(f"Unsubscribe attempt on closed connection: {e!s}")
 
                 # Close can be called even on closed connections (it's idempotent)
                 try:
@@ -106,7 +105,7 @@ class WebSocketMetric(BaseMetric):
                 except asyncio.CancelledError:
                     logging.info("WebSocket close completed despite cancellation")
                 except Exception as e:
-                    logging.warning(f"Error closing websocket (non-critical): {e!s}")
+                    logging.debug(f"WebSocket close attempt: {e!s}")
 
 
 class HttpMetric(BaseMetric):
@@ -266,7 +265,13 @@ class HttpCallLatencyMetricBase(HttpMetric):
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
                 # Return RPC time only (exclude connection time)
-                return response_time - conn_time
+                rpc_time = response_time - conn_time
+                if rpc_time < 0:
+                    raise ValueError(
+                        f"Negative RPC time: {rpc_time:.6f}s "
+                        f"(response={response_time:.6f}s, conn={conn_time:.6f}s)"
+                    )
+                return rpc_time
             finally:
                 await response.release()
 

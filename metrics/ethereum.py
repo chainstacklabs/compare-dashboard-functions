@@ -300,11 +300,17 @@ class WSBlockLatencyMetric(WebSocketMetric):
             float: Latency in seconds between block timestamp and current time
 
         Raises:
-            ValueError: If block timestamp is invalid or missing
+            ValueError: If block timestamp is invalid, missing, or in the future
         """
         block_timestamp_hex = block.get("timestamp", "0x0")
         block_timestamp = int(block_timestamp_hex, 16)
         block_time: datetime = datetime.fromtimestamp(block_timestamp, timezone.utc)
         current_time: datetime = datetime.now(timezone.utc)
         latency: float = (current_time - block_time).total_seconds()
+        if latency < 0:
+            raise ValueError(
+                f"Negative block latency: {latency:.3f}s "
+                f"(block_time={block_time.isoformat()}, "
+                f"current_time={current_time.isoformat()})"
+            )
         return latency

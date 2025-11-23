@@ -176,7 +176,12 @@ class SolanaLandingMetric(HttpMetric):
             # `response_time` is not representative,
             # we don't use it in the visualizations
             response_time: float = time.monotonic() - start_time
-            self._slot_diff: int = max(confirmation_slot - start_slot, 0)
+            self._slot_diff: int = confirmation_slot - start_slot
+            if self._slot_diff < 0:
+                raise ValueError(
+                    f"Negative slot difference: {self._slot_diff} "
+                    f"(confirmation_slot={confirmation_slot}, start_slot={start_slot})"
+                )
             self.update_metric_value(self._slot_diff, "slot_latency")
             return response_time
 

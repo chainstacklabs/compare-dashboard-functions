@@ -85,7 +85,16 @@ class BaseMetric(ABC):
         value_type: str = "response_time",
         labels: Optional[dict[str, str]] = None,
     ) -> None:
-        """Updates metric value, preserving existing labels if present."""
+        """Updates metric value, preserving existing labels if present.
+
+        Raises:
+            ValueError: If value is negative.
+        """
+        if value < 0:
+            raise ValueError(
+                f"Negative metric value detected: {value} for {value_type} "
+                f"in {self.labels.get_prometheus_labels()}"
+            )
         if value_type in self.values:
             labels = labels or self.values[value_type].labels
         self.values[value_type] = MetricValue(value=value, labels=labels)

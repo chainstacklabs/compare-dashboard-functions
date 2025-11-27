@@ -1,0 +1,62 @@
+{
+  "functions": {
+    "api/read/ethereum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/base.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/solana.py": {
+      "memory": 300,
+      "maxDuration": 59
+    },
+    "api/read/arbitrum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/bnbsc.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/hyperliquid.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/monad.py": {
+      "memory": 400,
+      "maxDuration": 59
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/read/ethereum",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/base",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/solana",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/arbitrum",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/bnbsc",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/hyperliquid",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/monad",
+      "schedule": "*/3 * * * *"
+    }
+  ]
+}

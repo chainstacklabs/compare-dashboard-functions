@@ -1,42 +1,52 @@
-# Chainstack Compare Dashboard
+# Chainstack RPC Monitoring Dashboard
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,SKIP_AUTH,SOLANA_PRIVATE_KEY,ENDPOINTS,STORE_ID,VERCEL_BLOB_TOKEN)
+A serverless RPC node monitoring system that measures response times across multiple blockchains and regions. Runs on Vercel Functions and pushes metrics to Grafana Cloud.
 
-A serverless solution for monitoring RPC nodes response time across different blockchains and regions using Vercel Functions and Grafana Cloud. The project collects metrics from HTTP/WS endpoints for multiple blockchains and pushes them to Grafana Cloud.
+**[→ Multi-Region Deployment Guide](#multi-region-deployment-guide)**
 
 📊 [Live Dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/chainstack-compare-dashboard)
 
 ## Table of Contents
-- [Features](#features)
-- [System Overview](#solution-overview)
-- [Quick Start](#quick-start)
-- [Detailed Setup](#detailed-setup)
+- [Overview](#overview)
+- [Supported Blockchains](#supported-blockchains)
+- [Architecture](#architecture)
+- [Setup](#setup)
 - [Configuration](#configuration)
-- [Development Guide](#development-guide)
-- [Technical Reference](#technical-reference)
-- [Contributing](#contributing)
+- [Development](#development)
+- [Multi-Region Deployment Guide](#multi-region-deployment-guide)
 
-## Features
+## Overview
 
-- :chains: Supported blockchains: Ethereum, Arbitrum, Base, BNB Smart Chain, Solana, TON
-- :globe_with_meridians: Multi-region deployment (US, EU, Asia)
-- :zap: Real-time metrics collection
+This system collects latency metrics from RPC endpoints using scheduled cron jobs. Functions run in multiple regions (Frankfurt, San Francisco, Singapore, Tokyo) to measure response times from different geographic locations.
 
-## Solution Overview
+**Metric types collected:**
+- HTTP RPC method latency (eth_blockNumber, eth_call, eth_getLogs, etc.)
+- WebSocket block notification latency (EVM only)
+- Transaction landing time (Solana only)
+
+Metrics are pushed to Grafana Cloud in Influx line protocol format for visualization and alerting.
+
+## Supported Blockchains
+
+Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, TON, Hyperliquid, Monad
+
+Each blockchain has region-specific deployment configurations detailed in the [Multi-Region Deployment Guide](#multi-region-deployment-guide).
+
+## Architecture
 
 ```mermaid
 flowchart TB
     subgraph Vercel["Vercel Platform"]
         subgraph Functions["Serverless Functions"]
-            subgraph Global["Global Functions"]
-                Collectors["Measure Response Times
-                            [1 min]"]
+            subgraph Global["Regional Functions"]
+                Collectors["Metric Collectors
+                            [3 min intervals]"]
             end
-            subgraph Services["EU Only Functions"]
-                STATE["Update Recent Data
-                      [30 min]"]
-                TX["Measure Tx Landing
-                    [15 min]"]
+            subgraph Services["fra1 Only"]
+                STATE["State Update
+                      [15 min intervals]"]
+                TX["Transaction Landing
+                    [15 min intervals]"]
             end
         end
         BLOB[("Blob Storage")]
@@ -45,9 +55,8 @@ flowchart TB
         API["JSON-RPC API"]
     end
     subgraph Grafana["Grafana Cloud"]
-        METRICS["Default Prometheus Instance"]
+        METRICS["Prometheus"]
     end
-    %% Data Flows
     BLOB --> Collectors
     Collectors <--> API
     Collectors --> METRICS
@@ -55,234 +64,297 @@ flowchart TB
     STATE --> BLOB
     TX <--> API
     TX --> METRICS
-    %% Basic Styling
     classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px,color:#000
     classDef vercel fill:#f0f0f0,stroke:#333,color:#000
     classDef grafana fill:#d4eaf7,stroke:#333,color:#000
     classDef rpc fill:#eafaf1,stroke:#333,color:#000
-    
+
     class BLOB,Collectors,STATE,TX vercel
     class METRICS grafana
     class API rpc
 ```
 
-## Quick Start
+**Workflow:**
 
-### 1. Prerequisites
-- Grafana Cloud account
-- Vercel account
-- GitHub account
-- RPC node endpoints
+1. State updater fetches latest block and transaction data from RPC endpoints every 15 minutes (fra1 only)
+2. State data is stored in Vercel Blob Storage (recent block numbers and transaction hashes)
+3. Metric collectors in each region fetch state data and execute RPC calls every 3 minutes
+4. Response times are measured and formatted as Influx metrics
+5. Metrics are pushed to Grafana Cloud for storage and visualization
 
-### 2. One-Click Deploy
+## Setup
+
+### Prerequisites
+
+- Grafana Cloud account with Prometheus endpoint
+- Vercel account (Pro plan recommended for multi-region deployment)
+- RPC node endpoints to monitor
+
+### Deployment
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fchainstacklabs%2Fchainstack-rpc-dashboard-functions&env=GRAFANA_URL,GRAFANA_USER,GRAFANA_API_KEY,CRON_SECRET,SKIP_AUTH,SOLANA_PRIVATE_KEY,ENDPOINTS,STORE_ID,VERCEL_BLOB_TOKEN)
 
-Configure required environment variables:
-   ```env
-   GRAFANA_URL=Grafana Cloud URL for pushing metrics
-   GRAFANA_USER=Grafana Cloud user ID
-   GRAFANA_API_KEY=Grafana Cloud API key
-
-   CRON_SECRET=Generate secret to protect API, it's used by CRON jobs
-   SKIP_AUTH=Set False for non-production deployments
-
-   SOLANA_PRIVATE_KEY=Set it if you'd like to measure transaction landing
-   ENDPOINTS=Read below
-
-   STORE_ID=Vercel Blob Storage ID
-   VERCEL_BLOB_TOKEN=Vercel Blob Storage token for reading/writing data to the storage
-   ```
-
-Update the `ENDPOINTS` environment variable with your RPC configuration:
-```json
-{
-    "providers": [
-        {
-            "blockchain": "Ethereum",
-            "name": "Provider-Name",
-            "region": "Global",
-            "websocket_endpoint": "wss://...",
-            "http_endpoint": "https://...",
-            "data": {}
-        }
-    ]
-}
-```
-You can leave `data` empty. If a provider has a separate endpoint for sending transactions, use `tx_endpoint` field for that in addition to `http_endpoint`.
-
-## Detailed Setup
-
-### Multi-Region Deployment
-1. Create three Vercel projects:
-   - `your-project-sin1` (Singapore)
-   - `your-project-fra1` (EU)
-   - `your-project-sfo1` (US West)
-
-2. Configure each project:
-   ```bash
-   # Project Settings → Functions
-   Function Regions: [Select corresponding region]
-   ```
-
-3. Link environment variables:
-   ```bash
-   # Team Settings → Environment Variables
-   Link to all three projects
-   ```
-
-   It is recommended to have separate environment variables for production and preview for at least `ENDPOINTS`, `SOLANA_PRIVATE_KEY` and `SKIP_AUTH`. You can create two environment variables with the same name, but linked to different environments.
+For multi-region setup across multiple projects, see the [Multi-Region Deployment Guide](#multi-region-deployment-guide) below.
 
 ### Blob Storage Setup
-1. Create a Vercel Blob store
-2. Configure storage variables:
-   ```env
-   VERCEL_BLOB_TOKEN=your_blob_token
-   STORE_ID=your_store_id
-   ```
 
-### Security Configuration
-1. Generate a strong CRON_SECRET
-2. Configure authentication:
-   ```env
-   SKIP_AUTH=FALSE  # Production
-   SKIP_AUTH=TRUE   # Development
-   ```
+Create a Vercel Blob store and configure the storage variables:
+
+```env
+VERCEL_BLOB_TOKEN=vercel_blob_...
+STORE_ID=store_...
+```
+
+These are required for the state management system.
 
 ## Configuration
 
 ### Environment Variables
 
-#### Required Variables
-```env
-# Grafana Settings
-GRAFANA_URL=https://influx-...grafana.net/api/v1/push/influx/write
-GRAFANA_USER=your_user_id
-GRAFANA_API_KEY=your_api_key
+**Required:**
 
-# Security
-CRON_SECRET=your_secret
+```env
+# Grafana Cloud credentials
+GRAFANA_URL=https://influx-...grafana.net/api/v1/push/influx/write
+GRAFANA_USER=user_id
+GRAFANA_API_KEY=glc_...
+
+# Authentication
+CRON_SECRET=random_secret_string
 SKIP_AUTH=FALSE
 
-# Storage
-VERCEL_BLOB_TOKEN=your_blob_token
-STORE_ID=your_store_id
+# Blob Storage
+VERCEL_BLOB_TOKEN=vercel_blob_...
+STORE_ID=store_...
 ```
 
-#### Optional Variables
+**Optional:**
+
 ```env
-# Development
-VERCEL_ENV=development  # Adds 'dev_' prefix to metrics
-SOLANA_PRIVATE_KEY=...  # For Solana write metrics
+# Adds 'dev_' prefix to metric names in non-production environments
+VERCEL_ENV=production
+
+# Required only for Solana transaction landing metrics
+SOLANA_PRIVATE_KEY=base58_encoded_private_key
 ```
 
-### RPC Provider Configuration
-Full configuration options in `endpoints.json`:
+### RPC Endpoints Configuration
+
+Configure monitored endpoints in the `ENDPOINTS` environment variable (JSON format):
+
 ```json
 {
-    "providers": [
-        {
-            "blockchain": "Ethereum",
-            "name": "Provider1",
-            "region": "Global",
-            "websocket_endpoint": "wss://...",
-            "http_endpoint": "https://...",
-            "tx_endpoint": "",
-            "data": {}
-        }
-    ]
+  "providers": [
+    {
+      "blockchain": "Ethereum",
+      "name": "Chainstack",
+      "websocket_endpoint": "wss://ethereum-mainnet.example.com",
+      "http_endpoint": "https://ethereum-mainnet.example.com"
+    },
+    {
+      "blockchain": "Solana",
+      "name": "Chainstack",
+      "http_endpoint": "https://solana-mainnet.example.com",
+      "tx_endpoint": "https://solana-mainnet-tx.example.com"
+    }
+  ]
 }
 ```
-You can leave `data` empty. If a provider has a separate endpoint for sending transactions, use `tx_endpoint` field for that in addition to `http_endpoint`.
 
-## Development Guide
+**Fields:**
+- `blockchain` - Blockchain name (case-insensitive, must match supported list)
+- `name` - Provider identifier (used in metric labels)
+- `http_endpoint` - HTTP RPC endpoint URL
+- `websocket_endpoint` - WebSocket endpoint URL (optional, use "not_supported" if unavailable)
+- `tx_endpoint` - Separate transaction endpoint (Solana only, optional)
+
+For local development, create `endpoints.json` in the project root. For Vercel deployment, set as environment variable.
+
+## Development
 
 ### Local Setup
-1. Clone and setup environment:
-   ```bash
-   git clone https://github.com/chainstacklabs/chainstack-rpc-dashboard-functions.git
-   cd chainstack-rpc-dashboard-functions
-   python -m venv venv
-   source venv/bin/activate  # or venv\Scripts\activate on Windows
-   ```
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Configure local environment:
-   ```bash
-   cp .env.local.example .env.local
-   cp endpoints.json.example endpoints.json
-   # Update with your values
-   ```
-
-4. Run development server:
-   ```bash
-   python tests/test_api_read.py  # For read metrics
-   python tests/test_api_write.py  # For write metrics
-   python tests/test_update_state.py  # For state updates
-   ```
-
-### Adding New Metrics
-1. Create metric class:
-   ```python
-   from common.metric_types import HttpCallLatencyMetricBase
-
-   class YourMetric(HttpCallLatencyMetricBase):
-       @property
-       def method(self) -> str:
-           return "your_rpc_method"
-
-       @staticmethod
-       def get_params_from_state(state_data: dict) -> dict:
-           return {"your": "params"}
-   ```
-
-2. Register in appropriate handler:
-   ```python
-   METRICS = [
-       (YourMetric, metric_name),
-       # ... other metrics
-   ]
-   ```
-
-## Technical Reference
-
-### Project Structure
-```plaintext
-├── api/                      # Vercel Functions
-│   ├── read/                 # Read metrics
-│   ├── write/                # Write metrics
-│   └── support/             # Support functions
-├── common/                   # Shared utilities
-│   ├── base_metric.py       # Base framework
-│   ├── factory.py           # Metrics creation
-│   ├── metric_*.py          # Configuration
-│   └── state/              # State management
-├── metrics/                 # Implementations
-└── config/                  # Configuration
+```bash
+git clone https://github.com/chainstacklabs/chainstack-rpc-dashboard-functions.git
+cd chainstack-rpc-dashboard-functions
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-### Metric Types
-- **HTTP Metrics**: RPC endpoint response times
-- **WebSocket Metrics**: real-time block monitoring
-- **Transaction Metrics**: tx processing times
+### Local Configuration
 
-## Contributing
+```bash
+cp .env.local.example .env.local
+cp endpoints.json.example endpoints.json
+```
 
-### Getting Started
-1. Fork the repository
-2. Create feature branch:
-   ```bash
-   git checkout -b feature/YourFeature
-   ```
-3. Make changes
-4. Run local servers
-5. Submit PR
+Edit `.env.local` and `endpoints.json` with your credentials and endpoints.
 
-### Code Style
-- Follow PEP 8
-- Use type hints
-- Add docstrings
-- Include tests
+### Running Tests
+
+```bash
+# Test metric collection for a specific blockchain
+python tests/test_api_read.py
+
+# Test state update function
+python tests/test_update_state.py
+
+# Test Solana transaction landing metrics
+python tests/test_api_write.py
+```
+
+By default, test scripts import specific blockchain handlers. Modify the import statement in the test file to test different blockchains:
+
+```python
+# In tests/test_api_read.py, change:
+from api.read.ethereum import handler
+# to:
+from api.read.monad import handler
+```
+
+### Project Structure
+
+```
+├── api/
+│   ├── read/              # Metric collection handlers (one per blockchain)
+│   ├── write/             # Transaction landing metrics
+│   └── support/           # State update handler
+├── common/
+│   ├── base_metric.py     # Base metric classes
+│   ├── factory.py         # Metric factory
+│   ├── metrics_handler.py # Request handler
+│   └── state/             # Blob storage interface
+├── metrics/               # Blockchain-specific metric implementations
+├── config/
+│   └── defaults.py        # Block offset ranges, timeouts, etc.
+├── tests/                 # Local development servers
+└── vercel.json            # Function and cron configuration
+```
+
+### Adding a New Blockchain
+
+1. Create `metrics/{blockchain}.py` with metric implementations:
+
+```python
+from common.metric_types import HttpCallLatencyMetricBase
+
+class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
+    @property
+    def method(self) -> str:
+        return "eth_blockNumber"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict) -> list:
+        return []
+```
+
+2. Create `api/read/{blockchain}.py` handler:
+
+```python
+import os
+from common.metrics_handler import BaseVercelHandler, MetricsHandler
+from config.defaults import MetricsServiceConfig
+from metrics.{blockchain} import HTTPBlockNumberLatencyMetric
+
+METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
+ALLOWED_REGIONS = ["fra1", "sfo1", "sin1"]
+
+METRICS = (
+    [(HTTPBlockNumberLatencyMetric, METRIC_NAME)]
+    if os.getenv("VERCEL_REGION") in ALLOWED_REGIONS
+    else []
+)
+
+class handler(BaseVercelHandler):
+    metrics_handler = MetricsHandler("YourBlockchain", METRICS)
+```
+
+3. Add to `config/defaults.py`:
+
+```python
+BLOCK_OFFSET_RANGES = {
+    # ...
+    "yourblockchain": (7200, 10000),  # blocks back from latest
+}
+```
+
+4. Add to `api/support/update_state.py`:
+
+```python
+SUPPORTED_BLOCKCHAINS = [
+    "ethereum", "solana", "ton", "base",
+    "arbitrum", "bnb", "hyperliquid", "monad",
+    "yourblockchain",  # Add here
+]
+```
+
+5. Add to `common/state/blockchain_fetcher.py` (EVM chains only):
+
+```python
+if blockchain.lower() in (
+    "ethereum", "base", "arbitrum", "bnb",
+    "hyperliquid", "monad", "yourblockchain",  # Add here
+):
+    return await self._fetch_evm_data(blockchain)
+```
+
+6. Update `vercel.{region}.json` files to include the new blockchain's cron job in appropriate regions.
+
+## Multi-Region Deployment Guide
+
+### Problem
+
+Vercel executes all crons defined in `vercel.json` across all projects/regions, even if the function filters by `ALLOWED_REGIONS`. This wastes cron job slots (40 total limit under the Pro plan).
+
+### Solution
+
+Use region-specific vercel.json files that only define crons for functions that should run in each region.
+
+### Deployment Commands
+
+Deploy each project with its region-specific configuration:
+
+```bash
+# Germany (Frankfurt - fra1) - 10 crons
+vercel link --project chainstack-rpc-dashboard-germany
+vercel --prod --cwd . --local-config vercel.fra1.json
+
+# US West (San Francisco - sfo1) - 8 crons
+vercel link --project chainstack-rpc-dashboard-us-west
+vercel --prod --cwd . --local-config vercel.sfo1.json
+
+# Singapore (sin1) - 5 crons
+vercel link --project chainstack-rpc-dashboard-singapore
+vercel --prod --cwd . --local-config vercel.sin1.json
+
+# Japan (Tokyo - hnd1) - 4 crons
+vercel link --project chainstack-rpc-dashboard-japan
+vercel --prod --cwd . --local-config vercel.hnd1.json
+```
+
+Ensure you're in the correct Vercel project context before deploying. Use `vercel link` to switch between projects.
+
+### Verification
+
+After deployment, verify cron jobs in each Vercel project:
+
+1. Navigate to each project in Vercel Dashboard
+2. Go to Settings → Crons
+3. Confirm only expected crons are listed (10/8/5/4 depending on region)
+4. Total across all projects should be 27 crons
+
+### Updating Region Configuration
+
+To add or remove a blockchain from a region:
+
+1. Update `ALLOWED_REGIONS` in `api/read/{blockchain}.py`
+2. Update the corresponding `vercel.{region}.json` cron list
+3. Redeploy that specific region with the updated config
+
+### Notes
+
+- The original `vercel.json` serves as a reference template
+- State Update and Solana Write only run in fra1 to avoid data conflicts
+- TON runs in all 4 regions
+- Each region's config file (`vercel.fra1.json`, etc.) defines only the functions needed in that region

@@ -316,19 +316,19 @@ Use region-specific vercel.json files that only define crons for functions that 
 Deploy each project with its region-specific configuration:
 
 ```bash
-# Germany (Frankfurt - fra1) - 10 crons
+# Germany (Frankfurt - fra1)
 vercel link --project chainstack-rpc-dashboard-germany
 vercel --prod --cwd . --local-config vercel.fra1.json
 
-# US West (San Francisco - sfo1) - 8 crons
+# US West (San Francisco - sfo1)
 vercel link --project chainstack-rpc-dashboard-us-west
 vercel --prod --cwd . --local-config vercel.sfo1.json
 
-# Singapore (sin1) - 5 crons
+# Singapore (sin1)
 vercel link --project chainstack-rpc-dashboard-singapore
 vercel --prod --cwd . --local-config vercel.sin1.json
 
-# Japan (Tokyo - hnd1) - 4 crons
+# Japan (Tokyo - hnd1)
 vercel link --project chainstack-rpc-dashboard-japan
 vercel --prod --cwd . --local-config vercel.hnd1.json
 ```
@@ -341,8 +341,7 @@ After deployment, verify cron jobs in each Vercel project:
 
 1. Navigate to each project in Vercel Dashboard
 2. Go to Settings → Crons
-3. Confirm only expected crons are listed (10/8/5/4 depending on region)
-4. Total across all projects should be 27 crons
+3. Confirm only expected crons are listed
 
 ### Updating Region Configuration
 
@@ -356,5 +355,4 @@ To add or remove a blockchain from a region:
 
 - The original `vercel.json` serves as a reference template
 - State Update and Solana Write only run in fra1 to avoid data conflicts
-- TON runs in all 4 regions
 - Each region's config file (`vercel.fra1.json`, etc.) defines only the functions needed in that region

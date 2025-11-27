@@ -20,6 +20,7 @@ SUPPORTED_BLOCKCHAINS: list[str] = [
     "arbitrum",
     "bnb",
     "hyperliquid",
+    "monad",
 ]
 ALLOWED_PROVIDERS: set[str] = {
     "Chainstack"

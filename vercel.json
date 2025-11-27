@@ -28,6 +28,10 @@
       "memory": 400,
       "maxDuration": 59
     },
+    "api/read/monad.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
     "api/read/test_blockchain.py": {
       "memory": 150,
       "maxDuration": 59
@@ -44,31 +48,35 @@
   "crons": [
     {
       "path": "/api/read/ethereum",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/base",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/solana",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/ton",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/arbitrum",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/bnbsc",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/hyperliquid",
-      "schedule": "*/2 * * * *"
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/monad",
+      "schedule": "*/3 * * * *"
     },
     {
       "path": "/api/read/test_blockchain",

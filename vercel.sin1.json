@@ -1,0 +1,49 @@
+{
+  "git": {
+    "deploymentEnabled": false
+  },
+  "functions": {
+    "api/read/ethereum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/solana.py": {
+      "memory": 300,
+      "maxDuration": 59
+    },
+    "api/read/ton.py": {
+      "memory": 200,
+      "maxDuration": 59
+    },
+    "api/read/bnbsc.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/monad.py": {
+      "memory": 400,
+      "maxDuration": 59
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/read/ethereum",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/solana",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/ton",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/bnbsc",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/monad",
+      "schedule": "*/3 * * * *"
+    }
+  ]
+}

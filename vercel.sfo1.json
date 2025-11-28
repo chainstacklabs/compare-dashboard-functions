@@ -15,10 +15,6 @@
       "memory": 300,
       "maxDuration": 59
     },
-    "api/read/ton.py": {
-      "memory": 200,
-      "maxDuration": 59
-    },
     "api/read/arbitrum.py": {
       "memory": 400,
       "maxDuration": 59
@@ -33,18 +29,6 @@
     },
     "api/read/monad.py": {
       "memory": 400,
-      "maxDuration": 59
-    },
-    "api/read/test_blockchain.py": {
-      "memory": 150,
-      "maxDuration": 59
-    },
-    "api/write/solana.py": {
-      "memory": 160,
-      "maxDuration": 65
-    },
-    "api/support/update_state.py": {
-      "memory": 128,
       "maxDuration": 59
     }
   },
@@ -62,10 +46,6 @@
       "schedule": "*/3 * * * *"
     },
     {
-      "path": "/api/read/ton",
-      "schedule": "*/3 * * * *"
-    },
-    {
       "path": "/api/read/arbitrum",
       "schedule": "*/3 * * * *"
     },
@@ -80,18 +60,6 @@
     {
       "path": "/api/read/monad",
       "schedule": "*/3 * * * *"
-    },
-    {
-      "path": "/api/read/test_blockchain",
-      "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/write/solana",
-      "schedule": "*/15 * * * *"
-    },
-    {
-      "path": "/api/support/update_state",
-      "schedule": "*/15 * * * *"
     }
   ]
 }

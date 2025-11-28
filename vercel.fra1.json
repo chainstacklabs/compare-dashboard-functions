@@ -35,10 +35,6 @@
       "memory": 400,
       "maxDuration": 59
     },
-    "api/read/test_blockchain.py": {
-      "memory": 150,
-      "maxDuration": 59
-    },
     "api/write/solana.py": {
       "memory": 160,
       "maxDuration": 65
@@ -80,10 +76,6 @@
     {
       "path": "/api/read/monad",
       "schedule": "*/3 * * * *"
-    },
-    {
-      "path": "/api/read/test_blockchain",
-      "schedule": "*/5 * * * *"
     },
     {
       "path": "/api/write/solana",

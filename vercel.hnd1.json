@@ -1,0 +1,33 @@
+{
+  "git": {
+    "deploymentEnabled": false
+  },
+  "functions": {
+    "api/read/base.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/arbitrum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    },
+    "api/read/hyperliquid.py": {
+      "memory": 400,
+      "maxDuration": 59
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/read/base",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/arbitrum",
+      "schedule": "*/3 * * * *"
+    },
+    {
+      "path": "/api/read/hyperliquid",
+      "schedule": "*/3 * * * *"
+    }
+  ]
+}

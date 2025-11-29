@@ -313,27 +313,36 @@ Use region-specific vercel.json files that only define crons for functions that 
 
 ### Deployment Commands
 
+**Note:** Due to a Vercel CLI bug, the `--local-config` flag doesn't always work correctly. You must copy the region-specific config to `vercel.json` before deploying.
+
 Deploy each project with its region-specific configuration:
 
 ```bash
 # Germany (Frankfurt - fra1)
 vercel link --project chainstack-rpc-dashboard-germany
-vercel --prod --cwd . --local-config vercel.fra1.json
+cp vercel.fra1.json vercel.json
+vercel --prod
 
 # US West (San Francisco - sfo1)
 vercel link --project chainstack-rpc-dashboard-us-west
-vercel --prod --cwd . --local-config vercel.sfo1.json
+cp vercel.sfo1.json vercel.json
+vercel --prod
 
 # Singapore (sin1)
 vercel link --project chainstack-rpc-dashboard-singapore
-vercel --prod --cwd . --local-config vercel.sin1.json
+cp vercel.sin1.json vercel.json
+vercel --prod
 
 # Japan (Tokyo - hnd1)
 vercel link --project chainstack-rpc-dashboard-japan
-vercel --prod --cwd . --local-config vercel.hnd1.json
+cp vercel.hnd1.json vercel.json
+vercel --prod
 ```
 
-Ensure you're in the correct Vercel project context before deploying. Use `vercel link` to switch between projects.
+**Important:**
+- Always `cp` the region-specific config to `vercel.json` before deploying
+- Ensure you're in the correct Vercel project context before deploying (use `vercel link`)
+- After deployment, you can restore the original `vercel.json` from git if needed: `git checkout vercel.json`
 
 ### Verification
 

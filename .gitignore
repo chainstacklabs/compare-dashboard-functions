@@ -13,3 +13,5 @@ venv
 api/test
 endpoints*.json
 endpoints
+
+dashboards

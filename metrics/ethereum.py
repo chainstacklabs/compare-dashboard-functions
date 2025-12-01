@@ -228,7 +228,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
             fallback_subscription_msg: str = json.dumps(
                 {
-                    "id": 1,
+                    "id": 2,
                     "jsonrpc": "2.0",
                     "method": "eth_subscribe",
                     "params": ["newHeads"],
@@ -262,7 +262,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
         unsubscribe_msg: str = json.dumps(
             {
-                "id": 2,
+                "id": 3,
                 "jsonrpc": "2.0",
                 "method": "eth_unsubscribe",
                 "params": [self.subscription_id],

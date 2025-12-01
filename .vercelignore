@@ -1,6 +1,7 @@
 dashboards
 tests
 readme.md
+endpoints.json
 
 *.local*
 *.example*

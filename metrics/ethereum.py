@@ -208,13 +208,14 @@ class WSBlockLatencyMetric(WebSocketMetric):
         Raises:
             ValueError: If subscription to newHeads fails
         """
-        # First attempt: with False flag, not all providers support this
+        # Use standard eth_subscribe format without optional parameters
+        # The False parameter caused Quicknode to accept the subscription but never send data
         subscription_msg: str = json.dumps(
             {
                 "id": 1,
                 "jsonrpc": "2.0",
                 "method": "eth_subscribe",
-                "params": ["newHeads", False],
+                "params": ["newHeads"],
             }
         )
 
@@ -222,33 +223,11 @@ class WSBlockLatencyMetric(WebSocketMetric):
         response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
         subscription_data = json.loads(response)
 
-        # If subscription failed, try without the False flag
         if subscription_data.get("result") is None:
-            logging.info("Subscription with False flag failed, retrying without flag")
+            error_msg = subscription_data.get("error", "Unknown error")
+            raise ValueError(f"Subscription to newHeads failed: {error_msg}")
 
-            fallback_subscription_msg: str = json.dumps(
-                {
-                    "id": 2,
-                    "jsonrpc": "2.0",
-                    "method": "eth_subscribe",
-                    "params": ["newHeads"],
-                }
-            )
-
-            await self.send_with_timeout(
-                websocket, fallback_subscription_msg, WS_DEFAULT_TIMEOUT
-            )
-            fallback_response: str = await self.recv_with_timeout(
-                websocket, WS_DEFAULT_TIMEOUT
-            )
-            fallback_subscription_data = json.loads(fallback_response)
-
-            if fallback_subscription_data.get("result") is None:
-                raise ValueError("Subscription to newHeads failed even without flag")
-
-            self.subscription_id = fallback_subscription_data["result"]
-        else:
-            self.subscription_id = subscription_data["result"]
+        self.subscription_id = subscription_data["result"]
 
     async def unsubscribe(self, websocket) -> None:
         """Unsubscribe from the WebSocket connection.
@@ -262,7 +241,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
         unsubscribe_msg: str = json.dumps(
             {
-                "id": 3,
+                "id": 2,
                 "jsonrpc": "2.0",
                 "method": "eth_unsubscribe",
                 "params": [self.subscription_id],

@@ -40,7 +40,7 @@ class MetricsServiceConfig:
         "arbitrum": (7200, 10000),
         "bnb": (7200, 10000),
         "hyperliquid": (3600, 7200),
-        "monad": (14400, 20000),
+        "monad": (216000, 256000),
     }
 
 

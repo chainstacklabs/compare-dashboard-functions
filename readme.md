@@ -252,19 +252,15 @@ class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
 2. Create `api/read/{blockchain}.py` handler:
 
 ```python
-import os
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.{blockchain} import HTTPBlockNumberLatencyMetric
 
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
-ALLOWED_REGIONS = ["fra1", "sfo1", "sin1"]
 
-METRICS = (
-    [(HTTPBlockNumberLatencyMetric, METRIC_NAME)]
-    if os.getenv("VERCEL_REGION") in ALLOWED_REGIONS
-    else []
-)
+METRICS = [
+    (HTTPBlockNumberLatencyMetric, METRIC_NAME),
+]
 
 class handler(BaseVercelHandler):
     metrics_handler = MetricsHandler("YourBlockchain", METRICS)
@@ -356,9 +352,8 @@ After deployment, verify cron jobs in each Vercel project:
 
 To add or remove a blockchain from a region:
 
-1. Update `ALLOWED_REGIONS` in `api/read/{blockchain}.py`
-2. Update the corresponding `vercel.{region}.json` cron list
-3. Redeploy that specific region with the updated config
+1. Update the corresponding `vercel.{region}.json` cron list to add or remove the blockchain's cron entry
+2. Redeploy that specific region with the updated config
 
 ### Notes
 

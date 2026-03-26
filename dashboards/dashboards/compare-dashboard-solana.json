@@ -1,0 +1,4979 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 57,
+  "links": [],
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 17,
+        "x": 0,
+        "y": 0
+      },
+      "id": 18,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <!-- Image Link -->\n    <a href=\"https://chainstack.com/\" target=\"_blank\" style=\"margin-right: 25px; display: inline-block;\">\n        <img src=\"https://chainstack.com/wp-content/themes/chainstack/img/press-kit-logo-white-text.svg\" alt=\"chainstack_logo\" style=\"max-width: 150px; height: auto; display: block;\">\n    </a>\n    \n    <!-- Text Links with Highlight on the First Link -->\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Ethereum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Arbitrum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/11861148d82247128307025fac628b6e\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Base\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/059a680a502a4d8782e93fcc1f2f1be9\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        BNB\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5f957bbcc3ae4c9d8d9669a299a24676\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Hyperliquid\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/ae4e8ccc089b460f95d5d2f29dd0d022\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Monad\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #e0f7fa; border: 1px solid #007bff;\">\n        Solana\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/deeaf524ea264f42a12718f675511b13\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        TON\n    </a>\n</div>\n\n",
+        "mode": "html"
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 42,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #f8f9fa; border: 1px solid #dee2e6;\">\n        Global\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/ca292eb9006541389b119061260e6bc8\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        US West\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/47f9dafa230148bf95aaa1d82f5f518b\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        EU\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/93d0717a742149bcabb2038a722c9a8d\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Asia\n    </a>\n</div>",
+        "mode": "html"
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 22,
+        "w": 9,
+        "x": 0,
+        "y": 3
+      },
+      "id": 5,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
+      "gridPos": {
+        "h": 1,
+        "w": 14,
+        "x": 10,
+        "y": 3
+      },
+      "id": 97,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "title": "Provider score (lower is better)",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": 0
+              },
+              {
+                "color": "text",
+                "value": 0.4
+              },
+              {
+                "color": "text",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Chainstack"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 14,
+        "x": 10,
+        "y": 4
+      },
+      "id": 98,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "percentChangeColorMode": "same_as_value",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {},
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "format": "time_series",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 14,
+        "x": 10,
+        "y": 8
+      },
+      "id": 66,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "title": "What is the average response time and overall success rate?",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "uid": "grafanacloud-prom"
+      },
+      "description": "Average response time across all metrics per provider, segmented by request origin region.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source_region"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "fra1": {
+                        "index": 0,
+                        "text": "EU"
+                      },
+                      "sfo1": {
+                        "index": 2,
+                        "text": "US West"
+                      },
+                      "sin1": {
+                        "index": 1,
+                        "text": "SG"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Chainstack"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 8,
+        "x": 10,
+        "y": 9
+      },
+      "id": 56,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.79,
+        "fullHighlight": false,
+        "groupWidth": 0.72,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source_region",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "avg by (provider, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{provider}}",
+          "range": false,
+          "refId": "regions"
+        }
+      ],
+      "title": "By data collection region",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "source_region": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "source_region",
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-blue",
+            "mode": "continuous-YlBl"
+          },
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false,
+            "wrapHeaderText": false
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "from": 0.99991,
+                "result": {
+                  "index": 0,
+                  "text": "100.0%"
+                },
+                "to": 1
+              },
+              "type": "range"
+            }
+          ],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "1"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "gauge"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 6,
+        "x": 18,
+        "y": 9
+      },
+      "id": 33,
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": false
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Solana\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{provider}} - {{source_region}}",
+          "range": false,
+          "refId": "A",
+          "useBackend": false
+        }
+      ],
+      "title": "Success rate",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "Alchemy-Growth - fra1": 1,
+              "Alchemy-Growth - sfo1": 3,
+              "Alchemy-Growth - sin1": 2,
+              "Chainstack - fra1": 4,
+              "Chainstack - sfo1": 6,
+              "Chainstack - sin1": 5,
+              "Helius-Developer - fra1": 7,
+              "Helius-Developer - sfo1": 9,
+              "Helius-Developer - sin1": 8,
+              "Quicknode-Growth - fra1": 10,
+              "Quicknode-Growth - sfo1": 12,
+              "Quicknode-Growth - sin1": 11,
+              "Time": 0,
+              "dRPC - fra1": 13,
+              "dRPC - sfo1": 15,
+              "dRPC - sin1": 14
+            },
+            "renameByName": {
+              "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+              "Chainstack - fra1": "Chainstack-Growth - EU",
+              "Chainstack - sfo1": "Chainstack-Growth - US West",
+              "Chainstack - sin1": "Chainstack-Growth - SG",
+              "Helius-Developer - fra1": "Helius-Developer - EU",
+              "Helius-Developer - sfo1": "Helius-Developer - US West",
+              "Helius-Developer - sin1": "Helius-Developer - SG",
+              "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+              "dRPC - fra1": "dRPC-Growth - EU",
+              "dRPC - sfo1": "dRPC-Growth - US West",
+              "dRPC - sin1": "dRPC-Growth - SG"
+            }
+          }
+        },
+        {
+          "id": "transpose",
+          "options": {}
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "uid": "grafanacloud-prom"
+      },
+      "description": "Average response time per API method for each provider, aggregated across all regions.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source_region"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "fra1": {
+                        "index": 0,
+                        "text": "EU"
+                      },
+                      "sfo1": {
+                        "index": 2,
+                        "text": "US West"
+                      },
+                      "sin1": {
+                        "index": 1,
+                        "text": "SG"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Chainstack"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 10,
+        "y": 15
+      },
+      "id": 84,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.79,
+        "fullHighlight": false,
+        "groupWidth": 0.72,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source_region",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "avg by (provider, api_method) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{provider}}",
+          "range": false,
+          "refId": "regions"
+        }
+      ],
+      "title": "By API method",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "source_region": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "api_method",
+            "mode": "outer"
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "id": 70,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.4.0-19576184216.patch1",
+      "title": "What is the average response time in each region?",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "uid": "grafanacloud-prom"
+      },
+      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source_region"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "fra1": {
+                        "index": 0,
+                        "text": "EU"
+                      },
+                      "sfo1": {
+                        "index": 1,
+                        "text": "US West"
+                      },
+                      "sin1": {
+                        "index": 2,
+                        "text": "SG"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Chainstack"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Chainstack-Growth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 0,
+        "y": 26
+      },
+      "id": 68,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.79,
+        "fullHighlight": false,
+        "groupWidth": 0.72,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source_region",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "12.4.0-19576184216.patch1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(simulateTransaction|getBalance)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{provider}}",
+          "range": false,
+          "refId": "regions"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "source_region": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider",
+              "source_region"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "api_method",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Alchemy-Growth fra1": 1,
+              "Alchemy-Growth sfo1": 3,
+              "Alchemy-Growth sin1": 2,
+              "Chainstack fra1": 4,
+              "Chainstack sfo1": 6,
+              "Chainstack sin1": 5,
+              "Helius-Developer fra1": 10,
+              "Helius-Developer sfo1": 12,
+              "Helius-Developer sin1": 11,
+              "Quicknode-Growth fra1": 7,
+              "Quicknode-Growth sfo1": 9,
+              "Quicknode-Growth sin1": 8,
+              "api_method": 0,
+              "dRPC fra1": 13,
+              "dRPC sfo1": 15,
+              "dRPC sin1": 14
+            },
+            "renameByName": {
+              "Alchemy-Growth fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Chainstack fra1": "Chainstack-Growth - EU",
+              "Chainstack sfo1": "Chainstack-Growth - US West",
+              "Chainstack sin1": "Chainstack-Growth - SG",
+              "Helius-Developer fra1": "Helius-Developer - EU",
+              "Helius-Developer sfo1": "Helius-Developer - US West",
+              "Helius-Developer sin1": "Helius-Developer - SG",
+              "Quicknode-Growth fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "dRPC fra1": "dRPC-Growth - EU",
+              "dRPC sfo1": "dRPC-Growth - US West",
+              "dRPC sin1": "dRPC-Growth - SG"
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "uid": "grafanacloud-prom"
+      },
+      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "source_region"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "fra1": {
+                        "index": 0,
+                        "text": "EU"
+                      },
+                      "sfo1": {
+                        "index": 1,
+                        "text": "US West"
+                      },
+                      "sin1": {
+                        "index": 2,
+                        "text": "SG"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Chainstack"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Chainstack-Growth"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 7,
+        "x": 7,
+        "y": 26
+      },
+      "id": 93,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.79,
+        "fullHighlight": false,
+        "groupWidth": 0.72,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": false
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source_region",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "12.4.0-19576184216.patch1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getTransaction|getLatestBlockhash)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{provider}}",
+          "range": false,
+          "refId": "regions"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "source_region": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider",
+              "source_region"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "api_method",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Alchemy-Growth fra1": 1,
+              "Alchemy-Growth sfo1": 3,
+              "Alchemy-Growth sin1": 2,
+              "Chainstack fra1": 4,
+              "Chainstack sfo1": 6,
+              "Chainstack sin1": 5,
+              "Helius-Developer fra1": 10,
+              "Helius-Developer sfo1": 12,
+              "Helius-Developer sin1": 11,
+              "Quicknode-Growth fra1": 7,
+              "Quicknode-Growth sfo1": 9,
+              "Quicknode-Growth sin1": 8,
+              "api_method": 0,
+              "dRPC fra1": 13,
+              "dRPC sfo1": 15,
+              "dRPC sin1": 14
+            },
+            "renameByName": {
+              "Alchemy-Growth fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Chainstack fra1": "Chainstack-Growth - EU",
+              "Chainstack sfo1": "Chainstack-Growth - US West",
+              "Chainstack sin1": "Chainstack-Growth - SG",
+              "Helius-Developer fra1": "Helius-Developer - EU",
+              "Helius-Developer sfo1": "Helius-Developer - US West",
+              "Helius-Developer sin1": "Helius-Developer - SG",
+              "Quicknode-Growth fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "dRPC fra1": "dRPC-Growth - EU",
+              "dRPC sfo1": "dRPC-Growth - US West",
+              "dRPC sin1": "dRPC-Growth - SG"
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "uid": "grafanacloud-prom"
+      },
+      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 10,
+        "x": 14,
+        "y": 26
+      },
+      "id": 67,
+      "options": {
+        "barRadius": 0.1,
+        "barWidth": 0.79,
+        "fullHighlight": false,
+        "groupWidth": 0.72,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "orientation": "horizontal",
+        "showValue": "never",
+        "stacking": "none",
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        },
+        "xField": "source_region",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 100
+      },
+      "pluginVersion": "12.4.0-19576184216.patch1",
+      "targets": [
+        {
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getBlock|getProgramAccounts)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "{{provider}}",
+          "range": false,
+          "refId": "regions"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "source_region": false
+            },
+            "includeByName": {},
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider",
+              "source_region"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
+            }
+          }
+        },
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "api_method",
+            "mode": "inner"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Alchemy-Growth fra1": 1,
+              "Alchemy-Growth sfo1": 3,
+              "Alchemy-Growth sin1": 2,
+              "Chainstack fra1": 4,
+              "Chainstack sfo1": 6,
+              "Chainstack sin1": 5,
+              "Helius-Developer fra1": 10,
+              "Helius-Developer sfo1": 12,
+              "Helius-Developer sin1": 11,
+              "Quicknode-Growth fra1": 7,
+              "Quicknode-Growth sfo1": 9,
+              "Quicknode-Growth sin1": 8,
+              "api_method": 0,
+              "dRPC fra1": 13,
+              "dRPC sfo1": 15,
+              "dRPC sin1": 14
+            },
+            "renameByName": {
+              "Alchemy-Growth fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Chainstack fra1": "Chainstack-Growth - EU",
+              "Chainstack sfo1": "Chainstack-Growth - US West",
+              "Chainstack sin1": "Chainstack-Growth - SG",
+              "Helius-Developer fra1": "Helius-Developer - EU",
+              "Helius-Developer sfo1": "Helius-Developer - US West",
+              "Helius-Developer sin1": "Helius-Developer - SG",
+              "Quicknode-Growth fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "dRPC fra1": "dRPC-Growth - EU",
+              "dRPC sfo1": "dRPC-Growth - US West",
+              "dRPC sin1": "dRPC-Growth - SG"
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 7,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Historical response time per provider-region pair, showing trends in simulateTransaction requests.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 2,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 19,
+            "x": 0,
+            "y": 35
+          },
+          "id": 3,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Solana\", api_method=\"simulateTransaction\", response_status=\"success\"})",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "simulateTransaction",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": false
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 0,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 5,
+            "x": 19,
+            "y": 35
+          },
+          "id": 83,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"simulateTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"simulateTransaction\"}[$__range])) by (provider, source_region)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": false,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Historical response time per provider-region pair, showing trends in getBalance requests.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 2,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 19,
+            "x": 0,
+            "y": 74
+          },
+          "id": 85,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Solana\", api_method=\"getBalance\", response_status=\"success\"})",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "getBalance",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": false
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 5,
+            "x": 19,
+            "y": 74
+          },
+          "id": 89,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getBalance\"}[$__range])) by (provider, source_region)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": false,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Historical response time per provider-region pair, showing trends in getTransaction requests.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 2,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 19,
+            "x": 0,
+            "y": 88
+          },
+          "id": 86,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Solana\", api_method=\"getTransaction\", response_status=\"success\"})",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "getTransaction",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": false
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 5,
+            "x": 19,
+            "y": 88
+          },
+          "id": 90,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getTransaction\"}[$__range])) by (provider, source_region)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": false,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Historical response time per provider-region pair, showing trends in getLatestBlockhash requests.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 2,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 19,
+            "x": 0,
+            "y": 102
+          },
+          "id": 87,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"})",
+              "instant": false,
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "getLatestBlockhash",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": false
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 1,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 5,
+            "x": 19,
+            "y": 102
+          },
+          "id": 91,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getLatestBlockhash\"}[$__range])) by (provider, source_region)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": false,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Historical response time per provider-region pair, showing trends in getProgramAccounts requests.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 2,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 19,
+            "x": 0,
+            "y": 116
+          },
+          "id": 94,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Solana\", api_method=\"getProgramAccounts\", response_status=\"success\"} >= 0)",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "getProgramAccounts",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": false
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 5,
+            "x": 19,
+            "y": 116
+          },
+          "id": 96,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getProgramAccounts\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getProgramAccounts\"}[$__range])) by (provider, source_region)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": false,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Historical response time per provider-region pair, showing trends in getBlock requests.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 2,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 19,
+            "x": 0,
+            "y": 130
+          },
+          "id": 88,
+          "options": {
+            "legend": {
+              "calcs": [
+                "min",
+                "mean",
+                "max"
+              ],
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "sortBy": "Mean",
+              "sortDesc": false
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Solana\", api_method=\"getBlock\", response_status=\"success\"} >= 0)",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "C"
+            }
+          ],
+          "title": "getBlock \u231b",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": false
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            }
+          ],
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 5,
+            "x": 19,
+            "y": 130
+          },
+          "id": 92,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getBlock\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getBlock\"}[$__range])) by (provider, source_region)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": false,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - sin1": 2,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sfo1": 6,
+                  "Chainstack - sin1": 5,
+                  "Helius-Developer - fra1": 10,
+                  "Helius-Developer - sfo1": 12,
+                  "Helius-Developer - sin1": 11,
+                  "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - sfo1": 9,
+                  "Quicknode-Growth - sin1": 8,
+                  "Time": 0,
+                  "dRPC - fra1": 13,
+                  "dRPC - sfo1": 15,
+                  "dRPC - sin1": 14
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sfo1": "Helius-Developer - US West",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sfo1": "dRPC-Growth - US West",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Historical data",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
+      },
+      "id": 100,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Number of slots between transaction submission and confirmation, both using confirmed commitment level. Lower values indicate faster transaction landing on chain.\n\nTransactions are sent every 15 minutes. Compute unit price (priority fee) fixed at 200,000 microlamports per compute unit.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineStyle": {
+                  "fill": "solid"
+                },
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "log": 2,
+                  "type": "log"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Default"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack_tx"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Warp"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Default"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 20,
+            "x": 0,
+            "y": 36
+          },
+          "id": 101,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "right",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "expr": "transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", api_method=\"sendTransaction\", metric_type=\"slot_latency\", response_status=\"success\"}",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "interval": "",
+              "legendFormat": "{{provider}}",
+              "range": true,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Transaction confirmation",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "The success rate of transaction landing, calculated by dividing successful confirmations by total attempts over the selected time range. Data grouped by provider and displayed as a percentage.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "mappings": [],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Default"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack_tx"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Warp"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Default"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 4,
+            "x": 20,
+            "y": 36
+          },
+          "id": 102,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "percentChangeColorMode": "standard",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": false,
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "expr": "sum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\"}[$__range])) by (provider)",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": false,
+              "interval": "",
+              "legendFormat": "{{provider}}",
+              "range": true,
+              "refId": "A",
+              "useBackend": false
+            }
+          ],
+          "title": "Landing rate",
+          "type": "stat"
+        },
+        {
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 44
+          },
+          "id": 103,
+          "options": {
+            "code": {
+              "language": "plaintext",
+              "showLineNumbers": false,
+              "showMiniMap": false
+            },
+            "content": "",
+            "mode": "markdown"
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "title": "Slot distribution",
+          "transparent": true,
+          "type": "text"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 0,
+            "y": 45
+          },
+          "id": 104,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Alchemy-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "Alchemy-Growth",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Transactions are sent through a Solana Trader Node (bloXroute) under Growth plan",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 6,
+            "y": 45
+          },
+          "id": 105,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack_tx\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "Chainstack-Warp",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Transactions are sent through a default Solana RPC endpoint (staked) under Developer plan",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 12,
+            "y": 45
+          },
+          "id": 109,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Helius-Developer\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "Helius-Default",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 45
+          },
+          "id": 107,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Quicknode-Growth\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "Quicknode-Growth",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 0,
+            "y": 53
+          },
+          "id": 110,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "dRPC-Growth",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Transactions are sent through a default Solana RPC endpoint (not bloXroute) under Growth plan",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 6,
+            "y": 53
+          },
+          "id": 108,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.4.0-19378664917",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"Chainstack\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "Chainstack-Default",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        }
+      ],
+      "title": "Transaction landing (EU only)",
+      "type": "row"
+    }
+  ],
+  "preload": false,
+  "refresh": "1m",
+  "schemaVersion": 42,
+  "tags": [
+    "global",
+    "solana"
+  ],
+  "templating": {
+    "list": [
+      {
+        "allowCustomValue": false,
+        "baseFilters": [],
+        "datasource": {
+          "type": "prometheus",
+          "uid": "ee3qd1t7j5vy8b"
+        },
+        "filters": [],
+        "label": "Filter",
+        "name": "adhoc",
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Compare Dashboard: Solana",
+  "uid": "fe3mtxna6483ke-solana-global",
+  "version": 73,
+  "weekStart": "monday"
+}

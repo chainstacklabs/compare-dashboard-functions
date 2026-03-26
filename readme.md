@@ -6,6 +6,10 @@ A serverless RPC node monitoring system that measures response times across mult
 
 📊 [Live Dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/chainstack-compare-dashboard)
 
+## Open Source Dashboards
+
+The Grafana dashboards used by this project are open source and available in the [`dashboards/`](./dashboards) folder. This includes all dashboard JSON definitions and a sync tool (`grafana_sync.py`) that lets you pull updates from Grafana Cloud and push them back — keeping the repo and your live dashboards in sync.
+
 ## Table of Contents
 - [Overview](#overview)
 - [Supported Blockchains](#supported-blockchains)

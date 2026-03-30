@@ -220,7 +220,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sin1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -335,7 +335,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
-      "title": "What is the average response time?",
+      "title": "What is the p95 response time?",
       "transparent": true,
       "type": "text"
     },
@@ -344,7 +344,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Displays the average response time for each provider. eth_subscribe(\"newHeads\") shows the difference between the block timestamp and its reception time.",
+      "description": "Displays the p95 response time for each provider. eth_subscribe(\"newHeads\") shows the difference between the block timestamp and its reception time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -489,7 +489,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -508,7 +508,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -527,7 +527,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -546,7 +546,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -565,7 +565,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -584,7 +584,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -603,7 +603,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -622,7 +622,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\", source_region=\"sin1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -915,13 +915,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1127,13 +1127,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1339,13 +1339,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1547,13 +1547,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1755,13 +1755,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1967,13 +1967,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2175,13 +2175,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2383,13 +2383,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -6082,6 +6082,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Monad (Singapore)",
   "uid": "monad-asia-1",
-  "version": 15,
+  "version": 17,
   "weekStart": "monday"
 }

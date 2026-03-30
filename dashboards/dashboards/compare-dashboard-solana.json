@@ -206,7 +206,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"Solana\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -234,7 +234,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
-      "title": "What is the average response time and overall success rate?",
+      "title": "What is the p95 response time and overall success rate?",
       "transparent": true,
       "type": "text"
     },
@@ -242,7 +242,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time across all metrics per provider, segmented by request origin region.",
+      "description": "p95 response time across all metrics per provider, segmented by request origin region.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -372,7 +372,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -585,7 +585,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per API method for each provider, aggregated across all regions.",
+      "description": "p95 response time per API method for each provider, aggregated across all regions.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -715,7 +715,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -777,7 +777,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19576184216.patch1",
-      "title": "What is the average response time in each region?",
+      "title": "What is the p95 response time in each region?",
       "transparent": true,
       "type": "text"
     },
@@ -785,7 +785,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -903,7 +903,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(simulateTransaction|getBalance)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(simulateTransaction|getBalance)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -993,7 +993,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1111,7 +1111,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getTransaction|getLatestBlockhash)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getTransaction|getLatestBlockhash)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1201,7 +1201,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1276,7 +1276,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getBlock|getProgramAccounts)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getBlock|getProgramAccounts)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1460,13 +1460,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1790,13 +1790,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2120,13 +2120,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2450,13 +2450,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2782,13 +2782,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -3112,13 +3112,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -4974,6 +4974,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana",
   "uid": "fe3mtxna6483ke-solana-global",
-  "version": 73,
+  "version": 75,
   "weekStart": "monday"
 }

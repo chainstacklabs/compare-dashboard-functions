@@ -38,7 +38,7 @@
         "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <!-- Image Link -->\n    <a href=\"https://chainstack.com/\" target=\"_blank\" style=\"margin-right: 25px; display: inline-block;\">\n        <img src=\"https://chainstack.com/wp-content/themes/chainstack/img/press-kit-logo-white-text.svg\" alt=\"chainstack_logo\" style=\"max-width: 150px; height: auto; display: block;\">\n    </a>\n    \n    <!-- Text Links with Highlight on the First Link -->\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Ethereum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #e0f7fa; border: 1px solid #007bff;\">\n        Arbitrum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/11861148d82247128307025fac628b6e\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Base\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/059a680a502a4d8782e93fcc1f2f1be9\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        BNB\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5f957bbcc3ae4c9d8d9669a299a24676\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Hyperliquid\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/ae4e8ccc089b460f95d5d2f29dd0d022\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Monad\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Solana\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/deeaf524ea264f42a12718f675511b13\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        TON\n    </a>\n</div>\n\n",
         "mode": "html"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [],
       "title": "",
       "transparent": true,
@@ -61,7 +61,7 @@
         "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #f8f9fa; border: 1px solid #dee2e6;\">\n        Global\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/398b405559254d1fa99f71844b64c091\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        US West\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/d8532de7b4f3435081951d2f03bfffb4\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        EU\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/ae8a2c9a647f460db6923feef4620910\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Asia\n    </a>\n</div>",
         "mode": "html"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [],
       "title": "",
       "transparent": true,
@@ -84,7 +84,7 @@
         "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [],
       "title": "",
       "transparent": true,
@@ -108,7 +108,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [],
       "title": "Provider score (lower is better)",
       "transparent": true,
@@ -207,7 +207,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
@@ -216,7 +216,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(# Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(# Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -244,9 +244,9 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [],
-      "title": "What is the average response time and overall success rate?",
+      "title": "What is the p95 response time and overall success rate?",
       "transparent": true,
       "type": "text"
     },
@@ -255,7 +255,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time across all metrics per provider, segmented by request origin region.",
+      "description": "p95 response time across all metrics per provider, segmented by request origin region.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -282,6 +282,7 @@
               "mode": "off"
             }
           },
+          "max": 1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -379,7 +380,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
@@ -388,7 +389,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -495,7 +496,7 @@
         "cellHeight": "sm",
         "showHeader": false
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
@@ -583,7 +584,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per API method for each provider, aggregated across all regions. Block timestamp delay in eth_subscribe(\"newHeads\")  represents the difference between block timestamp and its reception time.",
+      "description": "p95 response time per API method for each provider, aggregated across all regions. Block timestamp delay in eth_subscribe(\"newHeads\")  represents the difference between block timestamp and its reception time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -728,266 +729,58 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "provider",
+        "xField": "source_region",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
           "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{provider}}",
           "range": false,
-          "refId": "eth_call",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_getBalance",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_getLogs",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_getTransactionReceipt",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "debug_traceTransaction",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_blockNumber",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "debug_traceBlockByNumber",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Arbitrum\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_subscribe",
-          "useBackend": false
+          "refId": "regions"
         }
       ],
       "title": "By API method",
       "transformations": [
         {
-          "id": "joinByField",
-          "options": {
-            "byField": "provider",
-            "mode": "outer"
-          }
-        },
-        {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Time 1": true,
-              "Time 2": true,
-              "Time 3": true,
-              "Time 4": true,
-              "Time 5": true,
-              "Time 6": true,
-              "Time 7": true,
-              "Time 8": true,
-              "Value #eth_subscribe": false,
-              "__proxy_source__ 1": true,
-              "__proxy_source__ 2": true,
-              "__proxy_source__ 3": true,
-              "__proxy_source__ 4": true,
-              "__proxy_source__ 5": true,
-              "__proxy_source__ 6": true,
-              "__proxy_source__ 7": true,
-              "__proxy_source__ 8": true,
-              "api_method 1": true,
-              "api_method 2": true,
-              "api_method 3": true,
-              "api_method 4": true,
-              "api_method 5": true,
-              "api_method 6": true,
-              "api_method 7": true,
-              "api_method 8": true,
-              "blockchain 1": true,
-              "blockchain 2": true,
-              "blockchain 3": true,
-              "blockchain 4": true,
-              "blockchain 5": true,
-              "blockchain 6": true,
-              "blockchain 7": true,
-              "blockchain 8": true,
-              "instance 1": true,
-              "instance 2": true,
-              "instance 3": true,
-              "instance 4": true,
-              "job 1": true,
-              "job 2": true,
-              "job 3": true,
-              "job 4": true,
-              "metric_type 1": true,
-              "metric_type 2": true,
-              "metric_type 3": true,
-              "metric_type 4": true,
-              "metric_type 5": true,
-              "metric_type 6": true,
-              "metric_type 7": true,
-              "metric_type 8": true,
-              "response_status 1": true,
-              "response_status 2": true,
-              "response_status 3": true,
-              "response_status 4": true,
-              "response_status 5": true,
-              "response_status 6": true,
-              "response_status 7": true,
-              "response_status 8": true,
-              "source_region 1": true,
-              "source_region 2": true,
-              "source_region 3": true,
-              "source_region 4": true,
-              "source_region 5": true,
-              "source_region 6": true,
-              "source_region 7": true,
-              "source_region 8": true,
-              "target_region 1": true,
-              "target_region 2": true,
-              "target_region 3": true,
-              "target_region 4": true,
-              "target_region 5": true,
-              "target_region 6": true,
-              "target_region 7": true,
-              "target_region 8": true
+              "Time": true,
+              "source_region": false
             },
             "includeByName": {},
             "indexByName": {},
-            "renameByName": {
-              "Value #eth_getBalance": "",
-              "Value #eth_subscribe": "",
-              "target_region 3": "",
-              "target_region 4": ""
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
             }
           }
         },
         {
-          "id": "transpose",
+          "id": "joinByField",
           "options": {
-            "firstFieldName": "api_method"
+            "byField": "api_method",
+            "mode": "outer"
           }
         }
       ],
@@ -1010,9 +803,9 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [],
-      "title": "What is the average response time in each region?",
+      "title": "What is the p95 response time in each region?",
       "transparent": true,
       "type": "text"
     },
@@ -1021,7 +814,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1089,7 +882,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
@@ -1098,7 +891,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (\r\n      response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (\r\n      response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1192,7 +985,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1271,7 +1064,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
@@ -1280,7 +1073,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|hnd1\"}[$__range]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|hnd1\"}[$__range]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1374,7 +1167,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1401,6 +1194,7 @@
               "mode": "off"
             }
           },
+          "max": 1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1442,7 +1236,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "13.0.0-23605486576",
       "targets": [
         {
           "datasource": {
@@ -1451,7 +1245,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1623,13 +1417,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1959,13 +1753,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2280,13 +2074,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2615,13 +2409,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2950,13 +2744,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -3285,13 +3079,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -3622,13 +3416,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -3957,13 +3751,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -4252,6 +4046,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Arbitrum",
   "uid": "arbitrum-global-1",
-  "version": 81,
+  "version": 84,
   "weekStart": "monday"
 }

@@ -220,7 +220,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          avg_over_time(\r\n            response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Solana\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -334,7 +334,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
-      "title": "What is the average response time?",
+      "title": "What is the p95 response time?",
       "transparent": true,
       "type": "text"
     },
@@ -343,7 +343,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Displays the average response time for each provider.",
+      "description": "Displays the p95 response time for each provider.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -484,7 +484,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"simulateTransaction\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Solana\", api_method=\"simulateTransaction\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -503,7 +503,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getBalance\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Solana\", api_method=\"getBalance\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -522,7 +522,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getTransaction\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Solana\", api_method=\"getTransaction\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -541,7 +541,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getLatestBlockhash\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Solana\", api_method=\"getLatestBlockhash\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -560,7 +560,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getProgramAccounts\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Solana\", api_method=\"getProgramAccounts\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -579,7 +579,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"Solana\", api_method=\"getBlock\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Solana\", api_method=\"getBlock\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -776,13 +776,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -985,13 +985,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1194,13 +1194,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1403,13 +1403,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1612,13 +1612,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1821,13 +1821,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -5498,6 +5498,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana (US West)",
   "uid": "de82ypwiibsowe",
-  "version": 65,
+  "version": 67,
   "weekStart": "monday"
 }

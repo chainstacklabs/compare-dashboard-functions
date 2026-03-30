@@ -89,7 +89,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
@@ -97,7 +97,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
       "gridPos": {
         "h": 1,
         "w": 5,
@@ -220,7 +220,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          avg_over_time(\r\n            response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", response_status=\"success\", source_region=\"sfo1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"BNB\", source_region=\"sfo1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -334,7 +334,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
-      "title": "What is the average response time?",
+      "title": "What is the p95 response time?",
       "transparent": true,
       "type": "text"
     },
@@ -343,7 +343,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Displays the average response time for each provider. eth_subscribe(\"newHeads\") shows the difference between the block timestamp and its reception time.",
+      "description": "Displays the p95 response time for each provider. eth_subscribe(\"newHeads\") shows the difference between the block timestamp and its reception time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -487,7 +487,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_call\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_call\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -506,7 +506,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_getBalance\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_getBalance\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -525,7 +525,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_getTransactionReceipt\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_getTransactionReceipt\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -544,7 +544,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"debug_traceTransaction\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"debug_traceTransaction\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -563,7 +563,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_blockNumber\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_blockNumber\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -582,7 +582,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"debug_traceBlockByNumber\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"debug_traceBlockByNumber\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -601,7 +601,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_subscribe\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_subscribe\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -620,7 +620,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time(response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_getLogs\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"BNB\", api_method=\"eth_getLogs\", source_region=\"sfo1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1150,7 +1150,7 @@
               "refId": "C"
             }
           ],
-          "title": "eth_getBalance ⌛",
+          "title": "eth_getBalance \u231b",
           "type": "timeseries"
         },
         {

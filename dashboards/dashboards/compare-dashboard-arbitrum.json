@@ -81,7 +81,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "13.0.0-23605486576",
@@ -91,7 +91,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
       "gridPos": {
         "h": 1,
         "w": 14,
@@ -216,7 +216,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(# Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(# Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Arbitrum\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -246,7 +246,7 @@
       },
       "pluginVersion": "13.0.0-23605486576",
       "targets": [],
-      "title": "What is the average response time and overall success rate?",
+      "title": "What is the p95 response time and overall success rate?",
       "transparent": true,
       "type": "text"
     },
@@ -255,7 +255,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time across all metrics per provider, segmented by request origin region.",
+      "description": "p95 response time across all metrics per provider, segmented by request origin region.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -389,7 +389,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -584,7 +584,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per API method for each provider, aggregated across all regions. Block timestamp delay in eth_subscribe(\"newHeads\")  represents the difference between block timestamp and its reception time.",
+      "description": "p95 response time per API method for each provider, aggregated across all regions. Block timestamp delay in eth_subscribe(\"newHeads\")  represents the difference between block timestamp and its reception time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -742,7 +742,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -805,7 +805,7 @@
       },
       "pluginVersion": "13.0.0-23605486576",
       "targets": [],
-      "title": "What is the average response time in each region?",
+      "title": "What is the p95 response time in each region?",
       "transparent": true,
       "type": "text"
     },
@@ -814,7 +814,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -891,7 +891,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (\r\n      response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (\r\n      response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -985,7 +985,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1073,7 +1073,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|hnd1\"}[$__range]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|hnd1\"}[$__range]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1167,7 +1167,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1245,7 +1245,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Arbitrum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|hnd1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1782,7 +1782,7 @@
               "refId": "C"
             }
           ],
-          "title": "eth_getBalance ⌛",
+          "title": "eth_getBalance \u231b",
           "transformations": [
             {
               "id": "joinByField",

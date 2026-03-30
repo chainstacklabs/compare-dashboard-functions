@@ -89,7 +89,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
@@ -97,7 +97,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
       "gridPos": {
         "h": 1,
         "w": 14,
@@ -206,7 +206,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -230,7 +230,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<small>⚠️ Please note that `clearinghouseState` and `openOrders` are excluded from ranking and total success rate calculations, since they are currently supported only by Alchemy, Chainstack and Quicknode.</small>",
+        "content": "<small>\u26a0\ufe0f Please note that `clearinghouseState` and `openOrders` are excluded from ranking and total success rate calculations, since they are currently supported only by Alchemy, Chainstack and Quicknode.</small>",
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
@@ -255,7 +255,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
-      "title": "What is the average response time and overall success rate?",
+      "title": "What is the p95 response time and overall success rate?",
       "transparent": true,
       "type": "text"
     },
@@ -263,7 +263,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time across all metrics per provider, segmented by request origin region.",
+      "description": "p95 response time across all metrics per provider, segmented by request origin region.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -397,7 +397,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", source_region=~\"fra1|sfo1|hnd1\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", source_region=~\"fra1|sfo1|hnd1\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -616,7 +616,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per API method for each provider, aggregated across all regions. Block timestamp delay in eth_subscribe(\"newHeads\")  represents the difference between block timestamp and its reception time.",
+      "description": "p95 response time per API method for each provider, aggregated across all regions. Block timestamp delay in eth_subscribe(\"newHeads\")  represents the difference between block timestamp and its reception time.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -776,7 +776,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -795,7 +795,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -814,7 +814,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -833,7 +833,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -852,7 +852,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -871,7 +871,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"clearinghouseState\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"clearinghouseState\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -890,7 +890,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"openOrders\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"openOrders\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1046,7 +1046,7 @@
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19576184216.patch1",
-      "title": "What is the average response time in each region?",
+      "title": "What is the p95 response time in each region?",
       "transparent": true,
       "type": "text"
     },
@@ -1054,7 +1054,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1139,7 +1139,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (\r\n      response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance|eth_getTransactionReceipt)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )\r\n    [$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (\r\n      response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance|eth_getTransactionReceipt)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )\r\n    [$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1234,7 +1234,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1319,7 +1319,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=~\"(clearinghouseState|openOrders)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=~\"(clearinghouseState|openOrders)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1414,7 +1414,7 @@
       "datasource": {
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1489,7 +1489,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getLogs|clearinghouseState|openOrders)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getLogs|clearinghouseState|openOrders)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",

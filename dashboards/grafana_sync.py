@@ -98,8 +98,11 @@ def cmd_pull(cfg: dict) -> None:
         dashboard = detail["dashboard"]
         meta = detail["meta"]
         title = dashboard.get("title", uid)
-        slug = make_slug(title, uid, used_slugs)
-        used_slugs.add(slug)
+        if uid in state:
+            slug = state[uid]["slug"]
+        else:
+            slug = make_slug(title, uid, used_slugs)
+            used_slugs.add(slug)
 
         filepath = Path("dashboards") / f"{slug}.json"
         content = json.dumps(dashboard, indent=2)

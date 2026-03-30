@@ -6080,6 +6080,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Monad (US West)",
   "uid": "monad-us-west-1",
-  "version": 10,
+  "version": 11,
   "weekStart": "monday"
 }

@@ -739,7 +739,7 @@
           "mode": "single",
           "sort": "none"
         },
-        "xField": "provider",
+        "xField": "source_region",
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
@@ -750,255 +750,47 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "avg by (provider, api_method) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
           "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
+          "legendFormat": "{{provider}}",
           "range": false,
-          "refId": "eth_call",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_getBalance",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_getLogs",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_getTransactionReceipt",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "debug_traceTransaction",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_blockNumber",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "debug_traceBlockByNumber",
-          "useBackend": false
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "avg_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0)[$__range:$__interval])",
-          "format": "table",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "eth_subscribe",
-          "useBackend": false
+          "refId": "regions"
         }
       ],
       "title": "By API method",
       "transformations": [
         {
-          "id": "joinByField",
-          "options": {
-            "byField": "provider",
-            "mode": "outer"
-          }
-        },
-        {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Time 1": true,
-              "Time 2": true,
-              "Time 3": true,
-              "Time 4": true,
-              "Time 5": true,
-              "Time 6": true,
-              "Time 7": true,
-              "Time 8": true,
-              "Value #eth_subscribe": false,
-              "__proxy_source__ 1": true,
-              "__proxy_source__ 2": true,
-              "__proxy_source__ 3": true,
-              "__proxy_source__ 4": true,
-              "__proxy_source__ 5": true,
-              "__proxy_source__ 6": true,
-              "__proxy_source__ 7": true,
-              "__proxy_source__ 8": true,
-              "api_method 1": true,
-              "api_method 2": true,
-              "api_method 3": true,
-              "api_method 4": true,
-              "api_method 5": true,
-              "api_method 6": true,
-              "api_method 7": true,
-              "api_method 8": true,
-              "blockchain 1": true,
-              "blockchain 2": true,
-              "blockchain 3": true,
-              "blockchain 4": true,
-              "blockchain 5": true,
-              "blockchain 6": true,
-              "blockchain 7": true,
-              "blockchain 8": true,
-              "instance 1": true,
-              "instance 2": true,
-              "instance 3": true,
-              "instance 4": true,
-              "job 1": true,
-              "job 2": true,
-              "job 3": true,
-              "job 4": true,
-              "metric_type 1": true,
-              "metric_type 2": true,
-              "metric_type 3": true,
-              "metric_type 4": true,
-              "metric_type 5": true,
-              "metric_type 6": true,
-              "metric_type 7": true,
-              "metric_type 8": true,
-              "response_status 1": true,
-              "response_status 2": true,
-              "response_status 3": true,
-              "response_status 4": true,
-              "response_status 5": true,
-              "response_status 6": true,
-              "response_status 7": true,
-              "response_status 8": true,
-              "source_region 1": true,
-              "source_region 2": true,
-              "source_region 3": true,
-              "source_region 4": true,
-              "source_region 5": true,
-              "source_region 6": true,
-              "source_region 7": true,
-              "source_region 8": true,
-              "target_region 1": true,
-              "target_region 2": true,
-              "target_region 3": true,
-              "target_region 4": true,
-              "target_region 5": true,
-              "target_region 6": true,
-              "target_region 7": true,
-              "target_region 8": true
+              "Time": true,
+              "source_region": false
             },
             "includeByName": {},
             "indexByName": {},
-            "renameByName": {
-              "Value #eth_getBalance": "",
-              "Value #eth_subscribe": "",
-              "target_region 3": "",
-              "target_region 4": ""
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "partitionByValues",
+          "options": {
+            "fields": [
+              "provider"
+            ],
+            "keepFields": false,
+            "naming": {
+              "asLabels": false
             }
           }
         },
         {
-          "id": "transpose",
+          "id": "joinByField",
           "options": {
-            "firstFieldName": "api_method"
+            "byField": "api_method",
+            "mode": "outer"
           }
         }
       ],

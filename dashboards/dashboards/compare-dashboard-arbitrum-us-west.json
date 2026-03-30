@@ -89,7 +89,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
@@ -97,7 +97,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
       "gridPos": {
         "h": 1,
         "w": 5,
@@ -913,13 +913,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1125,13 +1125,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1154,7 +1154,7 @@
               "refId": "C"
             }
           ],
-          "title": "eth_getBalance \u231b",
+          "title": "eth_getBalance ⌛",
           "type": "timeseries"
         },
         {
@@ -1337,13 +1337,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1545,13 +1545,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1753,13 +1753,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -1965,13 +1965,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2173,13 +2173,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -2381,13 +2381,13 @@
             "legend": {
               "calcs": [
                 "min",
-                "mean",
+                "p95",
                 "max"
               ],
               "displayMode": "table",
               "placement": "right",
               "showLegend": true,
-              "sortBy": "Mean",
+              "sortBy": "95th %",
               "sortDesc": false
             },
             "tooltip": {
@@ -6080,6 +6080,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Arbitrum (US West)",
   "uid": "arbitrum-us-west-1",
-  "version": 38,
+  "version": 39,
   "weekStart": "monday"
 }

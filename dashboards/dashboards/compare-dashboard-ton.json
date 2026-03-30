@@ -205,7 +205,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          avg_over_time(\r\n            (response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{blockchain=\"TON\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -235,7 +235,7 @@
       },
       "pluginVersion": "13.0.0-23605486576",
       "targets": [],
-      "title": "What is the average response time and overall success rate?",
+      "title": "What is the p95 response time and overall success rate?",
       "transparent": true,
       "type": "text"
     },
@@ -244,7 +244,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time across all metrics per provider, segmented by request origin region.",
+      "description": "p95 response time across all metrics per provider, segmented by request origin region.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -377,7 +377,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -590,7 +590,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per API method for each provider, aggregated across all regions.",
+      "description": "p95 response time per API method for each provider, aggregated across all regions.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -723,7 +723,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -786,7 +786,7 @@
       },
       "pluginVersion": "13.0.0-23605486576",
       "targets": [],
-      "title": "What is the average response time in each region?",
+      "title": "What is the p95 response time in each region?",
       "transparent": true,
       "type": "text"
     },
@@ -795,7 +795,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -916,7 +916,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\", api_method=~\"(runGetMethod|getWalletInformation)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\", api_method=~\"(runGetMethod|getWalletInformation)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1002,7 +1002,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Average response time per provider-region pair, showing response times between each collection location and provider endpoint.",
+      "description": "p95 response time per provider-region pair, showing response times between each collection location and provider endpoint.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1079,7 +1079,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  avg_over_time(\r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\", api_method=~\"(getBlockTransactions|getBlockHeader|getAddressBalance)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"TON\", response_status=\"success\", api_method=~\"(getBlockTransactions|getBlockHeader|getAddressBalance)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",

@@ -1,6 +1,6 @@
 """Monad EVM metrics implementation for HTTP endpoints."""
 
-from common.metric_types import HttpCallLatencyMetricBase
+from common.metric_types import EVMBlockNumberLatencyMetric, HttpCallLatencyMetricBase
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
@@ -89,17 +89,8 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
         return ["latest", {"tracer": "callTracer"}]
 
 
-class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `eth_blockNumber` method."""
-
-    @property
-    def method(self) -> str:
-        return "eth_blockNumber"
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Get empty parameter list for block number query."""
-        return []
+class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):
+    """Collects call latency for eth_blockNumber and captures block number for lag tracking."""
 
 
 class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):

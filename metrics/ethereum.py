@@ -6,7 +6,11 @@ import logging
 from datetime import datetime, timezone
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
-from common.metric_types import HttpCallLatencyMetricBase, WebSocketMetric
+from common.metric_types import (
+    EVMBlockNumberLatencyMetric,
+    HttpCallLatencyMetricBase,
+    WebSocketMetric,
+)
 
 WS_DEFAULT_TIMEOUT = 20
 
@@ -30,17 +34,8 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
         ]
 
 
-class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the eth_blockNumber method."""
-
-    @property
-    def method(self) -> str:
-        return "eth_blockNumber"
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Returns empty parameters list for eth_blockNumber."""
-        return []
+class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):
+    """Collects call latency for eth_blockNumber and captures block number for lag tracking."""
 
 
 class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):

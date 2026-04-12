@@ -11,7 +11,7 @@ import aiohttp
 
 from common.base_metric import BaseMetric
 from common.factory import MetricFactory
-from common.metric_config import MetricConfig
+from common.metric_config import MetricConfig, MetricLabelKey
 from common.state.blockchain_state import BlockchainState
 from config.defaults import MetricsServiceConfig
 
@@ -36,6 +36,35 @@ class MetricsHandler:
             "metric_request_timeout": MetricsServiceConfig.METRIC_REQUEST_TIMEOUT,
             "metric_max_latency": MetricsServiceConfig.METRIC_MAX_LATENCY,
         }
+
+    def _compute_block_lag(self) -> None:
+        """Compute relative block lag across providers and attach to each instance.
+
+        Groups instances by blockchain, finds the consensus tip (max block number),
+        and stores (tip - provider_block) as a "block_lag" metric value on each instance.
+        Instances that did not successfully capture a block number are skipped.
+        """
+        groups: dict[str, list[BaseMetric]] = {}
+        for instance in self._instances:
+            if instance._captured_block_number is not None:
+                blockchain = instance.labels.get_label(MetricLabelKey.BLOCKCHAIN) or ""
+                if blockchain not in groups:
+                    groups[blockchain] = []
+                groups[blockchain].append(instance)
+
+        for instances in groups.values():
+            block_numbers: list[int] = [
+                i._captured_block_number
+                for i in instances
+                if i._captured_block_number is not None
+            ]
+            if not block_numbers:
+                continue
+            tip = max(block_numbers)
+            for instance in instances:
+                if instance._captured_block_number is not None:
+                    lag = tip - instance._captured_block_number
+                    instance.update_metric_value(lag, "block_lag")
 
     def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""
@@ -124,6 +153,8 @@ class MetricsHandler:
                 for provider in rpc_providers
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)
+
+            self._compute_block_lag()
 
             metrics_text: str = self.get_metrics_text()
             if metrics_text:

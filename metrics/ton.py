@@ -1,6 +1,25 @@
 """TON (The Open Network) metrics implementation for HTTP endpoints."""
 
+from typing import Any
+
 from common.metric_types import HttpCallLatencyMetricBase
+
+
+class HTTPGetMasterchainInfoLatencyMetric(HttpCallLatencyMetricBase):
+    """Collects latency for getMasterchainInfo and captures current seqno for lag tracking."""
+
+    @property
+    def method(self) -> str:
+        return "getMasterchainInfo"
+
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        result = json_response.get("result")
+        if isinstance(result, dict):
+            last = result.get("last")
+            if isinstance(last, dict):
+                seqno = last.get("seqno")
+                if isinstance(seqno, int):
+                    self._captured_block_number = seqno
 
 
 class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):

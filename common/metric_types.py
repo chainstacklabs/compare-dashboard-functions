@@ -264,6 +264,8 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
+                self._on_json_response(json_response)
+
                 # Return RPC time only (exclude connection time)
                 rpc_time = response_time - conn_time
                 if rpc_time < 0:
@@ -288,6 +290,38 @@ class HttpCallLatencyMetricBase(HttpMetric):
             json=self._base_request,
         )
 
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Hook called after a successful JSON-RPC response.
+
+        Override in subclasses to capture response fields (e.g. block number).
+        The default implementation does nothing.
+        """
+        pass
+
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""
         return value
+
+
+class EVMBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
+    """Shared eth_blockNumber metric used by all EVM chains.
+
+    Captures the returned block number for cross-provider lag computation.
+    """
+
+    @property
+    def method(self) -> str:
+        return "eth_blockNumber"
+
+    @staticmethod
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
+        """Return empty params list for eth_blockNumber."""
+        return []
+
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        result = json_response.get("result")
+        if isinstance(result, str):
+            try:
+                self._captured_block_number = int(result, 16)
+            except ValueError:
+                pass

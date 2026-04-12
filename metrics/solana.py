@@ -1,5 +1,7 @@
 """Solana metrics implementation for HTTP endpoints."""
 
+from typing import Any
+
 from common.metric_types import HttpCallLatencyMetricBase
 
 
@@ -21,7 +23,10 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the getLatestBlockhash method."""
+    """Collects call latency for the getLatestBlockhash method.
+
+    Also captures the current slot from the response context for block lag tracking.
+    """
 
     @property
     def method(self) -> str:
@@ -31,6 +36,15 @@ class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
     def get_params_from_state(state_data: dict) -> list:
         """Get empty parameters list for blockhash retrieval."""
         return []
+
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        result = json_response.get("result")
+        if isinstance(result, dict):
+            context = result.get("context")
+            if isinstance(context, dict):
+                slot = context.get("slot")
+                if isinstance(slot, int):
+                    self._captured_block_number = slot
 
 
 class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):

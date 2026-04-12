@@ -4,6 +4,7 @@ from metrics.ton import (
     HTTPGetAddressBalanceLatencyMetric,
     HTTPGetBlockHeaderLatencyMetric,
     HTTPGetBlockTxsLatencyMetric,
+    HTTPGetMasterchainInfoLatencyMetric,
     HTTPGetWalletTxsLatencyMetric,
     HTTPRunGetMethodLatencyMetric,
 )
@@ -11,6 +12,7 @@ from metrics.ton import (
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
 
 METRICS = [
+    (HTTPGetMasterchainInfoLatencyMetric, METRIC_NAME),
     (HTTPGetBlockHeaderLatencyMetric, METRIC_NAME),
     (HTTPRunGetMethodLatencyMetric, METRIC_NAME),
     (HTTPGetAddressBalanceLatencyMetric, METRIC_NAME),

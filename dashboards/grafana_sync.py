@@ -51,7 +51,10 @@ def compute_checksum(data: dict) -> str:
 
 
 def _headers(cfg: dict) -> dict:
-    return {"Authorization": f"Bearer {cfg['token']}", "Content-Type": "application/json"}
+    return {
+        "Authorization": f"Bearer {cfg['token']}",
+        "Content-Type": "application/json",
+    }
 
 
 def api_get(cfg: dict, path: str) -> dict | list:
@@ -84,6 +87,7 @@ def make_slug(title: str, uid: str, existing: set) -> str:
     if slug in existing:
         slug = f"{slug}-{uid}"
     return slug
+
 
 def cmd_pull(cfg: dict) -> None:
     folder_uid = resolve_folder_uid(cfg)
@@ -143,11 +147,15 @@ def compute_diff(state: dict, remote_meta: dict) -> tuple[list, list]:
         if current_checksum == entry["checksum"]:
             continue
 
-        remote_updated = remote_meta.get(uid, {}).get("updated", entry["remote_updated"])
+        remote_updated = remote_meta.get(uid, {}).get(
+            "updated", entry["remote_updated"]
+        )
         if remote_updated != entry["remote_updated"]:
             conflicts.append({"uid": uid, "slug": slug, "entry": entry})
         else:
-            changed.append({"uid": uid, "slug": slug, "entry": entry, "data": current_data})
+            changed.append(
+                {"uid": uid, "slug": slug, "entry": entry, "data": current_data}
+            )
 
     return changed, conflicts
 
@@ -170,7 +178,9 @@ def cmd_push(cfg: dict, message: str = "") -> None:
     changed, conflicts = compute_diff(state, remote_meta)
 
     for item in conflicts:
-        print(f"[WARN]  {item['slug']} → conflict: remote changed since last pull, skipping")
+        print(
+            f"[WARN]  {item['slug']} → conflict: remote changed since last pull, skipping"
+        )
 
     for item in changed:
         uid = item["uid"]

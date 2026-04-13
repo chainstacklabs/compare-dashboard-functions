@@ -202,7 +202,8 @@ class WSBlockLatencyMetric(WebSocketMetric):
     ) -> str:
         """Receive a message with a timeout."""
         try:
-            message = await asyncio.wait_for(websocket.recv(), timeout)
+            raw = await asyncio.wait_for(websocket.recv(), timeout)
+            message: str = raw.decode("utf-8") if isinstance(raw, bytes) else raw
             # Log incoming message size in bytes
             message_size: int = len(message.encode("utf-8"))
             logging.info(

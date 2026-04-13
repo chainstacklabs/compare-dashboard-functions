@@ -6,7 +6,7 @@ include = '\.pyi?$'
 [tool.ruff]
 line-length = 88
 target-version = "py39"
-exclude = [".claude"]
+extend-exclude = [".claude"]
 
 [tool.ruff.lint]
 select = [

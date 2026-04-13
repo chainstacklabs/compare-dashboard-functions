@@ -248,7 +248,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 )
             return rpc_time
         finally:
-            await response.release()
+            response.release()
 
     async def fetch_data(self) -> float:
         """Measure single request latency with detailed timing."""
@@ -284,7 +284,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     wait_time = int(response.headers.get("Retry-After", 3))
-                    await response.release()
+                    response.release()
                     await asyncio.sleep(wait_time)
                     continue
 

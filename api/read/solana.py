@@ -1,3 +1,5 @@
+"""Vercel cron entry point for Solana metrics collection."""
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.solana import (
@@ -22,4 +24,6 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for Solana metric collection."""
+
     metrics_handler = MetricsHandler("Solana", METRICS)

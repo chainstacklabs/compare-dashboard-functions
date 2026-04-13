@@ -1,3 +1,5 @@
+"""Vercel cron entry point for Ethereum metrics collection."""
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.ethereum import (
@@ -26,4 +28,6 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for Ethereum metric collection."""
+
     metrics_handler = MetricsHandler("Ethereum", METRICS)

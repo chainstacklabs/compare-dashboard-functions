@@ -4,6 +4,9 @@ import asyncio
 import json
 import logging
 from datetime import datetime, timezone
+from typing import Any, Optional
+
+import websockets
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import (
@@ -20,6 +23,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_call"
 
     @staticmethod
@@ -35,7 +39,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):
-    """Collects call latency for eth_blockNumber and captures block number for lag tracking."""
+    """eth_blockNumber latency; captures raw block number for lag tracking."""
 
 
 class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
@@ -43,6 +47,7 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getTransactionReceipt"
 
     @staticmethod
@@ -61,6 +66,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getBalance"
 
     @staticmethod
@@ -79,6 +85,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "debug_traceBlockByNumber"
 
     @staticmethod
@@ -92,6 +99,7 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "debug_traceTransaction"
 
     @staticmethod
@@ -110,6 +118,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getLogs"
 
     @staticmethod
@@ -131,17 +140,19 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
                 "toBlock": to_block_hex,
                 "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",  # USDC
                 "topics": [
-                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event
+                    # ERC-20 Transfer event topic
+                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
                 ],
             }
         ]
 
 
 class WSBlockLatencyMetric(WebSocketMetric):
-    """Collects block latency for EVM providers using a WebSocket connection.
+    """Collects block latency for EVM providers via a WebSocket connection.
 
-    Suitable for serverless invocation: connects, subscribes, collects one message, and disconnects.
-    """  # noqa: E501
+    Suitable for serverless use: connects, subscribes, collects one message,
+    and disconnects.
+    """
 
     def __init__(
         self,
@@ -149,7 +160,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs,
+        **kwargs: object,
     ) -> None:
         """Initialize WebSocket block latency metric.
 
@@ -170,31 +181,41 @@ class WSBlockLatencyMetric(WebSocketMetric):
         )
         self.labels.update_label(MetricLabelKey.API_METHOD, "eth_subscribe")
 
-    async def send_with_timeout(self, websocket, message: str, timeout: float) -> None:
+    async def send_with_timeout(
+        self,
+        websocket: websockets.WebSocketClientProtocol,
+        message: str,
+        timeout: float,
+    ) -> None:
         """Send a message with a timeout."""
         try:
             await asyncio.wait_for(websocket.send(message), timeout)
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError as e:
             raise TimeoutError(
                 f"WebSocket message send timed out after {timeout} seconds"
-            )
+            ) from e
 
-    async def recv_with_timeout(self, websocket, timeout: float) -> str:
+    async def recv_with_timeout(
+        self,
+        websocket: websockets.WebSocketClientProtocol,
+        timeout: float,
+    ) -> str:
         """Receive a message with a timeout."""
         try:
             message = await asyncio.wait_for(websocket.recv(), timeout)
             # Log incoming message size in bytes
             message_size: int = len(message.encode("utf-8"))
             logging.info(
-                f"WebSocket received {message_size} bytes from {self.labels.get_prometheus_labels()}"
+                f"WebSocket received {message_size} bytes from "
+                f"{self.labels.get_prometheus_labels()}"
             )
             return message
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError as e:
             raise TimeoutError(
                 f"WebSocket message reception timed out after {timeout} seconds"
-            )
+            ) from e
 
-    async def subscribe(self, websocket) -> None:
+    async def subscribe(self, websocket: websockets.WebSocketClientProtocol) -> None:
         """Subscribe to the newHeads event on the WebSocket endpoint.
 
         Args:
@@ -204,7 +225,8 @@ class WSBlockLatencyMetric(WebSocketMetric):
             ValueError: If subscription to newHeads fails
         """
         # Use standard eth_subscribe format without optional parameters
-        # The False parameter caused Quicknode to accept the subscription but never send data
+        # The False parameter caused Quicknode to silently accept but never
+        # send data
         subscription_msg: str = json.dumps(
             {
                 "id": 1,
@@ -224,7 +246,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
         self.subscription_id = subscription_data["result"]
 
-    async def unsubscribe(self, websocket) -> None:
+    async def unsubscribe(self, websocket: websockets.WebSocketClientProtocol) -> None:
         """Unsubscribe from the WebSocket connection.
 
         Args:
@@ -245,14 +267,16 @@ class WSBlockLatencyMetric(WebSocketMetric):
         await self.send_with_timeout(websocket, unsubscribe_msg, WS_DEFAULT_TIMEOUT)
         await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
 
-    async def listen_for_data(self, websocket):
-        """Listen for a single data message from the WebSocket and process block latency.
+    async def listen_for_data(
+        self, websocket: websockets.WebSocketClientProtocol
+    ) -> Optional[dict[str, Any]]:
+        """Listen for a single data message from the WebSocket.
 
         Args:
             websocket: WebSocket connection instance
 
         Returns:
-            dict: Block data if received successfully, None otherwise
+            Block data dict if received successfully, None otherwise
 
         Raises:
             asyncio.TimeoutError: If no message received within timeout period
@@ -264,7 +288,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
             return block
         return None
 
-    def process_data(self, block) -> float:
+    def process_data(self, block: dict[str, Any]) -> float:
         """Calculate block latency in seconds.
 
         Args:

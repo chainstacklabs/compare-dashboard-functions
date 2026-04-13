@@ -1,7 +1,9 @@
 # Tests for grafana_sync.py
+import json
 import sys
-import pytest
 from unittest.mock import MagicMock, patch
+
+import pytest
 
 
 # Helper to import without running main()
@@ -88,8 +90,6 @@ def test_resolve_folder_uid_exits_if_not_found(monkeypatch):
         with pytest.raises(SystemExit):
             m.resolve_folder_uid(m.load_config())
 
-
-import json
 
 STATE_FILE = ".grafana_state.json"
 
@@ -251,7 +251,7 @@ def test_compute_diff_warns_file_not_in_state(tmp_path, monkeypatch, capsys):
     m = import_module()
     (tmp_path / "dashboards").mkdir()
     (tmp_path / "dashboards" / "unknown.json").write_text("{}")
-    changed, conflicts = m.compute_diff({}, {})
+    m.compute_diff({}, {})
     captured = capsys.readouterr()
     assert "[WARN]" in captured.out
     assert "unknown" in captured.out

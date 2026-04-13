@@ -12,6 +12,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_call"
 
     @staticmethod
@@ -31,6 +32,7 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getTransactionReceipt"
 
     @staticmethod
@@ -49,6 +51,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getBalance"
 
     @staticmethod
@@ -62,7 +65,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):
-    """Collects call latency for eth_blockNumber and captures block number for lag tracking."""
+    """eth_blockNumber latency; captures raw block number for lag tracking."""
 
 
 class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
@@ -70,6 +73,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getLogs"
 
     @staticmethod
@@ -91,7 +95,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
                 "toBlock": to_block_hex,
                 "address": "0x5555555555555555555555555555555555555555",  # Wrapped HYPE
                 # "topics": [
-                #    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # Withdrawal event
+                #    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # noqa: E501
                 # ],
             }
         ]

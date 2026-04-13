@@ -21,6 +21,7 @@ class BlockchainData:
 
     @classmethod
     def empty(cls) -> "BlockchainData":
+        """Return a BlockchainData instance with all fields set to empty strings."""
         return cls(block_id="", transaction_id="", old_block_id="")
 
 
@@ -28,6 +29,7 @@ class BlockchainDataFetcher:
     """Fetches blockchain data from RPC nodes using JSON-RPC protocol."""
 
     def __init__(self, http_endpoint: str) -> None:
+        """Initialise fetcher with the HTTP endpoint URL and retry settings."""
         self.http_endpoint: str = http_endpoint
         self._headers: dict[str, str] = {"Content-Type": "application/json"}
         self._timeout = aiohttp.ClientTimeout(total=15)

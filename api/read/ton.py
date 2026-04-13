@@ -1,3 +1,5 @@
+"""Vercel cron entry point for TON metrics collection."""
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.ton import (
@@ -22,4 +24,6 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for TON metric collection."""
+
     metrics_handler = MetricsHandler("TON", METRICS)

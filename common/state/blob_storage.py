@@ -12,6 +12,8 @@ from config.defaults import BlobStorageConfig
 
 @dataclass
 class BlobConfig:
+    """Configuration for Vercel Blob Storage access."""
+
     store_id: str
     token: str
     base_url: str = BlobStorageConfig.BLOB_BASE_URL
@@ -22,7 +24,10 @@ class BlobConfig:
 
 
 class BlobStorageHandler:
+    """Handles read and write operations against Vercel Blob Storage."""
+
     def __init__(self, config: BlobConfig) -> None:
+        """Initialise handler with blob storage config and set auth headers."""
         self.config: BlobConfig = config
         self._headers: dict[str, str] = {
             "Authorization": f"Bearer {config.token}",
@@ -50,23 +55,27 @@ class BlobStorageHandler:
                 return await resp.json()
 
     async def list_files(self) -> list[dict[str, str]]:
+        """Return all blobs in the configured folder."""
         list_url: str = f"{self.config.base_url}?prefix={self.config.folder}/"
         response = await self._make_request("GET", list_url)
         return response.get("blobs", [])
 
     async def delete_blobs(self, urls: list[str]) -> None:
+        """Delete blobs at the given URLs."""
         if not urls:
             return
         delete_url = f"{self.config.base_url}/delete"
         await self._make_request("POST", delete_url, {"urls": urls})
 
     async def delete_all_files(self) -> None:
+        """Delete all blobs in the configured folder."""
         files: list[dict[str, str]] = await self.list_files()
         if files:
             urls: list[str] = [file["url"] for file in files]
             await self.delete_blobs(urls)
 
     async def update_data(self, blockchain_data: dict[str, dict[str, str]]) -> None:
+        """Replace all blobs with a fresh snapshot of blockchain_data."""
         await self.delete_all_files()
         data = {**blockchain_data, "updated_at": int(time.time())}
         blob_url: str = (

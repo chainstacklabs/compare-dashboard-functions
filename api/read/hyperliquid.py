@@ -1,3 +1,5 @@
+"""Vercel cron entry point for Hyperliquid metrics collection."""
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.hyperliquid import (
@@ -26,4 +28,6 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for Hyperliquid metric collection."""
+
     metrics_handler = MetricsHandler("Hyperliquid", METRICS)

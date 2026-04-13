@@ -2,6 +2,7 @@
 
 import copy
 from dataclasses import dataclass
+from typing import ClassVar
 
 from common.base_metric import BaseMetric
 from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
@@ -18,12 +19,12 @@ class MetricRegistration:
 class MetricFactory:
     """Creates metric instances for blockchains.
 
-    For SolanaLandingMetric, a special logic is applied where both the default http endpoint
-    and an enhanced transaction endpoint (if available) are used to create separate metric
-    instances, allowing for differentiated provider names and richer data collection.
+    For SolanaLandingMetric, both the default HTTP endpoint and an optional
+    TX endpoint are used to create separate metric instances with distinct
+    provider names for richer data collection.
     """
 
-    _registry: dict[str, list[MetricRegistration]] = {}
+    _registry: ClassVar[dict[str, list[MetricRegistration]]] = {}
 
     @classmethod
     def register(
@@ -56,7 +57,8 @@ class MetricFactory:
         if blockchain_name not in cls._registry:
             available = list(cls._registry.keys())
             raise ValueError(
-                f"No metric classes registered for blockchain '{blockchain_name}'. Available blockchains: {available}"
+                f"No metric classes registered for blockchain "
+                f"'{blockchain_name}'. Available blockchains: {available}"
             )
 
         cls._setup_endpoint_config(config, kwargs)

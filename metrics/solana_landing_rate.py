@@ -47,6 +47,8 @@ def generate_fixed_memo(region: str) -> str:
 
 
 class SolanaLandingMetric(HttpMetric):
+    """Measures Solana transaction landing rate and slot latency via memo tx."""
+
     POLL_INTERVAL = 5.0  # seconds for polling getSignatureStatuses
     MEMO_PROGRAM_ID = "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo"
 
@@ -56,8 +58,9 @@ class SolanaLandingMetric(HttpMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        **kwargs,
+        **kwargs: object,
     ) -> None:
+        """Initialize with handler, metric name, labels, config, and endpoint kwargs."""
         http_endpoint = kwargs.get("http_endpoint")
         super().__init__(
             handler=handler,
@@ -148,6 +151,12 @@ class SolanaLandingMetric(HttpMetric):
         )
 
     async def fetch_data(self) -> Optional[float]:
+        """Send a memo transaction and return elapsed wall-clock time.
+
+        Initializes both response_time and slot_latency metric types, submits
+        a signed memo transaction, waits for confirmation, and stores the slot
+        difference as slot_latency.
+        """
         # Since we use here an additional value (metric_type),
         # let's initialize all used metric types.
         self.update_metric_value(0, "response_time")
@@ -190,4 +199,5 @@ class SolanaLandingMetric(HttpMetric):
                 await client.close()
 
     def process_data(self, value: float) -> float:
+        """Return the raw latency value unchanged."""
         return value

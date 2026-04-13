@@ -8,6 +8,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_call"
 
     @staticmethod
@@ -16,7 +17,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
         return [
             {
                 "to": "0xff75B6da14FfbbfD355Daf7a2731456b3562Ba6D",
-                "data": "0x026b1d5f0000000000000000000000000000000000000000000000000000000000000000",
+                "data": "0x026b1d5f0000000000000000000000000000000000000000000000000000000000000000",  # noqa: E501
             },
             "latest",
         ]
@@ -27,6 +28,7 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getTransactionReceipt"
 
     @staticmethod
@@ -45,6 +47,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getBalance"
 
     @staticmethod
@@ -63,6 +66,7 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "debug_traceTransaction"
 
     @staticmethod
@@ -81,6 +85,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "debug_traceBlockByNumber"
 
     @staticmethod
@@ -90,7 +95,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
 
 
 class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):
-    """Collects call latency for eth_blockNumber and captures block number for lag tracking."""
+    """eth_blockNumber latency; captures raw block number for lag tracking."""
 
 
 class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
@@ -98,6 +103,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getLogs"
 
     @staticmethod
@@ -117,9 +123,11 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
             {
                 "fromBlock": from_block_hex,
                 "toBlock": to_block_hex,
-                "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # Wrapped BNB on BSC
+                # Wrapped BNB on BSC
+                "address": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
                 "topics": [
-                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"  # Transfer event
+                    # ERC-20 Transfer event topic
+                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"
                 ],
             }
         ]

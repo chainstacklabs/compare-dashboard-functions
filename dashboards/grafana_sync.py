@@ -5,13 +5,15 @@
 #   "python-dotenv",
 # ]
 # ///
+"""CLI tool to pull, push, and diff Grafana dashboards via the Grafana HTTP API."""
 
-import sys
-import os
-import re
 import hashlib
 import json
+import os
+import re
+import sys
 from pathlib import Path
+
 import requests
 from dotenv import load_dotenv
 
@@ -22,6 +24,7 @@ STATE_FILE = ".grafana_state.json"
 
 
 def load_config() -> dict:
+    """Load and validate required Grafana config from environment variables."""
     missing = [v for v in REQUIRED_VARS if not os.getenv(v)]
     if missing:
         for v in missing:
@@ -35,6 +38,7 @@ def load_config() -> dict:
 
 
 def load_state() -> dict:
+    """Load local state from the state file, returning empty dict if absent."""
     p = Path(STATE_FILE)
     if not p.exists():
         return {}
@@ -42,10 +46,12 @@ def load_state() -> dict:
 
 
 def save_state(state: dict) -> None:
+    """Persist state dict to the state file as formatted JSON."""
     Path(STATE_FILE).write_text(json.dumps(state, indent=2))
 
 
 def compute_checksum(data: dict) -> str:
+    """Return a deterministic SHA-256 hex digest of the JSON-serialised data."""
     serialized = json.dumps(data, sort_keys=True, ensure_ascii=False)
     return hashlib.sha256(serialized.encode()).hexdigest()
 
@@ -58,6 +64,7 @@ def _headers(cfg: dict) -> dict:
 
 
 def api_get(cfg: dict, path: str) -> dict | list:
+    """Perform a GET request against the Grafana API, raising on non-200."""
     resp = requests.get(f"{cfg['url']}{path}", headers=_headers(cfg))
     if resp.status_code != 200:
         print(f"[ERROR] GET {path} → {resp.status_code}: {resp.text}")
@@ -66,6 +73,7 @@ def api_get(cfg: dict, path: str) -> dict | list:
 
 
 def api_post(cfg: dict, path: str, payload: dict) -> dict:
+    """Perform a POST request against the Grafana API, raising on non-200/201."""
     resp = requests.post(f"{cfg['url']}{path}", headers=_headers(cfg), json=payload)
     if resp.status_code not in (200, 201):
         print(f"[ERROR] POST {path} → {resp.status_code}: {resp.text}")
@@ -74,6 +82,7 @@ def api_post(cfg: dict, path: str, payload: dict) -> dict:
 
 
 def resolve_folder_uid(cfg: dict) -> str:
+    """Return the Grafana folder UID for the configured folder name, or exit."""
     results = api_get(cfg, "/api/search?type=dash-db&limit=200")
     for d in results:
         if d.get("folderTitle") == cfg["folder"]:
@@ -83,6 +92,7 @@ def resolve_folder_uid(cfg: dict) -> str:
 
 
 def make_slug(title: str, uid: str, existing: set) -> str:
+    """Generate a URL-safe slug from title, appending uid if already taken."""
     slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
     if slug in existing:
         slug = f"{slug}-{uid}"
@@ -90,6 +100,7 @@ def make_slug(title: str, uid: str, existing: set) -> str:
 
 
 def cmd_pull(cfg: dict) -> None:
+    """Pull all dashboards from Grafana and write them to the local dashboards/ dir."""
     folder_uid = resolve_folder_uid(cfg)
     results = api_get(cfg, f"/api/search?type=dash-db&folderUIDs={folder_uid}")
     Path("dashboards").mkdir(exist_ok=True)
@@ -125,6 +136,7 @@ def cmd_pull(cfg: dict) -> None:
 
 
 def compute_diff(state: dict, remote_meta: dict) -> tuple[list, list]:
+    """Return (changed, conflicts) lists by comparing local files to state/remote."""
     slug_to_uid = {v["slug"]: k for k, v in state.items()}
     changed = []
     conflicts = []
@@ -161,6 +173,7 @@ def compute_diff(state: dict, remote_meta: dict) -> tuple[list, list]:
 
 
 def cmd_push(cfg: dict, message: str = "") -> None:
+    """Push locally changed dashboards to Grafana, skipping conflicts."""
     if not Path(STATE_FILE).exists():
         print("[ERROR] No state file found. Run `pull` first.")
         sys.exit(1)
@@ -179,7 +192,8 @@ def cmd_push(cfg: dict, message: str = "") -> None:
 
     for item in conflicts:
         print(
-            f"[WARN]  {item['slug']} → conflict: remote changed since last pull, skipping"
+            f"[WARN]  {item['slug']} → conflict: remote changed since last pull,"
+            " skipping"
         )
 
     for item in changed:
@@ -205,6 +219,7 @@ def cmd_push(cfg: dict, message: str = "") -> None:
 
 
 def cmd_status(cfg: dict) -> None:
+    """Print a diff of local vs remote dashboards without making any changes."""
     if not Path(STATE_FILE).exists():
         print("[ERROR] No state file found. Run `pull` first.")
         sys.exit(1)
@@ -231,7 +246,8 @@ def cmd_status(cfg: dict) -> None:
         print(f"[conflict] {item['slug']} → remote changed since last pull")
 
 
-def main():
+def main() -> None:
+    """Parse CLI args and dispatch to pull, push, or status command."""
     if len(sys.argv) < 2 or sys.argv[1] not in ("pull", "push", "status"):
         print("Usage: uv run grafana_sync.py <pull|push|status> [-m 'message']")
         sys.exit(1)

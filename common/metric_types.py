@@ -28,24 +28,27 @@ class WebSocketMetric(BaseMetric):
         ws_endpoint: Optional[str] = None,
         http_endpoint: Optional[str] = None,
     ) -> None:
+        """Initialise WebSocket metric and set up subscription ID tracking."""
         super().__init__(
             handler, metric_name, labels, config, ws_endpoint, http_endpoint
         )
         self.subscription_id: Optional[int] = None
 
     @abstractmethod
-    async def subscribe(self, websocket: Any) -> None:
+    async def subscribe(self, websocket: websockets.WebSocketClientProtocol) -> None:
         """Sets up WebSocket subscription."""
 
     @abstractmethod
-    async def unsubscribe(self, websocket: Any) -> None:
+    async def unsubscribe(self, websocket: websockets.WebSocketClientProtocol) -> None:
         """Cleans up WebSocket subscription."""
 
     @abstractmethod
-    async def listen_for_data(self, websocket: Any) -> Optional[Any]:
+    async def listen_for_data(
+        self, websocket: websockets.WebSocketClientProtocol
+    ) -> Optional[dict[str, Any]]:
         """Receives WebSocket data."""
 
-    async def connect(self) -> Any:
+    async def connect(self) -> websockets.WebSocketClientProtocol:
         """Creates WebSocket connection."""
         websocket: websockets.WebSocketClientProtocol = await websockets.connect(
             self.ws_endpoint,  # type: ignore
@@ -59,7 +62,7 @@ class WebSocketMetric(BaseMetric):
         """Collects single WebSocket message."""
         websocket = None
 
-        async def _collect_ws_data():
+        async def _collect_ws_data() -> Any:
             nonlocal websocket
             websocket = await self.connect()
             await self.subscribe(websocket)
@@ -81,7 +84,8 @@ class WebSocketMetric(BaseMetric):
             self.mark_failure()
             self.handle_error(
                 TimeoutError(
-                    f"WebSocket metric collection exceeded {self.config.timeout}s timeout"
+                    f"WebSocket metric collection exceeded "
+                    f"{self.config.timeout}s timeout"
                 )
             )
 
@@ -112,7 +116,7 @@ class HttpMetric(BaseMetric):
     """HTTP metric for API data collection."""
 
     @abstractmethod
-    async def fetch_data(self) -> Optional[Any]:
+    async def fetch_data(self) -> Optional[float]:
         """Fetches HTTP endpoint data."""
 
     def get_endpoint(self) -> str:
@@ -120,6 +124,7 @@ class HttpMetric(BaseMetric):
         return str(self.config.endpoints.get_endpoint())
 
     async def collect_metric(self) -> None:
+        """Collect a single HTTP metric, applying timeout and error handling."""
         try:
             data = await asyncio.wait_for(
                 self.fetch_data(), timeout=self.config.timeout
@@ -164,6 +169,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         method_params: Optional[Union[dict[str, Any], list[Any]]] = None,
         **kwargs: Any,
     ) -> None:
+        """Initialise metric, validate state, and build the base JSON-RPC request."""
         state_data = kwargs.get("state_data", {})
         if not self.validate_state(state_data):
             raise ValueError(f"Invalid state data for {self.method}")
@@ -206,18 +212,59 @@ class HttpCallLatencyMetricBase(HttpMetric):
         """Get RPC method parameters from state data."""
         return {}
 
+    async def _process_response(
+        self,
+        response: aiohttp.ClientResponse,
+        response_time: float,
+        conn_time: float,
+    ) -> float:
+        """Validate response and return RPC time excluding connection overhead."""
+        try:
+            if response.status != 200:
+                raise aiohttp.ClientResponseError(
+                    request_info=response.request_info,
+                    history=(),
+                    status=response.status,
+                    message=f"Status code: {response.status}",
+                    headers=response.headers,
+                )
+
+            json_response = await response.json()
+            if "error" in json_response:
+                raise ValueError(f"JSON-RPC error: {json_response['error']}")
+
+            try:
+                self._on_json_response(json_response)
+            except Exception:
+                logging.debug(f"Block capture failed for {self.method}", exc_info=True)
+                self._captured_block_number = None
+
+            rpc_time = response_time - conn_time
+            if rpc_time < 0:
+                raise ValueError(
+                    f"Negative RPC time: {rpc_time:.6f}s "
+                    f"(response={response_time:.6f}s, conn={conn_time:.6f}s)"
+                )
+            return rpc_time
+        finally:
+            await response.release()
+
     async def fetch_data(self) -> float:
         """Measure single request latency with detailed timing."""
         endpoint: str | None = self.config.endpoints.get_endpoint()
 
         # Add trace config for detailed timing
         trace_config = aiohttp.TraceConfig()
-        timing = {}
+        timing: dict[str, float] = {}
 
-        async def on_connection_create_start(session, context, params) -> None:
+        async def on_connection_create_start(
+            session: Any, context: Any, params: Any
+        ) -> None:
             timing["conn_start"] = time.monotonic()
 
-        async def on_connection_create_end(session, context, params) -> None:
+        async def on_connection_create_end(
+            session: Any, context: Any, params: Any
+        ) -> None:
             timing["conn_end"] = time.monotonic()
 
         trace_config.on_connection_create_start.append(on_connection_create_start)
@@ -231,10 +278,8 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
             for retry_count in range(MAX_RETRIES):
                 start_time: float = time.monotonic()
-                response: aiohttp.ClientResponse = await self._send_request(
-                    session, endpoint
-                )
-                response_time: float = time.monotonic() - start_time
+                response = await self._send_request(session, endpoint)
+                response_time = time.monotonic() - start_time
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     wait_time = int(response.headers.get("Retry-After", 3))
@@ -244,46 +289,16 @@ class HttpCallLatencyMetricBase(HttpMetric):
 
                 break
 
-            if "conn_start" in timing and "conn_end" in timing:
-                conn_time = timing["conn_end"] - timing["conn_start"]
-            else:
-                conn_time = 0
+            conn_time = (
+                timing["conn_end"] - timing["conn_start"]
+                if "conn_start" in timing and "conn_end" in timing
+                else 0
+            )
 
             if not response:
                 raise ValueError("No response received")
 
-            try:
-                if response.status != 200:
-                    raise aiohttp.ClientResponseError(
-                        request_info=response.request_info,
-                        history=(),
-                        status=response.status,
-                        message=f"Status code: {response.status}",
-                        headers=response.headers,
-                    )
-
-                json_response = await response.json()
-                if "error" in json_response:
-                    raise ValueError(f"JSON-RPC error: {json_response['error']}")
-
-                try:
-                    self._on_json_response(json_response)
-                except Exception:
-                    logging.debug(
-                        f"Block capture failed for {self.method}", exc_info=True
-                    )
-                    self._captured_block_number = None
-
-                # Return RPC time only (exclude connection time)
-                rpc_time = response_time - conn_time
-                if rpc_time < 0:
-                    raise ValueError(
-                        f"Negative RPC time: {rpc_time:.6f}s "
-                        f"(response={response_time:.6f}s, conn={conn_time:.6f}s)"
-                    )
-                return rpc_time
-            finally:
-                await response.release()
+            return await self._process_response(response, response_time, conn_time)
 
     async def _send_request(
         self, session: aiohttp.ClientSession, endpoint: str
@@ -319,6 +334,7 @@ class EVMBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the eth_blockNumber RPC method name."""
         return "eth_blockNumber"
 
     @staticmethod

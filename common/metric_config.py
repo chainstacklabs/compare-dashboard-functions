@@ -25,6 +25,7 @@ class EndpointConfig:
         tx_endpoint: Optional[str] = None,
         ws_endpoint: Optional[str] = None,
     ) -> None:
+        """Initialise endpoint config with optional HTTP, TX, and WebSocket URLs."""
         self.main_endpoint: str | None = main_endpoint
         self.tx_endpoint: str | None = tx_endpoint
         self.ws_endpoint: str | None = ws_endpoint
@@ -44,6 +45,7 @@ class MetricConfig:
         extra_params: Optional[dict[str, Any]] = None,
         endpoints: Optional[EndpointConfig] = None,
     ) -> None:
+        """Initialise metric config with timeout, latency cap, params, and endpoints."""
         self.timeout: int = timeout
         self.max_latency: int = max_latency
         self.endpoints: EndpointConfig = endpoints or EndpointConfig()
@@ -54,6 +56,7 @@ class MetricLabel:
     """Single metric label container."""
 
     def __init__(self, key: MetricLabelKey, value: str) -> None:
+        """Initialise label, raising ValueError if key is not a MetricLabelKey."""
         if not isinstance(key, MetricLabelKey):
             raise ValueError(
                 f"Invalid key, must be an instance of MetricLabelKey Enum: {key}"
@@ -74,6 +77,7 @@ class MetricLabels:
         api_method: str = "default",
         response_status: str = "pending",
     ) -> None:
+        """Initialise the standard set of metric labels for a provider endpoint."""
         self.labels: list[MetricLabel] = [
             MetricLabel(MetricLabelKey.SOURCE_REGION, source_region),
             MetricLabel(MetricLabelKey.TARGET_REGION, target_region),

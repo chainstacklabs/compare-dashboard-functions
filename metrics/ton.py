@@ -6,10 +6,11 @@ from common.metric_types import HttpCallLatencyMetricBase
 
 
 class HTTPGetMasterchainInfoLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects latency for getMasterchainInfo and captures current seqno for lag tracking."""
+    """getMasterchainInfo latency; captures seqno for lag tracking."""
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getMasterchainInfo"
 
     def _on_json_response(self, json_response: dict[str, Any]) -> None:
@@ -27,6 +28,7 @@ class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "runGetMethod"
 
     @staticmethod
@@ -49,6 +51,7 @@ class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBlockHeader"
 
     @staticmethod
@@ -72,6 +75,7 @@ class HTTPGetWalletTxsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getWalletInformation"
 
     @staticmethod
@@ -85,6 +89,7 @@ class HTTPGetAddressBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getAddressBalance"
 
     @staticmethod
@@ -98,6 +103,7 @@ class HTTPGetBlockTxsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBlockTransactions"
 
     @staticmethod

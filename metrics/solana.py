@@ -10,6 +10,7 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "simulateTransaction"
 
     @staticmethod
@@ -17,7 +18,7 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
         """Get parameters for simulating a token transfer."""
         return [
             "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEDArczbMia1tLmq7zz4DinMNN0pJ1JtLdqIJPUw3YrGCzYAMHBsgN27lcgB6H2WQvFgyZuJYHa46puOQo9yQ8CVQbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCp20C7Wj2aiuk5TReAXo+VTVg8QTHjs0UjNMMKCvpzZ+ABAgEBARU=",
-            # The transaction recent blockhash will be replaced with the most recent blockhash.
+            # blockhash is replaced with the latest at send time
             {"encoding": "base64", "replaceRecentBlockhash": True},
         ]
 
@@ -30,6 +31,7 @@ class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getLatestBlockhash"
 
     @staticmethod
@@ -52,6 +54,7 @@ class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getTransaction"
 
     @staticmethod
@@ -73,6 +76,7 @@ class HTTPGetBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBalance"
 
     @staticmethod
@@ -86,6 +90,7 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBlock"
 
     @staticmethod
@@ -112,6 +117,7 @@ class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getProgramAccounts"
 
     @staticmethod

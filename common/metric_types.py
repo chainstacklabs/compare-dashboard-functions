@@ -4,7 +4,7 @@ import asyncio
 import logging
 import time
 from abc import abstractmethod
-from typing import Any, Optional
+from typing import Any, Optional, Union
 
 import aiohttp
 import websockets
@@ -161,7 +161,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        method_params: Optional[dict[str, Any]] = None,
+        method_params: Optional[Union[dict[str, Any], list[Any]]] = None,
         **kwargs: Any,
     ) -> None:
         state_data = kwargs.get("state_data", {})
@@ -175,7 +175,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
             config=config,
         )
 
-        self.method_params: dict[str, Any] = (
+        self.method_params: Union[dict[str, Any], list[Any]] = (
             self.get_params_from_state(state_data)
             if method_params is None
             else method_params
@@ -200,7 +200,9 @@ class HttpCallLatencyMetricBase(HttpMetric):
         return True
 
     @staticmethod
-    def get_params_from_state(state_data: dict[str, Any]) -> dict[str, Any]:
+    def get_params_from_state(
+        state_data: dict[str, Any],
+    ) -> Union[dict[str, Any], list[Any]]:
         """Get RPC method parameters from state data."""
         return {}
 
@@ -264,7 +266,13 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 if "error" in json_response:
                     raise ValueError(f"JSON-RPC error: {json_response['error']}")
 
-                self._on_json_response(json_response)
+                try:
+                    self._on_json_response(json_response)
+                except Exception:
+                    logging.debug(
+                        f"Block capture failed for {self.method}", exc_info=True
+                    )
+                    self._captured_block_number = None
 
                 # Return RPC time only (exclude connection time)
                 rpc_time = response_time - conn_time
@@ -315,7 +323,7 @@ class EVMBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
 
     @staticmethod
     def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
-        """Return empty params list for eth_blockNumber."""
+        """Return empty params list for eth_blockNumber (JSON-RPC positional params)."""
         return []
 
     def _on_json_response(self, json_response: dict[str, Any]) -> None:

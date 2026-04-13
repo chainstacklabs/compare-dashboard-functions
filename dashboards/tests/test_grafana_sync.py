@@ -86,9 +86,8 @@ def test_resolve_folder_uid_exits_if_not_found(monkeypatch):
         m,
         "api_get",
         return_value=[{"uid": "d1", "folderTitle": "Other", "folderUid": "abc"}],
-    ):
-        with pytest.raises(SystemExit):
-            m.resolve_folder_uid(m.load_config())
+    ), pytest.raises(SystemExit):
+        m.resolve_folder_uid(m.load_config())
 
 
 STATE_FILE = ".grafana_state.json"

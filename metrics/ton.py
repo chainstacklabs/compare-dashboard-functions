@@ -14,6 +14,7 @@ class HTTPGetMasterchainInfoLatencyMetric(HttpCallLatencyMetricBase):
         return "getMasterchainInfo"
 
     def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Capture result.last.seqno for block lag tracking."""
         result = json_response.get("result")
         if isinstance(result, dict):
             last = result.get("last")

@@ -40,6 +40,7 @@ class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
         return []
 
     def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Capture slot from result.context.slot for block lag tracking."""
         result = json_response.get("result")
         if isinstance(result, dict):
             context = result.get("context")

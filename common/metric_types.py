@@ -1,6 +1,7 @@
 """Base classes for WebSocket and HTTP metric collection."""
 
 import asyncio
+import contextlib
 import logging
 import time
 from abc import abstractmethod
@@ -319,7 +320,6 @@ class HttpCallLatencyMetricBase(HttpMetric):
         Override in subclasses to capture response fields (e.g. block number).
         The default implementation does nothing.
         """
-        pass
 
     def process_data(self, value: float) -> float:
         """Process raw latency measurement."""
@@ -343,9 +343,8 @@ class EVMBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
         return []
 
     def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Parse hex block number from eth_blockNumber response."""
         result = json_response.get("result")
         if isinstance(result, str):
-            try:
+            with contextlib.suppress(ValueError):
                 self._captured_block_number = int(result, 16)
-            except ValueError:
-                pass

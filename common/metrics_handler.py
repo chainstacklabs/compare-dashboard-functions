@@ -42,8 +42,11 @@ class MetricsHandler:
         """Emit raw block numbers for each instance that captured one.
 
         Stores the block number as metric_type="block_number" so Grafana can
-        compute relative lag across providers at query time (max - provider_value).
-        Instances that did not successfully capture a block number are skipped.
+        compute relative lag at query time using max(block_number) - provider_value.
+        Instances without a captured block number are skipped.
+
+        Returns:
+            None
         """
         for instance in self._instances:
             if instance._captured_block_number is not None:

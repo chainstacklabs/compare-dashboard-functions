@@ -128,7 +128,7 @@ class BlockchainDataFetcher:
             transactions = latest_block.get("transactions", [])
             tx_hash = (
                 transactions[0].get("hash", "")
-                if isinstance(transactions[0], dict)
+                if transactions and isinstance(transactions[0], dict)
                 else transactions[0]
                 if transactions
                 else ""

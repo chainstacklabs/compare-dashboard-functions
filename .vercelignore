@@ -1,13 +1,15 @@
 dashboards
 tests
-readme.md
+README.md
 endpoints.json
 
 *.local*
 *.example*
 
 pyproject.toml
+coderabbit.yaml
 .vscode
 
 AGENTS.md
+CLAUDE.md
 LICENSE

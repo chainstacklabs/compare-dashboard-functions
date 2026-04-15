@@ -290,7 +290,7 @@ def test_cmd_push_uploads_changed_skips_conflicts(tmp_path, monkeypatch, capsys)
 
     abc_call_count = {"n": 0}
 
-    def fake_api_get(cfg, path):
+    def fake_api_get(_cfg, path):
         if "abc" in path:
             abc_call_count["n"] += 1
             # Second call is the re-fetch after push — return new timestamp
@@ -309,7 +309,7 @@ def test_cmd_push_uploads_changed_skips_conflicts(tmp_path, monkeypatch, capsys)
 
     posted = []
 
-    def fake_api_post(cfg, path, payload):
+    def fake_api_post(_cfg, _path, payload):
         posted.append(payload)
         return {"status": "success"}
 

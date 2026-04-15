@@ -43,16 +43,16 @@ class MetricsHandler:
 
         Stores the block number as metric_type="block_number" so Grafana can
         compute relative lag at query time using max(block_number) - provider_value.
-        Instances without a captured block number are skipped.
+        Only HTTP JSON-RPC metrics (HttpCallLatencyMetricBase subclasses) carry
+        the _captured_block_number attribute; others are skipped via getattr.
 
         Returns:
             None
         """
         for instance in self._instances:
-            if instance._captured_block_number is not None:
-                instance.update_metric_value(
-                    instance._captured_block_number, "block_number"
-                )
+            block_number = getattr(instance, "_captured_block_number", None)
+            if block_number is not None:
+                instance.update_metric_value(block_number, "block_number")
 
     def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""

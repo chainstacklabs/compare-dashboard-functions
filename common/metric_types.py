@@ -189,6 +189,12 @@ class HttpCallLatencyMetricBase(HttpMetric):
         )
         self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
         self._base_request = self._build_base_request()
+        self._captured_block_number: Optional[int] = None
+
+    def mark_failure(self) -> None:
+        """Mark metric as failed and clear any captured block number."""
+        super().mark_failure()
+        self._captured_block_number = None
 
     def _build_base_request(self) -> dict[str, Any]:
         """Build the base JSON-RPC request object."""
@@ -237,7 +243,9 @@ class HttpCallLatencyMetricBase(HttpMetric):
             try:
                 self._on_json_response(json_response)
             except Exception:
-                logging.debug(f"Block capture failed for {self.method}", exc_info=True)
+                logging.warning(
+                    f"Block capture failed for {self.method}", exc_info=True
+                )
                 self._captured_block_number = None
 
             rpc_time = response_time - conn_time

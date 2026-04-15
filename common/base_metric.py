@@ -44,7 +44,6 @@ class BaseMetric(ABC):
         self.ws_endpoint: str | None = ws_endpoint
         self.http_endpoint: str | None = http_endpoint
         self.values: dict[str, MetricValue] = {}
-        self._captured_block_number: Optional[int] = None
         handler._instances.append(self)
 
     @abstractmethod
@@ -108,7 +107,6 @@ class BaseMetric(ABC):
     def mark_failure(self) -> None:
         """Sets failure status and zeros all existing metric types."""
         self.labels.update_label(MetricLabelKey.RESPONSE_STATUS, "failed")
-        self._captured_block_number = None
         value_types = list(self.values.keys())
         for value_type in value_types:
             self.update_metric_value(0, value_type)

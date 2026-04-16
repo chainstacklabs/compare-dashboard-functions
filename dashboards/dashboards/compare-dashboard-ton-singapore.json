@@ -89,7 +89,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
@@ -97,7 +97,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
       "gridPos": {
         "h": 1,
         "w": 5,
@@ -663,7 +663,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Each row is a provider. Color shows lag severity over time: green = at tip (≤2 blocks), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Masterchain seqno lag. 0 = at the tip.",
+          "description": "Each row is a provider. Color shows lag severity over time: green = at tip (\u22642 blocks), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Masterchain seqno lag. 0 = at the tip.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -819,17 +819,17 @@
                     "id": "mappings",
                     "value": [
                       {
-                        "type": "value",
                         "options": {
                           "Chainstack": {
-                            "text": "Chainstack-Growth",
-                            "index": 0
+                            "index": 0,
+                            "text": "Chainstack-Growth"
                           },
                           "dRPC": {
-                            "text": "dRPC-Growth",
-                            "index": 1
+                            "index": 1,
+                            "text": "dRPC-Growth"
                           }
-                        }
+                        },
+                        "type": "value"
                       }
                     ]
                   },
@@ -968,14 +968,14 @@
                   "Time": true
                 },
                 "indexByName": {
-                  "provider": 0,
                   "Value #A": 1,
-                  "Value #B": 2
+                  "Value #B": 2,
+                  "provider": 0
                 },
                 "renameByName": {
-                  "provider": "Provider",
                   "Value #A": "% at Tip",
-                  "Value #B": "SR"
+                  "Value #B": "SR",
+                  "provider": "Provider"
                 }
               }
             },
@@ -1895,7 +1895,7 @@
               "refId": "C"
             }
           ],
-          "title": "getBlockHeader ⌛",
+          "title": "getBlockHeader \u231b",
           "type": "timeseries"
         },
         {
@@ -4601,6 +4601,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: TON (Singapore)",
   "uid": "be82wni0bhukgd-ton-sing",
-  "version": 77,
+  "version": 79,
   "weekStart": "monday"
 }

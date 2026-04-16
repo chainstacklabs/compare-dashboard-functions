@@ -220,7 +220,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            response_latency_seconds{blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -303,7 +303,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\"}[$__range])) by (provider)",
+          "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\"}[$__range])) by (provider)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -488,7 +488,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"eth_call\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"eth_call\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -507,7 +507,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"eth_getBalance\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"eth_getBalance\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -526,7 +526,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"eth_getTransactionReceipt\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"eth_getTransactionReceipt\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -545,7 +545,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"debug_traceTransaction\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"debug_traceTransaction\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -564,7 +564,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"eth_blockNumber\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"eth_blockNumber\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -583,7 +583,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"debug_traceBlockByNumber\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"debug_traceBlockByNumber\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -602,7 +602,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"eth_subscribe\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"eth_subscribe\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -621,7 +621,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, response_latency_seconds{blockchain=\"Base\", api_method=\"eth_getLogs\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", api_method=\"eth_getLogs\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -934,7 +934,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1017,7 +1017,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_call\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_call\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1145,7 +1145,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1228,7 +1228,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getBalance\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getBalance\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1356,7 +1356,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1439,7 +1439,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getLogs\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getLogs\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1563,7 +1563,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1646,7 +1646,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1770,7 +1770,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1853,7 +1853,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1981,7 +1981,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2064,7 +2064,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_blockNumber\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_blockNumber\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -2188,7 +2188,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2271,7 +2271,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -2395,7 +2395,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2478,7 +2478,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_subscribe\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", api_method=\"eth_subscribe\"}[$__range])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -2614,7 +2614,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_call\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -2626,7 +2626,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -2759,7 +2759,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -2771,7 +2771,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -2905,7 +2905,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -2917,7 +2917,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3051,7 +3051,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3063,7 +3063,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3196,7 +3196,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3208,7 +3208,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3342,7 +3342,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3354,7 +3354,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3490,7 +3490,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3502,7 +3502,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3636,7 +3636,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3648,7 +3648,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3798,7 +3798,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_call\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3810,7 +3810,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3943,7 +3943,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3955,7 +3955,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4089,7 +4089,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4101,7 +4101,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4235,7 +4235,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4247,7 +4247,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4380,7 +4380,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4392,7 +4392,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4526,7 +4526,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4538,7 +4538,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4674,7 +4674,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4686,7 +4686,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4820,7 +4820,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4832,7 +4832,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4979,7 +4979,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_call\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4991,7 +4991,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5125,7 +5125,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5137,7 +5137,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5271,7 +5271,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5283,7 +5283,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5417,7 +5417,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5429,7 +5429,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5562,7 +5562,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5574,7 +5574,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5708,7 +5708,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5720,7 +5720,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5853,7 +5853,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5865,7 +5865,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5999,7 +5999,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6011,7 +6011,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Base\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"

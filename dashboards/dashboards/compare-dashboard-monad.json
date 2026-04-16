@@ -206,7 +206,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(# Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(# Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n        *\r\n        (\r\n          sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n          /\r\n          sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -376,7 +376,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -514,7 +514,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
@@ -752,7 +752,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -897,7 +897,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (\r\n      response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|sin1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (\r\n      response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|sin1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1074,7 +1074,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|sin1\"}[$__range]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|sin1\"}[$__range]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1256,7 +1256,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1452,7 +1452,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -1611,7 +1611,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -1790,7 +1790,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -1948,7 +1948,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -2127,7 +2127,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2285,7 +2285,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -2464,7 +2464,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2622,7 +2622,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -2801,7 +2801,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2959,7 +2959,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -3139,7 +3139,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
@@ -3298,7 +3298,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -3477,7 +3477,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3635,7 +3635,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,
@@ -3814,7 +3814,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3972,7 +3972,7 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_subscribe\"}[$__range])) by (provider, source_region)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": true,

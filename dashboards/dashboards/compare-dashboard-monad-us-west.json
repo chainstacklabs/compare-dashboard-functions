@@ -220,7 +220,7 @@
         {
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -304,7 +304,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval])) by (provider)",
+          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\"} >= 0)[$__range:$__interval])) by (provider)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
@@ -489,7 +489,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_call\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -508,7 +508,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getBalance\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -527,7 +527,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -546,7 +546,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceTransaction\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -565,7 +565,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_blockNumber\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_blockNumber\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -584,7 +584,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -603,7 +603,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_subscribe\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_subscribe\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -622,7 +622,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{blockchain=\"Monad\", api_method=\"eth_getLogs\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getLogs\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -936,7 +936,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1019,7 +1019,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_call\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_call\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1148,7 +1148,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1231,7 +1231,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getBalance\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getBalance\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1360,7 +1360,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1443,7 +1443,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getLogs\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getLogs\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1568,7 +1568,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1651,7 +1651,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getTransactionReceipt\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_getTransactionReceipt\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1776,7 +1776,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1859,7 +1859,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceTransaction\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceTransaction\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -1988,7 +1988,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2071,7 +2071,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_blockNumber\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_blockNumber\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -2196,7 +2196,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2279,7 +2279,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceBlockByNumber\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"debug_traceBlockByNumber\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -2404,7 +2404,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2487,7 +2487,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_subscribe\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", api_method=\"eth_subscribe\"} >= 0)[$__range:$__interval])) by (provider)",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "instant": false,
@@ -2623,7 +2623,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -2635,7 +2635,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -2768,7 +2768,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -2780,7 +2780,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -2914,7 +2914,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -2926,7 +2926,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3060,7 +3060,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3072,7 +3072,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3205,7 +3205,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3217,7 +3217,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3351,7 +3351,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3363,7 +3363,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3497,7 +3497,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3509,7 +3509,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3643,7 +3643,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Alchemy-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3655,7 +3655,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3805,7 +3805,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3817,7 +3817,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -3950,7 +3950,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -3962,7 +3962,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4096,7 +4096,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4108,7 +4108,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4242,7 +4242,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4254,7 +4254,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4387,7 +4387,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4399,7 +4399,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4533,7 +4533,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4545,7 +4545,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4679,7 +4679,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4691,7 +4691,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4825,7 +4825,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"dRPC\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4837,7 +4837,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4984,7 +4984,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4996,7 +4996,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5130,7 +5130,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5142,7 +5142,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5276,7 +5276,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5288,7 +5288,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5422,7 +5422,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5434,7 +5434,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5567,7 +5567,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5579,7 +5579,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5713,7 +5713,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5725,7 +5725,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5858,7 +5858,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5870,7 +5870,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6004,7 +6004,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Quicknode-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6016,7 +6016,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sfo1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"

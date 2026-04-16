@@ -688,99 +688,7 @@
         "y": 25
       },
       "id": 1006,
-      "title": "Block lag",
-      "type": "row",
       "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "description": "Measures slot number from getLatestBlockhash. The tip is the highest slot seen across all providers at each measurement. Lag = tip − provider slot. Lag ≤ 2 slots is treated as at-tip to filter measurement jitter (3-min sampling vs ~0.4s slot time).",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "fixedColor": "blue",
-                "mode": "thresholds"
-              },
-              "decimals": 1,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "red",
-                    "value": null
-                  },
-                  {
-                    "color": "orange",
-                    "value": 80
-                  },
-                  {
-                    "color": "yellow",
-                    "value": 90
-                  },
-                  {
-                    "color": "green",
-                    "value": 99
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Chainstack"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 4,
-            "w": 24,
-            "x": 0,
-            "y": 26
-          },
-          "id": 1007,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto",
-            "wideLayout": true
-          },
-          "pluginVersion": "13.0.0-23605486576",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "grafanacloud-prom"
-              },
-              "editorMode": "code",
-              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"}), 0) > bool 2)[$__range:$__interval]))",
-              "legendFormat": "{{provider}}",
-              "instant": true,
-              "refId": "A"
-            }
-          ],
-          "title": "% of time at tip",
-          "type": "stat"
-        },
         {
           "datasource": {
             "type": "prometheus",
@@ -793,6 +701,7 @@
                 "mode": "thresholds"
               },
               "custom": {
+                "axisPlacement": "auto",
                 "fillOpacity": 80,
                 "hideFrom": {
                   "legend": false,
@@ -809,7 +718,7 @@
                 "steps": [
                   {
                     "color": "green",
-                    "value": null
+                    "value": 0
                   },
                   {
                     "color": "yellow",
@@ -842,14 +751,18 @@
             ]
           },
           "gridPos": {
-            "h": 10,
-            "w": 19,
+            "h": 14,
+            "w": 18,
             "x": 0,
             "y": 30
           },
           "id": 1008,
           "options": {
             "alignValue": "left",
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "displayMode": "list",
               "placement": "bottom",
@@ -859,6 +772,7 @@
             "rowHeight": 0.8,
             "showValue": "never",
             "tooltip": {
+              "hideZeros": false,
               "mode": "single",
               "sort": "none"
             }
@@ -885,76 +799,153 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "getLatestBlockhash success rate — the method used for block lag tracking.",
+          "description": "",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.99991,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "type": "value",
+                        "options": {
+                          "Chainstack": {
+                            "text": "Chainstack-Growth",
+                            "index": 0
+                          },
+                          "dRPC": {
+                            "text": "dRPC-Growth",
+                            "index": 1
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 108
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "% at Tip"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": 0
+                        },
+                        {
+                          "color": "orange",
+                          "value": 80
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 90
+                        },
+                        {
+                          "color": "green",
+                          "value": 99
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "type": "color-text"
+                    }
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 85
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SR"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 68
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 10,
-            "w": 5,
-            "x": 19,
+            "h": 14,
+            "w": 6,
+            "x": 18,
             "y": 30
           },
           "id": 1009,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "% at Tip"
+              }
+            ]
           },
           "pluginVersion": "13.0.0-23605486576",
           "targets": [
@@ -964,17 +955,67 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getLatestBlockhash\"}[$__range])) by (provider)",
+              "exemplar": false,
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"}), 0) > bool 2)[$__range:$__interval]))",
+              "format": "table",
               "instant": true,
-              "range": false,
-              "legendFormat": "{{provider}}",
               "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\n/\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\"} >= 0)[$__range:$__interval])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "B"
             }
           ],
-          "title": "Success rate",
-          "type": "stat"
+          "title": "Block lag summary",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "provider": 0,
+                  "Value #A": 1,
+                  "Value #B": 2
+                },
+                "renameByName": {
+                  "provider": "Provider",
+                  "Value #A": "% at Tip",
+                  "Value #B": "SR"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "% at Tip"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
         }
-      ]
+      ],
+      "title": "Block lag",
+      "type": "row"
     },
     {
       "collapsed": true,
@@ -1026,6 +1067,7 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -1035,12 +1077,12 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   }
                 ]
               },
@@ -1062,16 +1104,19 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 41
           },
           "id": 3,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1112,84 +1157,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
+            "h": 12,
+            "w": 6,
+            "x": 18,
             "y": 41
           },
           "id": 33,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "11.6.0-82840",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"simulateTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"simulateTransaction\"}[$__range])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1231,6 +1323,7 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -1240,16 +1333,12 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
+                    "color": "green",
+                    "value": 0
                   }
                 ]
               },
@@ -1271,16 +1360,19 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 74
           },
           "id": 20,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1321,84 +1413,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
+            "h": 12,
+            "w": 6,
+            "x": 18,
             "y": 74
           },
           "id": 34,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "11.6.0-82840",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getBalance\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getBalance\"}[$__range])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1440,6 +1579,7 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -1449,16 +1589,12 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
+                    "color": "green",
+                    "value": 0
                   }
                 ]
               },
@@ -1480,16 +1616,19 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 82
           },
           "id": 52,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1530,84 +1669,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
+            "h": 12,
+            "w": 6,
+            "x": 18,
             "y": 82
           },
           "id": 53,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "11.6.0-82840",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getTransaction\"}[$__range])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1649,6 +1835,7 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -1658,16 +1845,12 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
+                    "color": "green",
+                    "value": 0
                   }
                 ]
               },
@@ -1689,16 +1872,19 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 90
           },
           "id": 21,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1739,84 +1925,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
+            "h": 12,
+            "w": 6,
+            "x": 18,
             "y": 90
           },
           "id": 60,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "11.6.0-82840",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getLatestBlockhash\"}[$__range])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1858,6 +2091,7 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -1867,16 +2101,12 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
+                    "color": "green",
+                    "value": 0
                   }
                 ]
               },
@@ -1898,16 +2128,19 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 98
           },
           "id": 63,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1948,84 +2181,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
+            "h": 12,
+            "w": 6,
+            "x": 18,
             "y": 98
           },
           "id": 64,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "11.6.0-82840",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getProgramAccounts\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getProgramAccounts\"}[$__range])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -2067,6 +2347,7 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -2076,16 +2357,12 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
+                    "color": "green",
+                    "value": 0
                   }
                 ]
               },
@@ -2107,16 +2384,19 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 106
           },
           "id": 50,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2157,84 +2437,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
+            "h": 12,
+            "w": 6,
+            "x": 18,
             "y": 106
           },
           "id": 51,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "11.6.0-82840",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
+              "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getBlock\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getBlock\"}[$__range])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         }
       ],
       "title": "Historical data",
@@ -2259,6 +2586,7 @@
           "fieldConfig": {
             "defaults": {
               "color": {
+                "fixedColor": "super-light-blue",
                 "mode": "palette-classic"
               },
               "custom": {
@@ -2283,12 +2611,13 @@
                   "fill": "solid"
                 },
                 "lineWidth": 1,
-                "pointSize": 5,
+                "pointSize": 2,
                 "scaleDistribution": {
                   "log": 2,
                   "type": "log"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -2298,15 +2627,16 @@
                   "mode": "off"
                 }
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   }
                 ]
-              }
+              },
+              "unit": "s"
             },
             "overrides": [
               {
@@ -2360,16 +2690,24 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
             "y": 42
           },
           "id": 70,
           "options": {
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
             "legend": {
-              "calcs": [],
-              "displayMode": "list",
+              "calcs": [
+                "min",
+                "p95",
+                "max"
+              ],
+              "displayMode": "table",
               "placement": "right",
               "showLegend": true,
               "sortBy": "95th %",
@@ -3624,7 +3962,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -3650,6 +3990,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -3667,7 +4008,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -3769,7 +4111,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -3795,6 +4139,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -3804,6 +4149,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -3811,7 +4157,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -3913,7 +4260,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -3939,6 +4288,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -3948,6 +4298,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -3955,7 +4306,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -3984,7 +4336,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 499
+            "y": 44
           },
           "id": 26,
           "options": {
@@ -4057,7 +4409,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4083,6 +4437,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4092,6 +4447,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -4099,7 +4455,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -4128,7 +4485,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 499
+            "y": 44
           },
           "id": 54,
           "options": {
@@ -4201,7 +4558,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4227,6 +4586,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4236,6 +4596,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -4243,7 +4604,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -4272,7 +4634,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 504
+            "y": 49
           },
           "id": 65,
           "options": {
@@ -4345,7 +4707,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4371,6 +4735,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4380,6 +4745,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -4387,7 +4753,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -4416,7 +4783,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 504
+            "y": 49
           },
           "id": 55,
           "options": {
@@ -4503,7 +4870,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4529,6 +4898,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4546,7 +4916,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -4648,7 +5019,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4674,6 +5047,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4683,6 +5057,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -4690,7 +5065,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -4792,7 +5168,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4818,6 +5196,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4827,6 +5206,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -4834,7 +5214,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -4863,7 +5244,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 499
+            "y": 44
           },
           "id": 1002,
           "options": {
@@ -4936,7 +5317,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -4962,6 +5345,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4971,6 +5355,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -4978,7 +5363,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5007,7 +5393,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 499
+            "y": 44
           },
           "id": 1003,
           "options": {
@@ -5080,7 +5466,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5106,6 +5494,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5115,6 +5504,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -5122,7 +5512,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5151,7 +5542,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 504
+            "y": 49
           },
           "id": 1004,
           "options": {
@@ -5224,7 +5615,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5250,6 +5643,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5259,6 +5653,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -5266,7 +5661,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5295,7 +5691,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 504
+            "y": 49
           },
           "id": 1005,
           "options": {
@@ -5382,7 +5778,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5408,6 +5806,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5425,7 +5824,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5527,7 +5927,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5553,6 +5955,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5562,6 +5965,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -5569,7 +5973,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5671,7 +6076,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5697,6 +6104,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5706,6 +6114,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -5713,7 +6122,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5742,7 +6152,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 485
+            "y": 45
           },
           "id": 58,
           "options": {
@@ -5815,7 +6225,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5841,6 +6253,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5850,6 +6263,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -5857,7 +6271,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -5886,7 +6301,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 485
+            "y": 45
           },
           "id": 46,
           "options": {
@@ -5959,7 +6374,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -5985,6 +6402,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5994,6 +6412,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -6001,7 +6420,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6030,7 +6450,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 490
+            "y": 50
           },
           "id": 66,
           "options": {
@@ -6103,7 +6523,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -6129,6 +6551,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6138,6 +6561,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -6145,7 +6569,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6174,7 +6599,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 490
+            "y": 50
           },
           "id": 56,
           "options": {
@@ -6261,7 +6686,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -6287,6 +6714,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6304,7 +6732,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6406,7 +6835,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -6432,6 +6863,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6441,6 +6873,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -6448,7 +6881,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6550,7 +6984,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -6576,6 +7012,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6585,6 +7022,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -6592,7 +7030,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6621,7 +7060,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 471
+            "y": 392
           },
           "id": 59,
           "options": {
@@ -6694,7 +7133,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -6720,6 +7161,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6729,6 +7171,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -6736,7 +7179,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6765,7 +7209,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 471
+            "y": 392
           },
           "id": 48,
           "options": {
@@ -6838,7 +7282,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -6864,6 +7310,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6873,6 +7320,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -6880,7 +7328,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -6909,7 +7358,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 476
+            "y": 397
           },
           "id": 67,
           "options": {
@@ -6982,7 +7431,9 @@
           "fieldConfig": {
             "defaults": {
               "color": {
-                "mode": "thresholds"
+                "fixedColor": "#61bbfb",
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
@@ -7008,6 +7459,7 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -7017,6 +7469,7 @@
                   "mode": "area"
                 }
               },
+              "fieldMinMax": false,
               "mappings": [],
               "max": 0.5,
               "min": -0.5,
@@ -7024,7 +7477,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
                   },
                   {
                     "color": "text",
@@ -7053,7 +7507,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 476
+            "y": 397
           },
           "id": 57,
           "options": {
@@ -7153,6 +7607,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana (EU)",
   "uid": "be82wni0bhukgd",
-  "version": 87,
+  "version": 95,
   "weekStart": "monday"
 }

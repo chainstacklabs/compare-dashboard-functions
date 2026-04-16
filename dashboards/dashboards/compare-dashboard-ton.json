@@ -417,6 +417,21 @@
             "byField": "source_region",
             "mode": "outer"
           }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Chainstack": 2,
+              "Quicknode-Growth": 3,
+              "TonCenter-WithAPIKey": 1,
+              "dRPC": 4,
+              "source_region": 0
+            },
+            "renameByName": {}
+          }
         }
       ],
       "type": "barchart"
@@ -762,6 +777,21 @@
           "options": {
             "byField": "api_method",
             "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "includeByName": {},
+            "indexByName": {
+              "Chainstack": 2,
+              "Quicknode-Growth": 3,
+              "TonCenter-WithAPIKey": 1,
+              "api_method": 0,
+              "dRPC": 4
+            },
+            "renameByName": {}
           }
         }
       ],
@@ -2754,6 +2784,7 @@
           "type": "prometheus",
           "uid": "ee3qd1t7j5vy8b"
         },
+        "enableGroupBy": false,
         "hide": 0,
         "label": "Filter",
         "name": "adhoc",
@@ -2783,6 +2814,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: TON",
   "uid": "fe3mtxna6483ke-TON-global",
-  "version": 64,
+  "version": 66,
   "weekStart": "monday"
 }

@@ -81,7 +81,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "13.0.0-23605486576",
@@ -91,7 +91,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
       "gridPos": {
         "h": 1,
         "w": 14,
@@ -1201,6 +1201,515 @@
         "x": 0,
         "y": 34
       },
+      "id": 100,
+      "title": "Block lag",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Measures masterchain block sequence number (seqno) from getMasterchainInfo. The tip is the highest seqno seen across all providers at each measurement. Lag = tip − provider seqno. Lag ≤ 2 blocks is treated as at-tip to filter measurement jitter (3-min sampling vs ~0.4s block time).",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "blue",
+                "mode": "thresholds"
+              },
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 90
+                  },
+                  {
+                    "color": "green",
+                    "value": 99
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "TonCenter-WithAPIKey - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "TonCenter-WithAPIKey - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "TonCenter-WithAPIKey - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "TonCenter-WithAPIKey - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - SG"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 24,
+            "x": 0,
+            "y": 35
+          },
+          "id": 103,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"})) - max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"}), 0) > bool 2)[$__range:$__interval]))",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "% of time at tip",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Each row is a provider-region. Color shows lag severity over time: green = at tip (≤2 blocks), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Masterchain seqno lag. 0 = at the tip.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 3
+                  },
+                  {
+                    "color": "orange",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "TonCenter-WithAPIKey - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "TonCenter-WithAPIKey - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "TonCenter-WithAPIKey - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "TonCenter-WithAPIKey - SG"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 19,
+            "x": 0,
+            "y": 39
+          },
+          "id": 111,
+          "options": {
+            "alignValue": "left",
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"})) - max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"})",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Block lag timeline",
+          "type": "state-timeline"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "getMasterchainInfo success rate — the method used for block lag tracking. Low success rate means the provider's block lag data is incomplete.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 19,
+            "y": 39
+          },
+          "id": 105,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", api_method=\"getMasterchainInfo\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", api_method=\"getMasterchainInfo\"}[$__range])) by (provider, source_region)",
+              "instant": true,
+              "range": false,
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Chainstack - fra1": 1,
+                  "Chainstack - sin1": 2,
+                  "Quicknode-Growth - fra1": 3,
+                  "Quicknode-Growth - sin1": 4,
+                  "TonCenter-WithAPIKey - fra1": 5,
+                  "TonCenter-WithAPIKey - sin1": 6,
+                  "dRPC - fra1": 7,
+                  "dRPC - sin1": 8,
+                  "Time": 0
+                },
+                "renameByName": {
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "TonCenter-WithAPIKey - fra1": "TonCenter-WithAPIKey - EU",
+                  "TonCenter-WithAPIKey - sin1": "TonCenter-WithAPIKey - SG",
+                  "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - sin1": "dRPC-Growth - SG"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 57
+      },
       "id": 87,
       "panels": [
         {
@@ -1269,7 +1778,7 @@
             "h": 12,
             "w": 19,
             "x": 0,
-            "y": 35
+            "y": 58
           },
           "id": 3,
           "options": {
@@ -1431,7 +1940,7 @@
             "h": 12,
             "w": 5,
             "x": 19,
-            "y": 35
+            "y": 58
           },
           "id": 83,
           "options": {
@@ -1582,7 +2091,7 @@
             "h": 12,
             "w": 19,
             "x": 0,
-            "y": 47
+            "y": 70
           },
           "id": 71,
           "options": {
@@ -1744,7 +2253,7 @@
             "h": 12,
             "w": 5,
             "x": 19,
-            "y": 47
+            "y": 70
           },
           "id": 72,
           "options": {
@@ -1895,7 +2404,7 @@
             "h": 12,
             "w": 19,
             "x": 0,
-            "y": 59
+            "y": 82
           },
           "id": 73,
           "options": {
@@ -2057,7 +2566,7 @@
             "h": 12,
             "w": 5,
             "x": 19,
-            "y": 59
+            "y": 82
           },
           "id": 74,
           "options": {
@@ -2208,7 +2717,7 @@
             "h": 12,
             "w": 19,
             "x": 0,
-            "y": 71
+            "y": 94
           },
           "id": 75,
           "options": {
@@ -2370,7 +2879,7 @@
             "h": 12,
             "w": 5,
             "x": 19,
-            "y": 71
+            "y": 94
           },
           "id": 76,
           "options": {
@@ -2521,7 +3030,7 @@
             "h": 12,
             "w": 19,
             "x": 0,
-            "y": 83
+            "y": 106
           },
           "id": 77,
           "options": {
@@ -2557,7 +3066,7 @@
               "refId": "C"
             }
           ],
-          "title": "getBlockHeader \u231b",
+          "title": "getBlockHeader ⌛",
           "transformations": [
             {
               "id": "joinByField",
@@ -2679,7 +3188,7 @@
             "h": 12,
             "w": 5,
             "x": 19,
-            "y": 83
+            "y": 106
           },
           "id": 78,
           "options": {

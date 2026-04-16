@@ -81,7 +81,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "13.0.0-23605486576",
@@ -91,7 +91,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
       "gridPos": {
         "h": 1,
         "w": 14,
@@ -1426,6 +1426,619 @@
         "x": 0,
         "y": 35
       },
+      "id": 113,
+      "title": "Block lag",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Measures slot number from getLatestBlockhash. The tip is the highest slot seen across all providers at each measurement. Lag = tip − provider slot. Lag ≤ 2 slots is treated as at-tip to filter measurement jitter (3-min sampling vs ~0.4s slot time).",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "blue",
+                "mode": "thresholds"
+              },
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 90
+                  },
+                  {
+                    "color": "green",
+                    "value": 99
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - US"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 24,
+            "x": 0,
+            "y": 36
+          },
+          "id": 114,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", response_status=\"success\"})) - max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", response_status=\"success\"}), 0) > bool 2)[$__range:$__interval]))",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "% of time at tip",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Each row is a provider-region. Color shows lag severity over time: green = at tip (≤2 slots), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Slot lag. 0 = at the tip.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 3
+                  },
+                  {
+                    "color": "orange",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - US"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 19,
+            "x": 0,
+            "y": 40
+          },
+          "id": 115,
+          "options": {
+            "alignValue": "left",
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", response_status=\"success\"})) - max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", response_status=\"success\"})",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Block lag timeline",
+          "type": "state-timeline"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "getLatestBlockhash success rate — the method used for block lag tracking. Low success rate means the provider's block lag data is incomplete.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "custom": {
+                "align": "left",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "wrapHeaderText": false
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "1"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 19,
+            "y": 40
+          },
+          "id": 116,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": false
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\"}[$__range])) by (provider, source_region)",
+              "instant": true,
+              "range": false,
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Success rate",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "Time",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "Time": 0,
+                  "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - sfo1": 3,
+                  "Chainstack - fra1": 4,
+                  "Chainstack - sin1": 5,
+                  "Chainstack - sfo1": 6,
+                  "Helius-Developer - fra1": 7,
+                  "Helius-Developer - sin1": 8,
+                  "Helius-Developer - sfo1": 9,
+                  "Quicknode-Growth - fra1": 10,
+                  "Quicknode-Growth - sin1": 11,
+                  "Quicknode-Growth - sfo1": 12
+                },
+                "renameByName": {
+                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US",
+                  "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - sfo1": "Chainstack-Growth - US",
+                  "Helius-Developer - fra1": "Helius-Developer - EU",
+                  "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - sfo1": "Helius-Developer - US",
+                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US"
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {}
+            }
+          ],
+          "type": "table"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 58
+      },
       "id": 111,
       "panels": [
         {
@@ -1508,7 +2121,7 @@
             "h": 14,
             "w": 19,
             "x": 0,
-            "y": 36
+            "y": 59
           },
           "id": 3,
           "options": {
@@ -1669,7 +2282,7 @@
             "h": 14,
             "w": 5,
             "x": 19,
-            "y": 36
+            "y": 59
           },
           "id": 83,
           "options": {
@@ -1837,7 +2450,7 @@
             "h": 14,
             "w": 19,
             "x": 0,
-            "y": 75
+            "y": 98
           },
           "id": 85,
           "options": {
@@ -1998,7 +2611,7 @@
             "h": 14,
             "w": 5,
             "x": 19,
-            "y": 75
+            "y": 98
           },
           "id": 89,
           "options": {
@@ -2166,7 +2779,7 @@
             "h": 14,
             "w": 19,
             "x": 0,
-            "y": 89
+            "y": 112
           },
           "id": 86,
           "options": {
@@ -2327,7 +2940,7 @@
             "h": 14,
             "w": 5,
             "x": 19,
-            "y": 89
+            "y": 112
           },
           "id": 90,
           "options": {
@@ -2495,7 +3108,7 @@
             "h": 14,
             "w": 19,
             "x": 0,
-            "y": 103
+            "y": 126
           },
           "id": 87,
           "options": {
@@ -2658,7 +3271,7 @@
             "h": 14,
             "w": 5,
             "x": 19,
-            "y": 103
+            "y": 126
           },
           "id": 91,
           "options": {
@@ -2826,7 +3439,7 @@
             "h": 14,
             "w": 19,
             "x": 0,
-            "y": 117
+            "y": 140
           },
           "id": 94,
           "options": {
@@ -2987,7 +3600,7 @@
             "h": 14,
             "w": 5,
             "x": 19,
-            "y": 117
+            "y": 140
           },
           "id": 96,
           "options": {
@@ -3155,7 +3768,7 @@
             "h": 14,
             "w": 19,
             "x": 0,
-            "y": 131
+            "y": 154
           },
           "id": 88,
           "options": {
@@ -3191,7 +3804,7 @@
               "refId": "C"
             }
           ],
-          "title": "getBlock \u231b",
+          "title": "getBlock ⌛",
           "transformations": [
             {
               "id": "joinByField",
@@ -3316,7 +3929,7 @@
             "h": 14,
             "w": 5,
             "x": 19,
-            "y": 131
+            "y": 154
           },
           "id": 92,
           "options": {
@@ -3414,7 +4027,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 59
       },
       "id": 112,
       "panels": [
@@ -3532,7 +4145,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 37
+            "y": 60
           },
           "id": 101,
           "options": {
@@ -3650,7 +4263,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 37
+            "y": 60
           },
           "id": 102,
           "options": {
@@ -3698,7 +4311,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 45
+            "y": 68
           },
           "id": 103,
           "options": {
@@ -3768,7 +4381,7 @@
             "h": 8,
             "w": 6,
             "x": 0,
-            "y": 46
+            "y": 69
           },
           "id": 104,
           "options": {
@@ -3979,7 +4592,7 @@
             "h": 8,
             "w": 6,
             "x": 6,
-            "y": 46
+            "y": 69
           },
           "id": 105,
           "options": {
@@ -4190,7 +4803,7 @@
             "h": 8,
             "w": 6,
             "x": 12,
-            "y": 46
+            "y": 69
           },
           "id": 109,
           "options": {
@@ -4400,7 +5013,7 @@
             "h": 8,
             "w": 6,
             "x": 18,
-            "y": 46
+            "y": 69
           },
           "id": 107,
           "options": {
@@ -4610,7 +5223,7 @@
             "h": 8,
             "w": 6,
             "x": 0,
-            "y": 54
+            "y": 77
           },
           "id": 110,
           "options": {
@@ -4823,7 +5436,7 @@
             "h": 8,
             "w": 6,
             "x": 6,
-            "y": 54
+            "y": 77
           },
           "id": 108,
           "options": {

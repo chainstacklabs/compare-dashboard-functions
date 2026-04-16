@@ -89,7 +89,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
+        "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (⌛), which query historical blocks (1-2 days ago).\n\nℹ️ If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))\n```",
         "mode": "markdown"
       },
       "pluginVersion": "12.4.0-19938312174",
@@ -97,7 +97,7 @@
       "type": "text"
     },
     {
-      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))",
+      "description": "We evaluate RPC providers based on their speed (response time) and reliability (success rate) across three regions.\n\nScore = 1 / ((1/ResponseTime) × (SuccessRate³))",
       "gridPos": {
         "h": 1,
         "w": 5,
@@ -687,6 +687,303 @@
         "x": 0,
         "y": 25
       },
+      "id": 1006,
+      "title": "Block lag",
+      "type": "row",
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Measures slot number from getLatestBlockhash. The tip is the highest slot seen across all providers at each measurement. Lag = tip − provider slot. Lag ≤ 2 slots is treated as at-tip to filter measurement jitter (3-min sampling vs ~0.4s slot time).",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "blue",
+                "mode": "thresholds"
+              },
+              "decimals": 1,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "orange",
+                    "value": 80
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 90
+                  },
+                  {
+                    "color": "green",
+                    "value": 99
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 24,
+            "x": 0,
+            "y": 26
+          },
+          "id": 1007,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"}), 0) > bool 2)[$__range:$__interval]))",
+              "legendFormat": "{{provider}}",
+              "instant": true,
+              "refId": "A"
+            }
+          ],
+          "title": "% of time at tip",
+          "type": "stat"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Each row is a provider. Color shows lag severity over time: green = at tip (≤2 slots), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Slot lag. 0 = at the tip.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 3
+                  },
+                  {
+                    "color": "orange",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 19,
+            "x": 0,
+            "y": 30
+          },
+          "id": 1008,
+          "options": {
+            "alignValue": "left",
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"fra1\", response_status=\"success\"})",
+              "legendFormat": "{{provider}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Block lag timeline",
+          "type": "state-timeline"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "getLatestBlockhash success rate — the method used for block lag tracking.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "super-light-blue",
+                "mode": "continuous-YlBl"
+              },
+              "decimals": 2,
+              "mappings": [
+                {
+                  "options": {
+                    "from": 0.99991,
+                    "result": {
+                      "index": 0,
+                      "text": "100.0%"
+                    },
+                    "to": 1
+                  },
+                  "type": "range"
+                }
+              ],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 5,
+            "x": 19,
+            "y": 30
+          },
+          "id": 1009,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "textMode": "auto",
+            "wideLayout": true
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"fra1\", api_method=\"getLatestBlockhash\"}[$__range])) by (provider)",
+              "instant": true,
+              "range": false,
+              "legendFormat": "{{provider}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Success rate",
+          "type": "stat"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
       "id": 7,
       "panels": [
         {
@@ -768,7 +1065,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 24
+            "y": 41
           },
           "id": 3,
           "options": {
@@ -851,7 +1148,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 24
+            "y": 41
           },
           "id": 33,
           "options": {
@@ -977,7 +1274,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 57
+            "y": 74
           },
           "id": 20,
           "options": {
@@ -1060,7 +1357,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 57
+            "y": 74
           },
           "id": 34,
           "options": {
@@ -1186,7 +1483,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 65
+            "y": 82
           },
           "id": 52,
           "options": {
@@ -1269,7 +1566,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 65
+            "y": 82
           },
           "id": 53,
           "options": {
@@ -1395,7 +1692,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 73
+            "y": 90
           },
           "id": 21,
           "options": {
@@ -1478,7 +1775,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 73
+            "y": 90
           },
           "id": 60,
           "options": {
@@ -1604,7 +1901,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 81
+            "y": 98
           },
           "id": 63,
           "options": {
@@ -1687,7 +1984,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 81
+            "y": 98
           },
           "id": 64,
           "options": {
@@ -1813,7 +2110,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 89
+            "y": 106
           },
           "id": 50,
           "options": {
@@ -1849,7 +2146,7 @@
               "refId": "C"
             }
           ],
-          "title": "getBlock \u231b",
+          "title": "getBlock ⌛",
           "type": "timeseries"
         },
         {
@@ -1896,7 +2193,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 89
+            "y": 106
           },
           "id": 51,
           "options": {
@@ -1949,7 +2246,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 43
       },
       "id": 69,
       "panels": [
@@ -2066,7 +2363,7 @@
             "h": 8,
             "w": 20,
             "x": 0,
-            "y": 25
+            "y": 42
           },
           "id": 70,
           "options": {
@@ -2186,7 +2483,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 25
+            "y": 42
           },
           "id": 72,
           "options": {
@@ -2234,7 +2531,7 @@
             "h": 1,
             "w": 24,
             "x": 0,
-            "y": 33
+            "y": 50
           },
           "id": 78,
           "options": {
@@ -2304,7 +2601,7 @@
             "h": 8,
             "w": 6,
             "x": 0,
-            "y": 34
+            "y": 51
           },
           "id": 83,
           "options": {
@@ -2515,7 +2812,7 @@
             "h": 8,
             "w": 6,
             "x": 6,
-            "y": 34
+            "y": 51
           },
           "id": 86,
           "options": {
@@ -2726,7 +3023,7 @@
             "h": 8,
             "w": 6,
             "x": 12,
-            "y": 34
+            "y": 51
           },
           "id": 80,
           "options": {
@@ -2936,7 +3233,7 @@
             "h": 8,
             "w": 6,
             "x": 18,
-            "y": 34
+            "y": 51
           },
           "id": 81,
           "options": {
@@ -3147,7 +3444,7 @@
             "h": 8,
             "w": 6,
             "x": 6,
-            "y": 42
+            "y": 59
           },
           "id": 79,
           "options": {
@@ -3314,7 +3611,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 44
       },
       "id": 23,
       "panels": [
@@ -3399,7 +3696,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 22
+            "y": 39
           },
           "id": 24,
           "options": {
@@ -3543,7 +3840,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 22
+            "y": 39
           },
           "id": 25,
           "options": {
@@ -3687,7 +3984,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 482
+            "y": 499
           },
           "id": 26,
           "options": {
@@ -3831,7 +4128,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 482
+            "y": 499
           },
           "id": 54,
           "options": {
@@ -3975,7 +4272,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 487
+            "y": 504
           },
           "id": 65,
           "options": {
@@ -4119,7 +4416,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 487
+            "y": 504
           },
           "id": 55,
           "options": {
@@ -4193,7 +4490,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 45
       },
       "id": 999,
       "panels": [
@@ -4278,7 +4575,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 22
+            "y": 39
           },
           "id": 1000,
           "options": {
@@ -4422,7 +4719,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 22
+            "y": 39
           },
           "id": 1001,
           "options": {
@@ -4566,7 +4863,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 482
+            "y": 499
           },
           "id": 1002,
           "options": {
@@ -4710,7 +5007,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 482
+            "y": 499
           },
           "id": 1003,
           "options": {
@@ -4854,7 +5151,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 487
+            "y": 504
           },
           "id": 1004,
           "options": {
@@ -4998,7 +5295,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 487
+            "y": 504
           },
           "id": 1005,
           "options": {
@@ -5072,7 +5369,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 46
       },
       "id": 43,
       "panels": [
@@ -5157,7 +5454,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 23
+            "y": 40
           },
           "id": 44,
           "options": {
@@ -5301,7 +5598,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 23
+            "y": 40
           },
           "id": 45,
           "options": {
@@ -5445,7 +5742,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 468
+            "y": 485
           },
           "id": 58,
           "options": {
@@ -5589,7 +5886,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 468
+            "y": 485
           },
           "id": 46,
           "options": {
@@ -5733,7 +6030,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 473
+            "y": 490
           },
           "id": 66,
           "options": {
@@ -5877,7 +6174,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 473
+            "y": 490
           },
           "id": 56,
           "options": {
@@ -5951,7 +6248,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 47
       },
       "id": 32,
       "panels": [
@@ -6036,7 +6333,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 370
+            "y": 387
           },
           "id": 47,
           "options": {
@@ -6180,7 +6477,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 370
+            "y": 387
           },
           "id": 49,
           "options": {
@@ -6324,7 +6621,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 454
+            "y": 471
           },
           "id": 59,
           "options": {
@@ -6468,7 +6765,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 454
+            "y": 471
           },
           "id": 48,
           "options": {
@@ -6612,7 +6909,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 459
+            "y": 476
           },
           "id": 67,
           "options": {
@@ -6756,7 +7053,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 459
+            "y": 476
           },
           "id": 57,
           "options": {

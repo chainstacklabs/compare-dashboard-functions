@@ -60,3 +60,4 @@ python_version = "3.9"
 strict = true
 ignore_missing_imports = true
 disallow_untyped_defs = true
+explicit_package_bases = true

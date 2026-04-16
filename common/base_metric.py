@@ -25,7 +25,7 @@ class MetricValue:
 
 
 class BaseMetric(ABC):
-    """Base class for collecting and formatting metrics in single-invocation environments."""
+    """Base class for metric collection in single-invocation environments."""
 
     def __init__(
         self,
@@ -36,6 +36,7 @@ class BaseMetric(ABC):
         ws_endpoint: Optional[str] = None,
         http_endpoint: Optional[str] = None,
     ) -> None:
+        """Initialise metric with handler, name, labels, config, and endpoints."""
         self.metric_id = str(uuid.uuid4())
         self.metric_name: str = metric_name
         self.labels: MetricLabels = labels
@@ -116,7 +117,8 @@ class BaseMetric(ABC):
             status_code: int = error.status
             if status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
                 logging.warning(
-                    f"Ignoring HTTP error [{status_code}] for {self.labels.get_prometheus_labels()}"
+                    f"Ignoring HTTP error [{status_code}] for "
+                    f"{self.labels.get_prometheus_labels()}"
                 )
                 return  # Skip metric submission for ignored errors
 
@@ -124,7 +126,8 @@ class BaseMetric(ABC):
             status_code = error.status_code
             if status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
                 logging.warning(
-                    f"Ignoring WebSocket connection error [{status_code}] for {self.labels.get_prometheus_labels()}"
+                    f"Ignoring WebSocket connection error [{status_code}] for "
+                    f"{self.labels.get_prometheus_labels()}"
                 )
                 return  # Skip metric submission for ignored errors
 
@@ -135,6 +138,7 @@ class BaseMetric(ABC):
         error_details = getattr(error, "error_msg", str(error))
 
         logging.error(
-            f"Metric error [{error_type}] {self.labels.get_prometheus_labels()}: {error_details}",
+            f"Metric error [{error_type}] {self.labels.get_prometheus_labels()}: "
+            f"{error_details}",
             exc_info=True,
         )

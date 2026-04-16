@@ -1,6 +1,27 @@
 """TON (The Open Network) metrics implementation for HTTP endpoints."""
 
+from typing import Any
+
 from common.metric_types import HttpCallLatencyMetricBase
+
+
+class HTTPGetMasterchainInfoLatencyMetric(HttpCallLatencyMetricBase):
+    """getMasterchainInfo latency; captures seqno for lag tracking."""
+
+    @property
+    def method(self) -> str:
+        """Return the RPC method name."""
+        return "getMasterchainInfo"
+
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Capture result.last.seqno for block lag tracking."""
+        result = json_response.get("result")
+        if isinstance(result, dict):
+            last = result.get("last")
+            if isinstance(last, dict):
+                seqno = last.get("seqno")
+                if isinstance(seqno, int):
+                    self._captured_block_number = seqno
 
 
 class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
@@ -8,6 +29,7 @@ class HTTPRunGetMethodLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "runGetMethod"
 
     @staticmethod
@@ -30,6 +52,7 @@ class HTTPGetBlockHeaderLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBlockHeader"
 
     @staticmethod
@@ -53,6 +76,7 @@ class HTTPGetWalletTxsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getWalletInformation"
 
     @staticmethod
@@ -66,6 +90,7 @@ class HTTPGetAddressBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getAddressBalance"
 
     @staticmethod
@@ -79,6 +104,7 @@ class HTTPGetBlockTxsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBlockTransactions"
 
     @staticmethod

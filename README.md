@@ -181,9 +181,7 @@ For local development, create `endpoints.json` in the project root. For Vercel d
 ```bash
 git clone https://github.com/chainstacklabs/chainstack-rpc-dashboard-functions.git
 cd chainstack-rpc-dashboard-functions
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+uv sync
 ```
 
 ### Local Configuration

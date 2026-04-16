@@ -1,3 +1,5 @@
+"""Vercel cron entry point for BNB Smart Chain metrics collection."""
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.bnbsc import (
@@ -28,4 +30,6 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for BNB Smart Chain metric collection."""
+
     metrics_handler = MetricsHandler("BNB", METRICS)

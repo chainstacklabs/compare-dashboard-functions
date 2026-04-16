@@ -1,12 +1,13 @@
 """Default configuration."""
 
 import os
+from typing import ClassVar
 
 
 class MetricsServiceConfig:
     """Default configuration for metrics collection and processing."""
 
-    IGNORED_HTTP_ERRORS = [
+    IGNORED_HTTP_ERRORS: ClassVar[list[int]] = [
         403,  # Forbidden - usually related to plan restrictions
         429,  # Too Many Requests - rate limit exceeded
         401,  # Unauthorized - if authentication failure is plan-related
@@ -32,7 +33,7 @@ class MetricsServiceConfig:
     )  # System env var, standard name
 
     # Block offset configuration (N blocks back from latest)
-    BLOCK_OFFSET_RANGES = {  # noqa: RUF012
+    BLOCK_OFFSET_RANGES: ClassVar[dict[str, tuple[int, int]]] = {
         "ethereum": (7200, 10000),
         "base": (7200, 10000),
         "solana": (432000, 648000),

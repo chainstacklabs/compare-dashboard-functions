@@ -34,6 +34,7 @@ class MissingEndpointsError(Exception):
     """Raised when required blockchain endpoints are not found."""
 
     def __init__(self, missing_chains: set[str]) -> None:
+        """Initialise with the set of chains that have no configured endpoint."""
         self.missing_chains: set[str] = missing_chains
         chains: str = ", ".join(missing_chains)
         super().__init__(f"Missing Chainstack endpoints for: {chains}")
@@ -42,12 +43,13 @@ class MissingEndpointsError(Exception):
 class StateUpdateManager:
     """Manages the collection, processing, and storage of blockchain state data.
 
-    This class orchestrates the retrieval of blockchain state data from configured endpoints,
-    handles fallback to previous data in case of errors, and updates the centralized blob storage.
-    It enforces provider and region filtering to optimize RPC calls and ensures data consistency.
+    Orchestrates state retrieval from configured endpoints, handles fallback to
+    previous data on errors, and writes the result to blob storage.
+    Enforces provider and region filtering to minimise RPC call volume.
     """
 
     def __init__(self) -> None:
+        """Initialise blob storage config from environment variables."""
         store_id: str | None = os.getenv("STORE_ID")
         token: str | None = os.getenv("VERCEL_BLOB_TOKEN")
         if not all([store_id, token]):
@@ -142,6 +144,7 @@ class StateUpdateManager:
         }
 
     async def update(self) -> str:
+        """Collect fresh blockchain state and persist it to blob storage."""
         if os.getenv("VERCEL_REGION") not in ALLOWED_REGIONS:
             return "Region not authorized for state updates"
 
@@ -177,6 +180,8 @@ class StateUpdateManager:
 
 
 class handler(BaseHTTPRequestHandler):
+    """Vercel HTTP handler for triggering blockchain state updates."""
+
     def _check_auth(self) -> bool:
         if os.getenv("SKIP_AUTH", "").lower() == "true":
             return True
@@ -184,6 +189,7 @@ class handler(BaseHTTPRequestHandler):
         return token == f"Bearer {os.getenv('CRON_SECRET', '')}"
 
     def do_GET(self) -> None:
+        """Handle GET request: authenticate then run state update."""
         if not self._check_auth():
             self.send_response(401)
             self.end_headers()

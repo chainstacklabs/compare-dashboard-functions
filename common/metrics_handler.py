@@ -20,6 +20,7 @@ class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
 
     def __init__(self, blockchain: str, metrics: list[tuple[type, str]]) -> None:
+        """Initialise handler with blockchain name and metric class list."""
         self._instances: list[BaseMetric] = []
         self.blockchain: str = blockchain
         self.metrics: list[tuple[type, str]] = metrics
@@ -37,6 +38,22 @@ class MetricsHandler:
             "metric_max_latency": MetricsServiceConfig.METRIC_MAX_LATENCY,
         }
 
+    def _emit_block_numbers(self) -> None:
+        """Emit raw block numbers for each instance that captured one.
+
+        Stores the block number as metric_type="block_number" so Grafana can
+        compute relative lag at query time using max(block_number) - provider_value.
+        Only HTTP JSON-RPC metrics (HttpCallLatencyMetricBase subclasses) carry
+        the _captured_block_number attribute; others are skipped via getattr.
+
+        Returns:
+            None
+        """
+        for instance in self._instances:
+            block_number = getattr(instance, "_captured_block_number", None)
+            if block_number is not None:
+                instance.update_metric_value(block_number, "block_number")
+
     def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""
         metrics = []
@@ -46,6 +63,7 @@ class MetricsHandler:
         return metrics
 
     def get_metrics_text(self) -> str:
+        """Returns all metrics as a newline-joined Influx line protocol string."""
         current_time = int(time.time_ns())
         metrics: list[str] = self.get_metrics_influx_format()
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
@@ -53,6 +71,7 @@ class MetricsHandler:
     async def collect_metrics(
         self, provider: dict, config: dict, state_data: dict
     ) -> None:
+        """Create and run all metric instances for a single provider."""
         metric_config = MetricConfig(
             timeout=self.grafana_config["metric_request_timeout"],
             max_latency=self.grafana_config["metric_max_latency"],
@@ -76,6 +95,7 @@ class MetricsHandler:
         await asyncio.gather(*(m.collect_metric() for m in metrics))
 
     async def push_to_grafana(self, metrics_text: str) -> None:
+        """Push metrics text to Grafana via HTTP with retry logic."""
         if not all(
             [
                 self.grafana_config["url"],
@@ -125,6 +145,8 @@ class MetricsHandler:
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)
 
+            self._emit_block_numbers()
+
             metrics_text: str = self.get_metrics_text()
             if metrics_text:
                 await self.push_to_grafana(metrics_text)
@@ -144,6 +166,7 @@ class BaseVercelHandler(BaseHTTPRequestHandler):
     metrics_handler: MetricsHandler = None  # type: ignore
 
     def validate_token(self) -> bool:
+        """Return True if the Authorization header matches the CRON_SECRET."""
         auth_token: str | None = self.headers.get("Authorization")
         expected_token: str | None = os.environ.get(
             "CRON_SECRET"
@@ -151,6 +174,7 @@ class BaseVercelHandler(BaseHTTPRequestHandler):
         return auth_token == f"Bearer {expected_token}"
 
     def do_GET(self) -> None:
+        """Handle GET request: authenticate, run metrics, respond with results."""
         skip_auth: bool = os.environ.get("SKIP_AUTH", "false").lower() == "true"
         if not skip_auth and not self.validate_token():
             self.send_response(401)

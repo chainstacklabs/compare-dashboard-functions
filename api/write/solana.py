@@ -1,4 +1,6 @@
-import os  # noqa: D100
+"""Vercel cron entry point for Solana transaction landing rate metrics."""
+
+import os
 
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
@@ -16,4 +18,6 @@ METRICS: list[tuple[type[SolanaLandingMetric], str]] = (
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for Solana landing rate metric collection."""
+
     metrics_handler = MetricsHandler("Solana", METRICS)

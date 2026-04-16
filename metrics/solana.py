@@ -1,5 +1,7 @@
 """Solana metrics implementation for HTTP endpoints."""
 
+from typing import Any
+
 from common.metric_types import HttpCallLatencyMetricBase
 
 
@@ -8,6 +10,7 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "simulateTransaction"
 
     @staticmethod
@@ -15,16 +18,20 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
         """Get parameters for simulating a token transfer."""
         return [
             "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEDArczbMia1tLmq7zz4DinMNN0pJ1JtLdqIJPUw3YrGCzYAMHBsgN27lcgB6H2WQvFgyZuJYHa46puOQo9yQ8CVQbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCp20C7Wj2aiuk5TReAXo+VTVg8QTHjs0UjNMMKCvpzZ+ABAgEBARU=",
-            # The transaction recent blockhash will be replaced with the most recent blockhash.
+            # blockhash is replaced with the latest at send time
             {"encoding": "base64", "replaceRecentBlockhash": True},
         ]
 
 
 class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the getLatestBlockhash method."""
+    """Collects call latency for the getLatestBlockhash method.
+
+    Also captures the current slot from the response context for block lag tracking.
+    """
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getLatestBlockhash"
 
     @staticmethod
@@ -32,12 +39,23 @@ class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
         """Get empty parameters list for blockhash retrieval."""
         return []
 
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Capture slot from result.context.slot for block lag tracking."""
+        result = json_response.get("result")
+        if isinstance(result, dict):
+            context = result.get("context")
+            if isinstance(context, dict):
+                slot = context.get("slot")
+                if isinstance(slot, int):
+                    self._captured_block_number = slot
+
 
 class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):
     """Collects call latency for the getTransaction method."""
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getTransaction"
 
     @staticmethod
@@ -59,6 +77,7 @@ class HTTPGetBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBalance"
 
     @staticmethod
@@ -72,6 +91,7 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getBlock"
 
     @staticmethod
@@ -98,6 +118,7 @@ class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "getProgramAccounts"
 
     @staticmethod

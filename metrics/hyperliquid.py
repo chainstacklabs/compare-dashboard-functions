@@ -4,7 +4,7 @@ For Hyperliquid Info API metrics (clearinghouseState, openOrders, etc.),
 see metrics.hyperliquid_info module.
 """
 
-from common.metric_types import HttpCallLatencyMetricBase
+from common.metric_types import EVMBlockNumberLatencyMetric, HttpCallLatencyMetricBase
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
@@ -12,6 +12,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_call"
 
     @staticmethod
@@ -31,6 +32,7 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getTransactionReceipt"
 
     @staticmethod
@@ -49,6 +51,7 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getBalance"
 
     @staticmethod
@@ -61,17 +64,8 @@ class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
         ]  # Only latest block is supported
 
 
-class HTTPBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the `eth_blockNumber` method."""
-
-    @property
-    def method(self) -> str:
-        return "eth_blockNumber"
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Get empty parameter list for block number query."""
-        return []
+class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):
+    """eth_blockNumber latency; captures raw block number for lag tracking."""
 
 
 class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
@@ -79,6 +73,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
 
     @property
     def method(self) -> str:
+        """Return the RPC method name."""
         return "eth_getLogs"
 
     @staticmethod
@@ -100,7 +95,7 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
                 "toBlock": to_block_hex,
                 "address": "0x5555555555555555555555555555555555555555",  # Wrapped HYPE
                 # "topics": [
-                #    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # Withdrawal event
+                #    " 0x7fcf532c15f0a6db0bd6d0e038bea71d30d808c7d98cb3bf7268a95bf5081b65"  # noqa: E501
                 # ],
             }
         ]

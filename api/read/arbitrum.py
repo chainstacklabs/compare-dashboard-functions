@@ -1,3 +1,5 @@
+"""Vercel cron entry point for Arbitrum metrics collection."""
+
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.arbitrum import (
@@ -28,4 +30,6 @@ METRICS = [
 
 
 class handler(BaseVercelHandler):
+    """Vercel HTTP handler for Arbitrum metric collection."""
+
     metrics_handler = MetricsHandler("Arbitrum", METRICS)

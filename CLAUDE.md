@@ -6,15 +6,15 @@ Python-based Vercel Functions that measure RPC node response times across multip
 
 ```bash
 # Code quality (run before completing any task)
-black .
-ruff check .
-ruff check . --fix
-mypy .
+uvx black .
+uvx ruff check .
+uvx ruff check . --fix
+uvx mypy .
 
 # Local testing
-python tests/test_api_read.py    # Read metrics (latency)
-python tests/test_api_write.py   # Write metrics (Solana landing rate)
-python tests/test_update_state.py  # State update via blob storage
+uv run python tests/test_api_read.py    # Read metrics (latency)
+uv run python tests/test_api_write.py   # Write metrics (Solana landing rate)
+uv run python tests/test_update_state.py  # State update via blob storage
 ```
 
 ## Environment Setup
@@ -59,6 +59,10 @@ tests/         # Local test scripts (not unit tests)
 **Error handling:** HTTP 401/403/404/429 errors are silently ignored (plan restrictions / rate limits). Other errors zero the metric and log with `mark_failure()`.
 
 **Metrics output:** Influx line protocol — `metric_name,tag1=v1,tag2=v2 value=X`
+
+## Subprojects
+
+**`dashboards/`** — isolated subproject for managing Grafana dashboard JSON definitions. Not deployed to Vercel (Vercel-ignored). Has its own `grafana_sync.py` CLI and `README.md`. Dependencies (`requests`, `python-dotenv`) are self-contained and not part of the main `pyproject.toml`. Do not modify this directory as part of Vercel function work.
 
 ## Gotchas
 

@@ -443,7 +443,6 @@
             "cellOptions": {
               "type": "auto"
             },
-            "filterable": true,
             "footer": {
               "reducers": []
             },
@@ -481,19 +480,83 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "1"
+              "options": "Provider"
             },
             "properties": [
               {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "Chainstack": {
+                        "index": 0,
+                        "text": "Chainstack-Growth"
+                      },
+                      "dRPC": {
+                        "index": 1,
+                        "text": "dRPC-Growth"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
                 "id": "custom.width",
                 "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Region"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "fra1": {
+                        "index": 0,
+                        "text": "EU"
+                      },
+                      "sfo1": {
+                        "index": 2,
+                        "text": "US West"
+                      },
+                      "sin1": {
+                        "index": 1,
+                        "text": "SG"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
               },
+              {
+                "id": "custom.width",
+                "value": 80
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SR"
+            },
+            "properties": [
               {
                 "id": "custom.cellOptions",
                 "value": {
                   "mode": "basic",
                   "type": "gauge"
                 }
+              },
+              {
+                "id": "custom.width",
+                "value": 120
               }
             ]
           }
@@ -520,13 +583,12 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=~\"fra1|sfo1|sin1\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+          "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
           "interval": "",
-          "legendFormat": "{{provider}} - {{source_region}}",
-          "range": false,
           "refId": "A",
           "useBackend": false
         }
@@ -534,61 +596,22 @@
       "title": "Success rate",
       "transformations": [
         {
-          "id": "joinByField",
-          "options": {
-            "byField": "Time",
-            "mode": "outer"
-          }
-        },
-        {
           "id": "organize",
           "options": {
             "excludeByName": {
               "Time": true
             },
-            "includeByName": {},
             "indexByName": {
-              "Alchemy-Growth - fra1": 1,
-              "Alchemy-Growth - hnd1": 2,
-              "Alchemy-Growth - sfo1": 3,
-              "Chainstack - fra1": 4,
-              "Chainstack - hnd1": 5,
-              "Chainstack - sfo1": 6,
-              "Quicknode-Growth - fra1": 7,
-              "Quicknode-Growth - hnd1": 8,
-              "Quicknode-Growth - sfo1": 9,
-              "Time": 0,
-              "dRPC - fra1": 10,
-              "dRPC - hnd1": 11,
-              "dRPC - sfo1": 12
+              "Value": 2,
+              "provider": 0,
+              "source_region": 1
             },
             "renameByName": {
-              "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-              "Alchemy-Growth - kix1": "Alchemy-Growth - JP",
-              "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-              "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-              "Chainstack - fra1": "Chainstack-Growth - EU",
-              "Chainstack - hnd1": "Chainstack-Growth - JP",
-              "Chainstack - kix1": "Chainstack-Growth - JP",
-              "Chainstack - sfo1": "Chainstack-Growth - US West",
-              "Chainstack - sin1": "Chainstack-Growth - SG",
-              "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-              "Quicknode-Growth - kix1": "Quicknode-Growth - JP",
-              "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-              "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-              "dRPC - fra1": "dRPC-Growth - EU",
-              "dRPC - hnd1": "dRPC-Growth - JP",
-              "dRPC - kix1": "dRPC-Growth - JP",
-              "dRPC - sfo1": "dRPC-Growth - US West",
-              "dRPC - sin1": "dRPC-Growth - SG"
+              "Value": "SR",
+              "provider": "Provider",
+              "source_region": "Region"
             }
           }
-        },
-        {
-          "id": "transpose",
-          "options": {}
         }
       ],
       "type": "table"
@@ -1369,7 +1392,549 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 35
+      },
+      "id": 200,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Each row is a provider-region. Lag is relative to the best provider in the same region. Color shows severity: green = at tip (\u22642 slots), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20).",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "axisPlacement": "auto",
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 3
+                  },
+                  {
+                    "color": "orange",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Alchemy-Growth - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Alchemy-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Helius-Developer - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Helius-Developer - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Quicknode-Growth - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Quicknode-Growth - US"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - fra1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - EU"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - sin1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - SG"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC - sfo1"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth - US"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 18,
+            "x": 0,
+            "y": 36
+          },
+          "id": 201,
+          "options": {
+            "alignValue": "left",
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.1.0-24455754975",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", response_status=\"success\"}))",
+              "legendFormat": "{{provider}} - {{source_region}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Block lag timeline",
+          "type": "state-timeline"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Block lag tracking summary. % at Tip = percentage of time slot lag \u2264 2 (tip is best provider in same region). Success Rate = getLatestBlockhash reliability.",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Provider"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 108
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 60
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "% at Tip"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": 0
+                        },
+                        {
+                          "color": "orange",
+                          "value": 80
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 90
+                        },
+                        {
+                          "color": "green",
+                          "value": 99
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "type": "color-text"
+                    }
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 85
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SR"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 68
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 6,
+            "x": 18,
+            "y": 36
+          },
+          "id": 202,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "% at Tip"
+              }
+            ]
+          },
+          "pluginVersion": "13.1.0-24455754975",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "100 * (1 - avg_over_time((clamp_min(-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", response_status=\"success\"})), 0) > bool 2)[$__range:1m]))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", response_status=\"success\"}[$__range])) by (provider, source_region)\n/\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\"}[$__range])) by (provider, source_region)",
+              "format": "table",
+              "instant": true,
+              "refId": "B"
+            }
+          ],
+          "title": "Block lag summary",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value #A": 2,
+                  "Value #B": 3,
+                  "provider": 0,
+                  "source_region": 1
+                },
+                "renameByName": {
+                  "Value #A": "% at Tip",
+                  "Value #B": "SR",
+                  "provider": "Provider",
+                  "source_region": "Region"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "% at Tip"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Block lag",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 36
       },
       "id": 99,
       "panels": [
@@ -1437,7 +2002,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 35
           },
@@ -1445,7 +2010,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1549,12 +2113,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -1562,45 +2122,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.9999,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -1608,8 +2227,8 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 35
           },
           "id": 83,
@@ -1618,93 +2237,40 @@
             "showHeader": false,
             "sortBy": []
           },
-          "pluginVersion": "12.4.0-19576184216",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_call\"}[$__range])) by (provider, source_region)",
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -1773,7 +2339,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 47
           },
@@ -1781,7 +2347,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1885,12 +2450,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -1898,45 +2459,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.9999,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -1944,102 +2564,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 47
           },
           "id": 72,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19576184216",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getBalance\"}[$__range])) by (provider, source_region)",
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -2108,7 +2676,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 59
           },
@@ -2116,7 +2684,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2220,12 +2787,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -2233,45 +2796,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.9999,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -2279,102 +2901,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 59
           },
           "id": 98,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19508498046",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -2443,7 +3013,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 71
           },
@@ -2451,7 +3021,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2555,12 +3124,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -2568,45 +3133,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.999999,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -2614,102 +3238,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 71
           },
           "id": 74,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19508498046",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -2778,7 +3350,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 83
           },
@@ -2786,7 +3358,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2890,12 +3461,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -2903,45 +3470,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.999901,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -2949,102 +3575,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 83
           },
           "id": 76,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19508498046",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider, source_region)",
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -3113,7 +3687,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 95
           },
@@ -3121,7 +3695,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -3227,12 +3800,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -3240,45 +3809,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.999901,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -3286,102 +3914,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 95
           },
           "id": 78,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19508498046",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -3450,7 +4026,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 107
           },
@@ -3458,7 +4034,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -3562,12 +4137,8 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -3575,45 +4146,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.999901,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -3621,102 +4251,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 107
           },
           "id": 80,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19508498046",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"
@@ -3785,7 +4363,7 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 19,
+            "w": 18,
             "x": 0,
             "y": 119
           },
@@ -3793,7 +4371,6 @@
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -3894,15 +4471,11 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Success rate of events where block delay has been successfully calculated and does not exceed 35 seconds.",
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
-              },
               "custom": {
-                "align": "left",
+                "align": "auto",
                 "cellOptions": {
                   "type": "auto"
                 },
@@ -3910,45 +4483,104 @@
                   "reducers": []
                 },
                 "inspect": false,
-                "wrapHeaderText": false
+                "minWidth": 110
               },
-              "decimals": 2,
-              "mappings": [
-                {
-                  "options": {
-                    "from": 0.999901,
-                    "result": {
-                      "index": 0,
-                      "text": "100.0%"
-                    },
-                    "to": 1
-                  },
-                  "type": "range"
-                }
-              ],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "1"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
                     "id": "custom.width",
-                    "value": 70
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 72
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
@@ -3956,102 +4588,50 @@
           },
           "gridPos": {
             "h": 12,
-            "w": 5,
-            "x": 19,
+            "w": 6,
+            "x": 18,
             "y": 119
           },
           "id": 82,
           "options": {
             "cellHeight": "sm",
-            "showHeader": false
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19508498046",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
               "exemplar": false,
               "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", api_method=\"eth_subscribe\"}[$__range])) by (provider, source_region)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
+              "format": "table",
               "instant": true,
-              "interval": "",
-              "legendFormat": "{{provider}} - {{source_region}}",
-              "range": false,
-              "refId": "A",
-              "useBackend": false
+              "refId": "A"
             }
           ],
           "title": "Success rate",
           "transformations": [
-            {
-              "id": "joinByField",
-              "options": {
-                "byField": "Time",
-                "mode": "outer"
-              }
-            },
             {
               "id": "organize",
               "options": {
                 "excludeByName": {
                   "Time": true
                 },
-                "includeByName": {},
                 "indexByName": {
-                  "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - hnd1": 4,
-                  "Alchemy-Growth - kix1": 3,
-                  "Alchemy-Growth - sfo1": 5,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 6,
-                  "Chainstack - hnd1": 9,
-                  "Chainstack - kix1": 8,
-                  "Chainstack - sfo1": 10,
-                  "Chainstack - sin1": 7,
-                  "Quicknode-Growth - fra1": 11,
-                  "Quicknode-Growth - hnd1": 14,
-                  "Quicknode-Growth - kix1": 13,
-                  "Quicknode-Growth - sfo1": 15,
-                  "Quicknode-Growth - sin1": 12,
-                  "Time": 0,
-                  "dRPC - fra1": 16,
-                  "dRPC - hnd1": 19,
-                  "dRPC - kix1": 18,
-                  "dRPC - sfo1": 20,
-                  "dRPC - sin1": 17
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
                 },
                 "renameByName": {
-                  "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
-                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
-                  "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - hnd1": "Chainstack-Growth - JP",
-                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
-                  "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
-                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - hnd1": "dRPC-Growth - JP",
-                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "Value": "Success Rate",
+                  "provider": "Provider",
+                  "source_region": "Region"
                 }
               }
-            },
-            {
-              "id": "transpose",
-              "options": {}
             }
           ],
           "type": "table"

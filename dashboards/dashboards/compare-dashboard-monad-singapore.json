@@ -825,6 +825,344 @@
         "x": 0,
         "y": 25
       },
+      "id": 1100,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Each row is a provider. Color shows lag severity over time: green = at tip (\u22642 slots), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Slot lag. 0 = at the tip.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "axisPlacement": "auto",
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 3
+                  },
+                  {
+                    "color": "orange",
+                    "value": 10
+                  },
+                  {
+                    "color": "red",
+                    "value": 20
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 18,
+            "x": 0,
+            "y": 30
+          },
+          "id": 1101,
+          "options": {
+            "alignValue": "left",
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", source_region=\"sin1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", source_region=\"sin1\", response_status=\"success\"})",
+              "legendFormat": "{{provider}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Block lag timeline",
+          "type": "state-timeline"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
+              },
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Provider"
+                },
+                "properties": [
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 108
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "% at Tip"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": 0
+                        },
+                        {
+                          "color": "orange",
+                          "value": 80
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 90
+                        },
+                        {
+                          "color": "green",
+                          "value": 99
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "type": "color-text"
+                    }
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 85
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SR"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 68
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 14,
+            "w": 6,
+            "x": 18,
+            "y": 30
+          },
+          "id": 1102,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "% at Tip"
+              }
+            ]
+          },
+          "pluginVersion": "13.0.0-23605486576",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", source_region=\"sin1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Monad\", source_region=\"sin1\", response_status=\"success\"}), 0) > bool 2)[$__range:1m]))",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", response_status=\"success\"}[$__range])) by (provider)\n/\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "B"
+            }
+          ],
+          "title": "Block lag summary",
+          "transformations": [
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value #A": 1,
+                  "Value #B": 2,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value #A": "% at Tip",
+                  "Value #B": "SR",
+                  "provider": "Provider"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "% at Tip"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Block lag",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 42
+      },
       "id": 7,
       "panels": [
         {
@@ -905,16 +1243,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 24
+            "y": 41
           },
           "id": 3,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -955,85 +1292,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 24
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 41
           },
           "id": 33,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19576184216.patch1",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_call\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_call\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1117,16 +1500,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 32
+            "y": 53
           },
           "id": 21,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1167,85 +1549,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 32
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 53
           },
           "id": 35,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19576184216.patch1",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getBalance\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getBalance\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1329,16 +1757,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 40
+            "y": 65
           },
           "id": 62,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1379,85 +1806,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 40
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 65
           },
           "id": 63,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19576184216.patch1",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getLogs\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getLogs\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1537,16 +2010,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 48
+            "y": 77
           },
           "id": 43,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1587,85 +2059,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 48
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 77
           },
           "id": 44,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19576184216.patch1",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getTransactionReceipt\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1745,16 +2263,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 56
+            "y": 89
           },
           "id": 45,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -1795,85 +2312,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 56
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 89
           },
           "id": 46,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceTransaction\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -1957,16 +2520,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 64
+            "y": 101
           },
           "id": 20,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2007,85 +2569,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 64
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 101
           },
           "id": 34,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_blockNumber\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_blockNumber\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -2165,16 +2773,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 72
+            "y": 113
           },
           "id": 47,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2215,85 +2822,131 @@
           "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 72
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 113
           },
           "id": 48,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceBlockByNumber\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "datasource": {
@@ -2373,16 +3026,15 @@
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 20,
+            "h": 12,
+            "w": 18,
             "x": 0,
-            "y": 80
+            "y": 125
           },
           "id": 22,
           "options": {
             "legend": {
               "calcs": [
-                "min",
                 "p95",
                 "max"
               ],
@@ -2420,88 +3072,134 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Success rate of events where block delay has been successfully calculated and does not exceed 35 seconds.",
+          "description": "Success rate of requests where response has 200 status code and contains no error field in JSON RPC response.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
                     "color": "green",
                     "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Growth"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Success Rate"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 80
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 125
           },
           "id": 36,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "13.0.0-23605486576",
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "grafanacloud-prom"
               },
-              "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_subscribe\"} >= 0)[$__range:$__interval])) by (provider)",
-              "fullMetaSearch": false,
-              "includeNullMetadata": true,
-              "instant": false,
-              "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
-              "refId": "A",
-              "useBackend": false
+              "exemplar": false,
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Monad\", source_region=\"sin1\", api_method=\"eth_subscribe\"}[$__range])) by (provider)",
+              "format": "table",
+              "instant": true,
+              "refId": "A"
             }
           ],
           "title": "Success rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            }
+          ],
+          "type": "table"
         }
       ],
       "title": "Historical data",
@@ -2513,7 +3211,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 43
       },
       "id": 23,
       "panels": [
@@ -3695,7 +4393,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 27
+        "y": 44
       },
       "id": 999,
       "panels": [
@@ -4877,7 +5575,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 45
       },
       "id": 32,
       "panels": [

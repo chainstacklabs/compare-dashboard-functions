@@ -1629,7 +1629,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"} >= 0)[$__range:1m])) by (provider, source_region)\n/\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"} >= 0)[$__range:1m])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"}[$__range])) by (provider, source_region)\n/\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "B"

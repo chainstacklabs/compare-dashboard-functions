@@ -957,7 +957,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"sfo1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"sfo1\", response_status=\"success\"}), 0) > bool 2)[$__range:$__interval]))",
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"sfo1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Solana\", source_region=\"sfo1\", response_status=\"success\"}), 0) > bool 2)[$__range:1m]))",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -969,7 +969,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\n/\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"sfo1\"} >= 0)[$__range:$__interval])) by (provider)",
+              "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"sfo1\", response_status=\"success\"} >= 0)[$__range:1m])) by (provider)\n/\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", source_region=\"sfo1\"} >= 0)[$__range:1m])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "B"

@@ -254,7 +254,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "decimals": 2
         },
         "overrides": [
           {
@@ -314,7 +315,21 @@
           "useBackend": false
         }
       ],
-      "type": "gauge"
+      "type": "gauge",
+      "transformations": [
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": false,
+                "field": "provider"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "gridPos": {

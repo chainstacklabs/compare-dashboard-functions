@@ -579,7 +579,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} > 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} > 0)[$__range:$__interval])) by (provider, source_region)",
+          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,

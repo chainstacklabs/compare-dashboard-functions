@@ -1249,7 +1249,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Each row is a provider-region. Lag is relative to the best provider in the same region. Color shows severity: green = at tip (\u22642 blocks), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20).",
+          "description": "Each row is a provider, aggregated across regions by worst region at each moment (most behind = shown). Lag is relative to the best provider in the same region. Color shows severity: green = at tip (\u22642 blocks), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20), grey = no data.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1268,6 +1268,19 @@
                 "spanNulls": false
               },
               "decimals": 0,
+              "mappings": [
+                {
+                  "options": {
+                    "match": "null",
+                    "result": {
+                      "color": "grey",
+                      "index": 0,
+                      "text": "No data"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -1294,96 +1307,24 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack - fra1"
+                  "options": "Chainstack"
                 },
                 "properties": [
                   {
                     "id": "displayName",
-                    "value": "Chainstack-Growth - EU"
+                    "value": "Chainstack-Growth"
                   }
                 ]
               },
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack - sin1"
+                  "options": "dRPC"
                 },
                 "properties": [
                   {
                     "id": "displayName",
-                    "value": "Chainstack-Growth - SG"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "dRPC - fra1"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "dRPC-Growth - EU"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "dRPC - sin1"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "dRPC-Growth - SG"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Quicknode-Growth - fra1"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "Quicknode-Growth - EU"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Quicknode-Growth - sin1"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "Quicknode-Growth - SG"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "TonCenter-WithAPIKey - fra1"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "TonCenter-WithAPIKey - EU"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "TonCenter-WithAPIKey - sin1"
-                },
-                "properties": [
-                  {
-                    "id": "displayName",
-                    "value": "TonCenter-WithAPIKey - SG"
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -1424,8 +1365,8 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"}))",
-              "legendFormat": "{{provider}} - {{source_region}}",
+              "expr": "max by (provider) (-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"})))",
+              "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
             }
@@ -1438,7 +1379,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Block lag tracking summary. % at Tip = percentage of time seqno lag \u2264 2 (tip is best provider in same region). Success Rate = getMasterchainInfo reliability.",
+          "description": "Block lag tracking summary, aggregated across regions (weighted). % at Tip = share of region\u00d7minute samples where provider's lag \u2264 2 blocks vs best-in-region tip. SR = overall RPC success rate across all regional samples.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -1494,40 +1435,6 @@
                   {
                     "id": "custom.width",
                     "value": 108
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Region"
-                },
-                "properties": [
-                  {
-                    "id": "mappings",
-                    "value": [
-                      {
-                        "options": {
-                          "fra1": {
-                            "index": 0,
-                            "text": "EU"
-                          },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
-                          }
-                        },
-                        "type": "value"
-                      }
-                    ]
-                  },
-                  {
-                    "id": "custom.width",
-                    "value": 60
                   }
                 ]
               },
@@ -1629,7 +1536,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "100 * (1 - avg_over_time((clamp_min(-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"})), 0) > bool 2)[$__range:1m]))",
+              "expr": "100 * (1 - avg_over_time((avg by (provider) (clamp_min(-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"TON\", response_status=\"success\"})), 0) > bool 2))[$__range:1m]))",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -1641,7 +1548,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region)",
+              "expr": "sum by (provider) (\r\n  count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"}[$__range])\r\n  or on(provider, source_region)\r\n  (0 * count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range]))\r\n)\r\n/\r\nsum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range]))",
               "format": "table",
               "instant": true,
               "refId": "B"
@@ -1660,16 +1567,14 @@
                   "Time": true
                 },
                 "indexByName": {
-                  "Value #A": 2,
-                  "Value #B": 3,
-                  "provider": 0,
-                  "source_region": 1
+                  "Value #A": 1,
+                  "Value #B": 2,
+                  "provider": 0
                 },
                 "renameByName": {
                   "Value #A": "% at Tip",
                   "Value #B": "SR",
-                  "provider": "Provider",
-                  "source_region": "Region"
+                  "provider": "Provider"
                 }
               }
             },
@@ -3452,6 +3357,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: TON",
   "uid": "fe3mtxna6483ke-TON-global",
-  "version": 114,
+  "version": 116,
   "weekStart": "monday"
 }

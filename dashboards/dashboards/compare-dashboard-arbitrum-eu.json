@@ -183,6 +183,18 @@
                 "value": "Chainstack-Growth"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
+              }
+            ]
           }
         ]
       },
@@ -254,7 +266,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "decimals": 2
         },
         "overrides": [
           {
@@ -266,6 +279,18 @@
               {
                 "id": "displayName",
                 "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
               }
             ]
           }
@@ -317,7 +342,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"} >= 0)[$__range:$__interval])) by (provider)",
+          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"}[$__range])) by (provider)\r\n  or on(provider)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
@@ -460,6 +485,18 @@
               {
                 "id": "displayName",
                 "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
               }
             ]
           }
@@ -899,6 +936,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -1120,7 +1169,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"}[$__range])) by (provider)\n/\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider)",
+              "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"}[$__range])) by (provider)\r\n  or on(provider)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "B"
@@ -1250,6 +1299,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -1427,6 +1488,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -1506,6 +1579,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -1683,6 +1768,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -1762,6 +1859,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -1939,6 +2048,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2014,6 +2135,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -2191,6 +2324,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2266,6 +2411,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -2443,6 +2600,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2522,6 +2691,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -2699,6 +2880,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2774,6 +2967,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -2951,6 +3156,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -3026,6 +3243,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -3202,6 +3431,18 @@
                   "Value": "Success Rate",
                   "provider": "Provider"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],

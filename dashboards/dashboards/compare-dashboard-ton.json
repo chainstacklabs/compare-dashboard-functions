@@ -466,7 +466,7 @@
           "mappings": [
             {
               "options": {
-                "from": 0.99991,
+                "from": 0.99995,
                 "result": {
                   "index": 0,
                   "text": "100.0%"
@@ -596,7 +596,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"} >= 0)[$__range:$__interval])) by (provider, source_region)\r\n/\r\nsum(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"} >= 0)[$__range:$__interval])) by (provider, source_region)",
+          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -624,6 +624,18 @@
               "provider": "Provider",
               "source_region": "Region"
             }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "fields": {},
+            "sort": [
+              {
+                "desc": false,
+                "field": "Provider"
+              }
+            ]
           }
         }
       ],
@@ -1629,7 +1641,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"}[$__range])) by (provider, source_region)\n/\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region)",
+              "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"TON\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "B"
@@ -2014,6 +2026,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2341,6 +2365,18 @@
                   "provider": "Provider",
                   "source_region": "Region"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],
@@ -2670,6 +2706,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2998,6 +3046,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -3325,6 +3385,18 @@
                   "provider": "Provider",
                   "source_region": "Region"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],

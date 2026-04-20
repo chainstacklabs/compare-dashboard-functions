@@ -1281,6 +1281,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -1536,6 +1548,18 @@
                   "Value": "Success Rate",
                   "provider": "Provider"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],
@@ -1793,6 +1817,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2049,6 +2085,18 @@
                   "provider": "Provider"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2304,6 +2352,18 @@
                   "Value": "Success Rate",
                   "provider": "Provider"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],

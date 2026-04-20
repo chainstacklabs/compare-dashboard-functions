@@ -2507,6 +2507,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -2834,6 +2846,18 @@
                   "provider": "Provider",
                   "source_region": "Region"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],
@@ -3163,6 +3187,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -3490,6 +3526,18 @@
                   "provider": "Provider",
                   "source_region": "Region"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],
@@ -3821,6 +3869,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -4151,6 +4211,18 @@
                   "source_region": "Region"
                 }
               }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
             }
           ],
           "type": "table"
@@ -4480,6 +4552,18 @@
                   "provider": "Provider",
                   "source_region": "Region"
                 }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
               }
             }
           ],

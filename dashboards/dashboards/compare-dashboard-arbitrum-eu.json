@@ -255,6 +255,7 @@
             "fixedColor": "#61bbfb",
             "mode": "continuous-YlBl"
           },
+          "decimals": 2,
           "max": 1,
           "min": 0,
           "thresholds": {
@@ -266,8 +267,7 @@
               }
             ]
           },
-          "unit": "percentunit",
-          "decimals": 2
+          "unit": "percentunit"
         },
         "overrides": [
           {
@@ -7025,6 +7025,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Arbitrum (EU)",
   "uid": "arbitrum-eu-1",
-  "version": 42,
+  "version": 53,
   "weekStart": "monday"
 }

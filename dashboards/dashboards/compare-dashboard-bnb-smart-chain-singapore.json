@@ -254,6 +254,7 @@
             "fixedColor": "#61bbfb",
             "mode": "continuous-YlBl"
           },
+          "decimals": 2,
           "mappings": [],
           "max": 1,
           "min": 0,
@@ -266,8 +267,7 @@
               }
             ]
           },
-          "unit": "percentunit",
-          "decimals": 2
+          "unit": "percentunit"
         },
         "overrides": [
           {
@@ -7005,6 +7005,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: BNB Smart Chain (Singapore)",
   "uid": "bnbsc-sing-1",
-  "version": 30,
+  "version": 38,
   "weekStart": "monday"
 }

@@ -529,13 +529,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "hnd1": {
                         "index": 1,
                         "text": "JP"
+                      },
+                      "sfo1": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -1740,13 +1740,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2168,13 +2168,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2509,13 +2509,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2850,13 +2850,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3191,13 +3191,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3532,13 +3532,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3875,13 +3875,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4216,13 +4216,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4557,13 +4557,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "hnd1": {
                             "index": 1,
                             "text": "JP"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4693,6 +4693,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Arbitrum",
   "uid": "arbitrum-global-1",
-  "version": 86,
+  "version": 94,
   "weekStart": "monday"
 }

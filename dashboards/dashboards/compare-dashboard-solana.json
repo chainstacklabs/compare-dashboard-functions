@@ -4218,6 +4218,7 @@
                   "mode": "off"
                 }
               },
+              "decimals": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -4227,8 +4228,7 @@
                   }
                 ]
               },
-              "unit": "short",
-              "decimals": 0
+              "unit": "short"
             },
             "overrides": [
               {
@@ -5828,6 +5828,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana",
   "uid": "fe3mtxna6483ke-solana-global",
-  "version": 111,
+  "version": 121,
   "weekStart": "monday"
 }

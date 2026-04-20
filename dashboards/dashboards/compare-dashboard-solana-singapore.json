@@ -254,6 +254,7 @@
             "fixedColor": "super-light-blue",
             "mode": "continuous-YlBl"
           },
+          "decimals": 2,
           "mappings": [],
           "max": 1,
           "min": 0,
@@ -266,8 +267,7 @@
               }
             ]
           },
-          "unit": "percentunit",
-          "decimals": 2
+          "unit": "percentunit"
         },
         "overrides": [
           {
@@ -6424,6 +6424,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana (Singapore)",
   "uid": "ae82yw1vzdfr4d",
-  "version": 76,
+  "version": 85,
   "weekStart": "monday"
 }

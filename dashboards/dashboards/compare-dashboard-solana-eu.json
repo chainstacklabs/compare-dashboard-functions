@@ -254,6 +254,7 @@
             "fixedColor": "super-light-blue",
             "mode": "continuous-YlBl"
           },
+          "decimals": 2,
           "mappings": [],
           "max": 1,
           "min": 0,
@@ -266,8 +267,7 @@
               }
             ]
           },
-          "unit": "percentunit",
-          "decimals": 2
+          "unit": "percentunit"
         },
         "overrides": [
           {
@@ -2820,6 +2820,7 @@
                   "mode": "off"
                 }
               },
+              "decimals": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -2829,8 +2830,7 @@
                   }
                 ]
               },
-              "unit": "short",
-              "decimals": 0
+              "unit": "short"
             },
             "overrides": [
               {
@@ -7801,6 +7801,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana (EU)",
   "uid": "be82wni0bhukgd",
-  "version": 97,
+  "version": 107,
   "weekStart": "monday"
 }

@@ -187,6 +187,18 @@
                 "value": "Chainstack-Growth"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
+              }
+            ]
           }
         ]
       },
@@ -267,6 +279,18 @@
               {
                 "id": "displayName",
                 "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
               }
             ]
           }
@@ -442,6 +466,18 @@
               {
                 "id": "displayName",
                 "value": "Chainstack-Growth"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "dRPC"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "dRPC-Growth"
               }
             ]
           }
@@ -882,6 +918,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -1235,6 +1283,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -1501,6 +1561,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -1771,6 +1843,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -2035,6 +2119,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -2297,6 +2393,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }
@@ -2567,6 +2675,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -2831,6 +2951,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },
@@ -3093,6 +3225,18 @@
                   {
                     "id": "displayName",
                     "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
                   }
                 ]
               }

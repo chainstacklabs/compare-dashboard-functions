@@ -923,6 +923,18 @@
                     "value": "Chainstack-Growth"
                   }
                 ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
               }
             ]
           },

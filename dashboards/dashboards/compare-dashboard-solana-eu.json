@@ -2686,7 +2686,7 @@
                 "axisBorderShow": false,
                 "axisCenteredZero": false,
                 "axisColorMode": "text",
-                "axisLabel": "",
+                "axisLabel": "Slots",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "barWidthFactor": 0.6,
@@ -2729,7 +2729,8 @@
                   }
                 ]
               },
-              "unit": "s"
+              "unit": "short",
+              "decimals": 0
             },
             "overrides": [
               {

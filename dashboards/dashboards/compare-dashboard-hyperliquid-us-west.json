@@ -870,7 +870,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Each row is a provider. Color shows lag severity over time: green = at tip (\u22642 slots), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Slot lag. 0 = at the tip.",
+          "description": "Each row is a provider. Color shows lag severity over time: green = at tip (\u22642 slots), yellow = slightly behind (3-10), orange = behind (10-20), red = significantly behind (>20). Slot lag. 0 = at the tip, grey = no data.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -889,6 +889,19 @@
                 "spanNulls": false
               },
               "decimals": 0,
+              "mappings": [
+                {
+                  "options": {
+                    "match": "null",
+                    "result": {
+                      "color": "grey",
+                      "index": 0,
+                      "text": "No data"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -4821,6 +4834,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Hyperliquid (US West)",
   "uid": "Hyperliquid-us-west-1",
-  "version": 57,
+  "version": 58,
   "weekStart": "monday"
 }

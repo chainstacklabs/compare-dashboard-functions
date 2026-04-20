@@ -330,27 +330,7 @@
         }
       ],
       "title": "",
-      "type": "gauge",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {
-            "mode": "columns"
-          }
-        },
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [
-              {
-                "desc": false,
-                "field": "provider"
-              }
-            ]
-          }
-        }
-      ]
+      "type": "gauge"
     },
     {
       "gridPos": {

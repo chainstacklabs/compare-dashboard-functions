@@ -1,6 +1,10 @@
 """Base EVM metrics implementation for HTTP endpoints."""
 
-from common.metric_types import EVMBlockNumberLatencyMetric, HttpCallLatencyMetricBase
+from common.metric_types import (
+    EVMAccBalanceLatencyMetric,
+    EVMBlockNumberLatencyMetric,
+    HttpCallLatencyMetricBase,
+)
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
@@ -42,23 +46,10 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
         return [state_data["tx"]]
 
 
-class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects latency for account balance queries."""
+class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
+    """eth_getBalance latency for Base."""
 
-    @property
-    def method(self) -> str:
-        """Return the RPC method name."""
-        return "eth_getBalance"
-
-    @staticmethod
-    def validate_state(state_data: dict) -> bool:
-        """Validates that required block number (hex) exists in state data."""
-        return bool(state_data and state_data.get("old_block"))
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Get parameters with fixed monitoring address."""
-        return ["0xF977814e90dA44bFA03b6295A0616a897441aceC", state_data["old_block"]]
+    probe_address = "0xF977814e90dA44bFA03b6295A0616a897441aceC"
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):

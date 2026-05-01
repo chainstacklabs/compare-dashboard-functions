@@ -10,6 +10,7 @@ import websockets
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import (
+    EVMAccBalanceLatencyMetric,
     EVMBlockNumberLatencyMetric,
     HttpCallLatencyMetricBase,
     WebSocketMetric,
@@ -61,23 +62,10 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
         return [state_data["tx"]]
 
 
-class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects call latency for the eth_getBalance method."""
+class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
+    """eth_getBalance latency for Ethereum."""
 
-    @property
-    def method(self) -> str:
-        """Return the RPC method name."""
-        return "eth_getBalance"
-
-    @staticmethod
-    def validate_state(state_data: dict) -> bool:
-        """Validates that required block number (hex) exists in state data."""
-        return bool(state_data and state_data.get("old_block"))
-
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Returns parameters for balance check of monitoring address."""
-        return ["0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990", state_data["old_block"]]
+    probe_address = "0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990"
 
 
 class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):

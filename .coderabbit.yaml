@@ -2,42 +2,42 @@ reviews:
   profile: assertive
   auto_review:
     enabled: true
+  path_instructions:
+    - path: "**"
+      instructions: |
+        This is a Python 3.9 codebase. Enforce the following:
+        - All functions must have full type annotations (mypy strict mode).
+        - Google-style docstrings on all public functions and classes.
+        - Max cyclomatic complexity of 10 — flag functions that exceed this.
+        - Prefer functional programming and composition over inheritance.
+        - Never hardcode metric names — always use the METRIC_PREFIX variable.
+        - Error handling convention: HTTP 401/403/404/429 errors are silently ignored.
+          All other errors must zero the metric value and call mark_failure() with a log message.
+        - Avoid 3.10+ syntax: no match statements, no X | Y union types in runtime positions.
 
-instructions: |
-  This is a Python 3.9 codebase. Enforce the following:
-  - All functions must have full type annotations (mypy strict mode).
-  - Google-style docstrings on all public functions and classes.
-  - Max cyclomatic complexity of 10 — flag functions that exceed this.
-  - Prefer functional programming and composition over inheritance.
-  - Never hardcode metric names — always use the METRIC_PREFIX variable.
-  - Error handling convention: HTTP 401/403/404/429 errors are silently ignored.
-    All other errors must zero the metric value and call mark_failure() with a log message.
-  - Avoid 3.10+ syntax: no match statements, no X | Y union types in runtime positions.
+    - path: "metrics/*.py"
+      instructions: |
+        Each file must define a class subclassing BaseMetric and implement both
+        collect_metric() and process_data(). Flag any business logic that belongs
+        in common/ instead, and any deviation from the BaseMetric pattern.
 
-path_instructions:
-  - path: "metrics/*.py"
-    instructions: |
-      Each file must define a class subclassing BaseMetric and implement both
-      collect_metric() and process_data(). Flag any business logic that belongs
-      in common/ instead, and any deviation from the BaseMetric pattern.
+    - path: "api/read/*.py"
+      instructions: |
+        These are Vercel cron entry points. They must stay thin — only wiring up
+        MetricFactory and delegating to it. Flag any business logic added here.
 
-  - path: "api/read/*.py"
-    instructions: |
-      These are Vercel cron entry points. They must stay thin — only wiring up
-      MetricFactory and delegating to it. Flag any business logic added here.
+    - path: "api/write/*.py"
+      instructions: |
+        Vercel cron entry points for write operations. Same rule as api/read/:
+        keep thin, no business logic beyond wiring.
 
-  - path: "api/write/*.py"
-    instructions: |
-      Vercel cron entry points for write operations. Same rule as api/read/:
-      keep thin, no business logic beyond wiring.
+    - path: "common/**/*.py"
+      instructions: |
+        Shared infrastructure used by all chains. Flag changes that could silently
+        break consumers (changed signatures, removed attributes, behavior changes).
 
-  - path: "common/**/*.py"
-    instructions: |
-      Shared infrastructure used by all chains. Flag changes that could silently
-      break consumers (changed signatures, removed attributes, behavior changes).
-
-  - path: "dashboards/grafana_sync.py"
-    instructions: |
-      This is a PEP 723 standalone script (uv run), independent from the main
-      Vercel project. Evaluate it on its own merits — different dependency set,
-      relaxed project conventions.
+    - path: "dashboards/grafana_sync.py"
+      instructions: |
+        This is a PEP 723 standalone script (uv run), independent from the main
+        Vercel project. Evaluate it on its own merits — different dependency set,
+        relaxed project conventions.

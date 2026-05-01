@@ -5,7 +5,7 @@ import contextlib
 import logging
 import time
 from abc import abstractmethod
-from typing import Any, Optional, Union
+from typing import Any, ClassVar, Optional, Union
 
 import aiohttp
 import websockets
@@ -356,3 +356,29 @@ class EVMBlockNumberLatencyMetric(HttpCallLatencyMetricBase):
         if isinstance(result, str):
             with contextlib.suppress(ValueError):
                 self._captured_block_number = int(result, 16)
+
+
+class EVMAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
+    """Shared eth_getBalance latency metric for EVM chains.
+
+    Subclasses set ``probe_address`` (a hex-string EOA or contract) and inherit
+    everything else. Mirrors the ``EVMBlockNumberLatencyMetric`` pattern so each
+    chain's ``HTTPAccBalanceLatencyMetric`` is a two-line subclass.
+    """
+
+    probe_address: ClassVar[str]
+
+    @property
+    def method(self) -> str:
+        """Return the eth_getBalance RPC method name."""
+        return "eth_getBalance"
+
+    @staticmethod
+    def validate_state(state_data: dict[str, Any]) -> bool:
+        """Validate that the historical block number is present in state data."""
+        return bool(state_data and state_data.get("old_block"))
+
+    @classmethod
+    def get_params_from_state(cls, state_data: dict[str, Any]) -> list[Any]:
+        """Build eth_getBalance params using the subclass's probe_address."""
+        return [cls.probe_address, state_data["old_block"]]

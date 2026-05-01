@@ -55,7 +55,14 @@ class BaseMetric(ABC):
         """Processes raw data into metric value."""
 
     def get_influx_format(self) -> list[str]:
-        """Returns metrics in Influx line protocol format."""
+        """Returns metrics in Influx line protocol format.
+
+        Per-value labels passed via ``update_metric_value(labels=...)`` are
+        appended to the tag line for that ``value_type`` only. Keys that
+        collide with an instance-label key or with the reserved
+        ``metric_type`` tag are silently dropped — the instance value wins,
+        avoiding duplicate tags on the output line.
+        """
         if not self.values:
             raise ValueError("No metric values set")
 
@@ -63,6 +70,9 @@ class BaseMetric(ABC):
         base_tags: str = ",".join(
             [f"{label.key.value}={label.value}" for label in self.labels.labels]
         )
+        reserved_keys = {label.key.value for label in self.labels.labels} | {
+            "metric_type"
+        }
 
         for value_type, metric_value in self.values.items():
             tags: str = base_tags
@@ -70,6 +80,15 @@ class BaseMetric(ABC):
                 tags = f"{base_tags},metric_type={value_type}"
             else:
                 tags = f"metric_type={value_type}"
+
+            if metric_value.labels:
+                extra = ",".join(
+                    f"{k}={v}"
+                    for k, v in metric_value.labels.items()
+                    if k not in reserved_keys
+                )
+                if extra:
+                    tags = f"{tags},{extra}"
 
             metric_line: str = f"{self.metric_name}"
             if tags:
@@ -87,6 +106,13 @@ class BaseMetric(ABC):
         labels: Optional[dict[str, str]] = None,
     ) -> None:
         """Updates metric value, preserving existing labels if present.
+
+        ``labels`` attaches per-value tags that ``get_influx_format`` appends
+        to the output line for this ``value_type`` only. Keys that collide
+        with an instance label (``source_region``, ``target_region``,
+        ``blockchain``, ``provider``, ``api_method``, ``response_status``)
+        or with the reserved ``metric_type`` tag are silently dropped at emit
+        time — the instance value wins.
 
         Raises:
             ValueError: If value is negative.

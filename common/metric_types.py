@@ -190,11 +190,13 @@ class HttpCallLatencyMetricBase(HttpMetric):
         self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
         self._base_request = self._build_base_request()
         self._captured_block_number: Optional[int] = None
+        self._captured_balance: Optional[int] = None
 
     def mark_failure(self) -> None:
-        """Mark metric as failed and clear any captured block number."""
+        """Mark metric as failed and clear any captured response fields."""
         super().mark_failure()
         self._captured_block_number = None
+        self._captured_balance = None
 
     def _build_base_request(self) -> dict[str, Any]:
         """Build the base JSON-RPC request object."""
@@ -244,9 +246,10 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 self._on_json_response(json_response)
             except Exception:
                 logging.warning(
-                    f"Block capture failed for {self.method}", exc_info=True
+                    f"Response capture failed for {self.method}", exc_info=True
                 )
                 self._captured_block_number = None
+                self._captured_balance = None
 
             rpc_time = response_time - conn_time
             if rpc_time < 0:
@@ -364,9 +367,22 @@ class EVMAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
     Subclasses set ``probe_address`` (a hex-string EOA or contract) and inherit
     everything else. Mirrors the ``EVMBlockNumberLatencyMetric`` pattern so each
     chain's ``HTTPAccBalanceLatencyMetric`` is a two-line subclass.
+
+    Captures the returned balance into ``_captured_balance`` for the verified-
+    correctness emit step (``MetricsHandler._emit_observed_balances``); also
+    stashes ``_old_block_hex`` (verbatim from ``state_data["old_block"]``) so
+    the emit step can tag the per-value ``block_number`` label without
+    depending on ``method_params`` shape.
     """
 
     probe_address: ClassVar[str]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Stash the historical block hex for the balance_observed emit step."""
+        state_data = kwargs.get("state_data") or {}
+        super().__init__(*args, **kwargs)
+        # validate_state guarantees old_block is present, so direct access is safe.
+        self._old_block_hex: str = state_data["old_block"]
 
     @property
     def method(self) -> str:
@@ -382,3 +398,10 @@ class EVMAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
     def get_params_from_state(cls, state_data: dict[str, Any]) -> list[Any]:
         """Build eth_getBalance params using the subclass's probe_address."""
         return [cls.probe_address, state_data["old_block"]]
+
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Parse hex balance from eth_getBalance response."""
+        result = json_response.get("result")
+        if isinstance(result, str):
+            with contextlib.suppress(ValueError):
+                self._captured_balance = int(result, 16)

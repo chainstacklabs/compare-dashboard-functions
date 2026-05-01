@@ -9,6 +9,7 @@ from http.server import BaseHTTPRequestHandler
 
 import aiohttp
 
+from common.balance_hash import hash_balance_to_float
 from common.base_metric import BaseMetric
 from common.factory import MetricFactory
 from common.metric_config import MetricConfig
@@ -53,6 +54,35 @@ class MetricsHandler:
             block_number = getattr(instance, "_captured_block_number", None)
             if block_number is not None:
                 instance.update_metric_value(block_number, "block_number")
+
+    def _emit_observed_balances(self) -> None:
+        """Emit hashed observed balances for instances that captured one.
+
+        Mirrors ``_emit_block_numbers``. For each instance with a captured
+        balance, emits ``metric_type=balance_observed`` with the per-value
+        ``block_number`` label set to the verbatim hex string from
+        ``state_data["old_block"]`` — so query-time joins (observed↔verified
+        in v2; observed-vs-observed in v1) match on identical strings.
+
+        Only ``EVMAccBalanceLatencyMetric`` subclasses carry both
+        ``_captured_balance`` and ``_old_block_hex``; everything else is
+        skipped via getattr.
+
+        Returns:
+            None
+        """
+        for instance in self._instances:
+            balance = getattr(instance, "_captured_balance", None)
+            if balance is None:
+                continue
+            block_hex = getattr(instance, "_old_block_hex", None)
+            if not block_hex:
+                continue
+            instance.update_metric_value(
+                hash_balance_to_float(balance),
+                "balance_observed",
+                labels={"block_number": block_hex},
+            )
 
     def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""
@@ -146,6 +176,7 @@ class MetricsHandler:
             await asyncio.gather(*collection_tasks, return_exceptions=True)
 
             self._emit_block_numbers()
+            self._emit_observed_balances()
 
             metrics_text: str = self.get_metrics_text()
             if metrics_text:

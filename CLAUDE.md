@@ -19,36 +19,47 @@ uv run python tests/test_update_state.py  # State update via blob storage
 
 ## Environment Setup
 
-Copy `endpoints.json.example` → `endpoints.json` and populate with RPC endpoints.
+Copy `endpoints.json.example` → `endpoints.json` (used by local tests; loaded into the `ENDPOINTS` env var by `tests/test_*.py`). In production, Vercel reads endpoints from the `ENDPOINTS` env var directly — see `common/metrics_handler.py` and `api/support/update_state.py`.
 
-Create `.env.local` (gitignored) with:
+Create `.env.local` (gitignored). See `.env.local.example` for the full list. Required vars:
 ```
 GRAFANA_URL=...
-GRAFANA_TOKEN=...
-BLOB_READ_WRITE_TOKEN=...
+GRAFANA_USER=...
+GRAFANA_API_KEY=...
 CRON_SECRET=...
-# VERCEL_ENV is auto-set by Vercel; omit locally to get "dev_" metric prefix
+SKIP_AUTH=FALSE
+VERCEL_BLOB_TOKEN=...
+STORE_ID=...
+SOLANA_PRIVATE_KEY=...   # only needed for Solana write/landing-rate
+# VERCEL_ENV: leave unset locally to get the "dev_" metric prefix and "dev-rpc-dashboard" blob folder
 ```
 
 ## Architecture
 
 ```
 api/read/      # Vercel cron entry points — one file per chain (every 3 min)
-api/write/     # Write metrics (Solana landing rate, every 15 min)
-api/support/   # update_state.py — fetches/caches blockchain state (every 15 min)
-common/        # Shared: BaseMetric, MetricFactory, MetricsHandler, state/
-metrics/       # Chain-specific metric implementations (subclass BaseMetric)
+               # Plus test_blockchain.py (every 5 min) — sandbox for new metric work
+api/write/     # solana.py — Solana landing rate (every 15 min, fra1 only)
+api/support/   # update_state.py — fetches/caches blockchain state (every 15 min, fra1 only)
+common/        # base_metric.py (BaseMetric, mark_failure), factory.py (MetricFactory),
+               # metrics_handler.py (BaseVercelHandler, MetricsHandler),
+               # metric_types.py (HttpCallLatencyMetricBase etc.), metric_config.py,
+               # state/ (BlobStorageHandler, BlockchainDataFetcher, BlockchainState),
+               # hyperliquid_info_base.py
+metrics/       # Chain-specific metric implementations (one file per chain), plus
+               # solana_landing_rate.py and hyperliquid_info.py
 config/        # defaults.py — MetricsServiceConfig, BlobStorageConfig
-tests/         # Local test scripts (not unit tests)
+tests/         # Local test scripts (not unit tests) — load endpoints.json into ENDPOINTS env
 ```
 
 ## Key Patterns
 
 **Adding a new chain metric:**
-1. Create `metrics/<chain>.py` subclassing `BaseMetric`, implement `collect_metric()` and `process_data()`
+1. Create `metrics/<chain>.py` subclassing `BaseMetric` (or `HttpCallLatencyMetricBase` from `common/metric_types.py`); implement `collect_metric()` and `process_data()`
 2. Register with `MetricFactory.register({<chain>: [(MetricClass, "metric_name")]})`
 3. Add `api/read/<chain>.py` entry point
-4. Add function config + cron to `vercel.json` (and region-specific `vercel.*.json` files)
+4. Add function config + cron to `vercel.json` AND each region-specific `vercel.<region>.json` file the chain should run in
+5. For new chains: also add to `SUPPORTED_BLOCKCHAINS` in `api/support/update_state.py` and to `BLOCK_OFFSET_RANGES` in `config/defaults.py`. EVM chains additionally need adding to the EVM tuple in `common/state/blockchain_fetcher.py:fetch_latest_data`
 
 **Metric prefix:** `METRIC_PREFIX = "dev_"` when `VERCEL_ENV != "production"`. All metric names must use this prefix to avoid polluting production Grafana.
 

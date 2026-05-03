@@ -82,24 +82,33 @@ async def _verify_chain(
     chain: str,
     state_data: dict[str, Any],
 ) -> list[str]:
-    """Run one verifier round for a chain. Returns Influx-format lines to emit."""
+    """Run one verifier round for a chain. Returns Influx-format lines to emit.
+
+    Always emits at least one ``verifier_status`` line so dashboards can tell
+    "verifier round happened" from "no sample" — never returns an empty list.
+    """
+    ts_ns = time.time_ns()
     chain_lower = chain.lower()
     chain_state = state_data.get(chain_lower)
     if not chain_state or not chain_state.get("old_block"):
-        logging.warning(f"verify_state: no old_block for {chain}, skipping")
-        return []
+        # Missing OLD_BLOCK — could be update_state outage, blob read failure, etc.
+        # Treat as anchor unavailable so the failure is visible, not silent.
+        logging.warning(f"verify_state: no old_block for {chain}")
+        return [_format_verifier_status_line(chain, STATUS_ANCHOR_UNAVAILABLE, ts_ns)]
 
     block_hex = chain_state["old_block"]
     addr_hex = PROBE_ADDRESSES[chain]
     addr_bytes = bytes.fromhex(addr_hex.removeprefix("0x"))
-    ts_ns = time.time_ns()
 
     providers = all_providers_for(chain)
     chainstack_url = chainstack_endpoint_for(chain)
 
-    if not providers or not chainstack_url:
-        logging.warning(f"verify_state: missing endpoints for {chain}")
+    if not providers:
+        logging.warning(f"verify_state: no anchor providers configured for {chain}")
         return [_format_verifier_status_line(chain, STATUS_ANCHOR_UNAVAILABLE, ts_ns)]
+    if not chainstack_url:
+        logging.warning(f"verify_state: no Chainstack endpoint configured for {chain}")
+        return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 
     # 1. Anchor — multi-provider stateRoot quorum.
     try:
@@ -158,21 +167,36 @@ async def _gather_state_data() -> dict[str, dict[str, Any]]:
 
 
 async def _verify_all() -> str:
-    """Run the verifier across all in-scope chains. Returns Influx text."""
+    """Run the verifier across all in-scope chains. Returns Influx text.
+
+    If a per-chain task raises an unexpected exception (i.e. something not
+    handled inside ``_verify_chain``), emit ``verifier_status=2`` for that
+    chain so the failure is visible in dashboards rather than silently dropped.
+    """
     state_data = await _gather_state_data()
+    chains = list(PROBE_ADDRESSES)
 
     async with aiohttp.ClientSession() as session:
         results = await asyncio.gather(
-            *[_verify_chain(session, chain, state_data) for chain in PROBE_ADDRESSES],
+            *[_verify_chain(session, chain, state_data) for chain in chains],
             return_exceptions=True,
         )
 
     lines: list[str] = []
-    for r in results:
+    fallback_ts_ns = time.time_ns()
+    for chain, r in zip(chains, results):
         if isinstance(r, list):
             lines.extend(r)
         else:
-            logging.exception("verify_state: chain task raised", exc_info=r)
+            logging.error(
+                f"verify_state: chain task raised for {chain}",
+                exc_info=r if isinstance(r, BaseException) else None,
+            )
+            lines.append(
+                _format_verifier_status_line(
+                    chain, STATUS_PROOF_MATH_INVALID, fallback_ts_ns
+                )
+            )
     return "\n".join(lines)
 
 

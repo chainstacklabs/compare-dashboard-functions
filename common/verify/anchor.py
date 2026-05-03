@@ -107,9 +107,12 @@ async def _fetch_state_root(
         if not isinstance(state_root_hex, str):
             return None
         try:
-            return bytes.fromhex(state_root_hex.removeprefix("0x"))
+            state_root = bytes.fromhex(state_root_hex.removeprefix("0x"))
         except ValueError:
             return None
+        # Reject non-32-byte stateRoots so a malformed-but-unanimous response
+        # fails as anchor-unavailable instead of surfacing later as proof-math-invalid.
+        return state_root if len(state_root) == 32 else None
 
 
 async def fetch_account_proof(
@@ -157,11 +160,11 @@ async def fetch_account_proof(
         account_proof = result.get("accountProof")
         if not isinstance(account_proof, list):
             raise RuntimeError("eth_getProof accountProof is not a list")
+        # Reject any non-string node so a malformed proof fails fast here rather
+        # than getting silently truncated and misreported as proof-math-invalid.
+        if not all(isinstance(node, str) for node in account_proof):
+            raise RuntimeError("eth_getProof accountProof contains non-string elements")
         try:
-            return [
-                bytes.fromhex(node.removeprefix("0x"))
-                for node in account_proof
-                if isinstance(node, str)
-            ]
+            return [bytes.fromhex(node.removeprefix("0x")) for node in account_proof]
         except ValueError as e:
             raise RuntimeError(f"eth_getProof accountProof has invalid hex: {e}") from e

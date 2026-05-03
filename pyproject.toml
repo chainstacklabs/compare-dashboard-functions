@@ -8,6 +8,8 @@ dependencies = [
     "solders==0.23.0",
     "solana==0.36.2",
     "base58==2.1.1",
+    "rlp==4.1.0",
+    "pycryptodome==3.21.0",
 ]
 
 [dependency-groups]

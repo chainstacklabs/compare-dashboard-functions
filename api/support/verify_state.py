@@ -248,8 +248,12 @@ class handler(BaseHTTPRequestHandler):
     def _check_auth(self) -> bool:
         if os.getenv("SKIP_AUTH", "").lower() == "true":
             return True
+        secret = os.getenv("CRON_SECRET", "")
+        if not secret:
+            logging.error("verify_state: CRON_SECRET not set; rejecting request")
+            return False
         token = self.headers.get("Authorization", "")
-        return token == f"Bearer {os.getenv('CRON_SECRET', '')}"
+        return token == f"Bearer {secret}"
 
     def do_GET(self) -> None:
         """Authenticate, gate by region, run verifier, push metrics."""
@@ -280,10 +284,11 @@ class handler(BaseHTTPRequestHandler):
                 f"verify_state completed\n\nMetrics:\n{metrics_text}".encode()
             )
             self.wfile.write(response_body)
-        except Exception as e:
+        except Exception:
+            logging.exception("verify_state: unhandled exception")
             self.send_response(500)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(str(e).encode())
+            self.wfile.write(b"Internal Server Error")
         finally:
             loop.close()

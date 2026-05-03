@@ -132,17 +132,21 @@ async def _verify_chain(
     # 3. Local MPT verification.
     try:
         balance = verify_account_proof(addr_bytes, proof, anchor)
-    except ProofError as e:
-        logging.error(f"verify_state: proof math invalid for {chain}: {e}")
+    except ProofError:
+        logging.exception(f"verify_state: proof math invalid for {chain}")
         return [_format_verifier_status_line(chain, STATUS_PROOF_MATH_INVALID, ts_ns)]
 
     if balance is None:
-        # Probe address has no state at OLD_BLOCK — unexpected for our funded probes.
+        # Cryptographically valid exclusion proof for our funded probe address —
+        # not a math failure. Most likely root causes: wrong probe address in
+        # config, stale OLD_BLOCK from blob, or chain reorg deeper than our
+        # offset. Mapped to STATUS_PROOF_UNAVAILABLE because the proof yielded
+        # nothing to verify against, not because the math was invalid.
         logging.error(
-            f"verify_state: exclusion proof for {chain} "
+            f"verify_state: unexpected exclusion proof for {chain} "
             f"address={addr_hex} block={block_hex}"
         )
-        return [_format_verifier_status_line(chain, STATUS_PROOF_MATH_INVALID, ts_ns)]
+        return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 
     # 4. Emit balance_verified + verifier_status=0.
     return [
@@ -192,9 +196,12 @@ async def _verify_all() -> str:
                 f"verify_state: chain task raised for {chain}",
                 exc_info=r if isinstance(r, BaseException) else None,
             )
+            # Catch-all for unexpected exceptions (network blips, bugs, etc.) —
+            # these are infra failures, not cryptographic invalidity, so map to
+            # STATUS_PROOF_UNAVAILABLE rather than STATUS_PROOF_MATH_INVALID.
             lines.append(
                 _format_verifier_status_line(
-                    chain, STATUS_PROOF_MATH_INVALID, fallback_ts_ns
+                    chain, STATUS_PROOF_UNAVAILABLE, fallback_ts_ns
                 )
             )
     return "\n".join(lines)
@@ -229,6 +236,10 @@ async def _push_to_grafana(metrics_text: str) -> None:
                     timeout=timeout,
                 ) as response:
                     if response.status in (200, 204):
+                        return
+                    if response.status in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
+                        # Silent per project convention (CLAUDE.md): plan
+                        # restrictions and rate limits are not retried or logged.
                         return
                     logging.warning(
                         f"verify_state: Grafana push got {response.status} "

@@ -65,7 +65,10 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
     """eth_getBalance latency for Ethereum."""
 
-    probe_address = "0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990"
+    # WETH9 — canonical wrap contract on Ethereum mainnet. Holds millions of
+    # ETH; native balance changes on every wrap/unwrap, so successive cron
+    # rounds sample meaningfully different values at OLD_BLOCK.
+    probe_address = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
 
 
 class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):

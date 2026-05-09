@@ -46,6 +46,10 @@
     "api/support/update_state.py": {
       "memory": 128,
       "maxDuration": 59
+    },
+    "api/support/verify_state.py": {
+      "memory": 200,
+      "maxDuration": 59
     }
   },
   "crons": [
@@ -92,6 +96,10 @@
     {
       "path": "/api/support/update_state",
       "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/support/verify_state",
+      "schedule": "5-59/15 * * * *"
     }
   ]
 }

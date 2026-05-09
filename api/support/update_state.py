@@ -1,6 +1,7 @@
 """State update handler for blockchain data collection with provider filtering."""
 
 import asyncio
+import hmac
 import json
 import logging
 import os
@@ -185,8 +186,11 @@ class handler(BaseHTTPRequestHandler):
     def _check_auth(self) -> bool:
         if os.getenv("SKIP_AUTH", "").lower() == "true":
             return True
+        secret = os.getenv("CRON_SECRET", "")
+        if not secret:
+            return False
         token: str = self.headers.get("Authorization", "")
-        return token == f"Bearer {os.getenv('CRON_SECRET', '')}"
+        return hmac.compare_digest(token, f"Bearer {secret}")
 
     def do_GET(self) -> None:
         """Handle GET request: authenticate then run state update."""

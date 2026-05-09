@@ -12,6 +12,7 @@ See ``spec-verified-correctness-v2.md`` (local design doc).
 """
 
 import asyncio
+import hmac
 import logging
 import os
 import time
@@ -268,7 +269,7 @@ class handler(BaseHTTPRequestHandler):
             logging.error("verify_state: CRON_SECRET not set; rejecting request")
             return False
         token = self.headers.get("Authorization", "")
-        return token == f"Bearer {secret}"
+        return hmac.compare_digest(token, f"Bearer {secret}")
 
     def do_GET(self) -> None:
         """Authenticate, gate by region, run verifier, push metrics."""

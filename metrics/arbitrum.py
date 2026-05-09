@@ -49,7 +49,9 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
     """eth_getBalance latency for Arbitrum."""
 
-    probe_address = "0x794a61358D6845594F94dc1DB02A252b5b4814aD"
+    # WETH — canonical wrap contract on Arbitrum One. Active wraps/unwraps
+    # produce frequent balance deltas at the queried historical block.
+    probe_address = "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):

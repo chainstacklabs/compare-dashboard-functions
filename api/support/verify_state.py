@@ -36,12 +36,16 @@ from config.defaults import MetricsServiceConfig
 
 ALLOWED_REGIONS: set[str] = {"fra1"}
 
-# Probe addresses match v1's HTTPAccBalanceLatencyMetric.probe_address per chain.
+# Probe addresses must stay in sync with v1's HTTPAccBalanceLatencyMetric.probe_address
+# per chain so balance_observed (v1) and balance_verified (v2) measure the same
+# account and can be joined by block_number in Grafana. Each is the canonical
+# wrap contract (WETH / WBNB) — high-volume, well-known, balance changes
+# frequently so successive rounds exercise the proof system on different values.
 PROBE_ADDRESSES: dict[str, str] = {
-    "Ethereum": "0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990",
-    "Base": "0xF977814e90dA44bFA03b6295A0616a897441aceC",
-    "Arbitrum": "0x794a61358D6845594F94dc1DB02A252b5b4814aD",
-    "BNB": "0x6807dc923806fE8Fd134338EABCA509979a7e0cB",
+    "Ethereum": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",  # WETH9
+    "Base": "0x4200000000000000000000000000000000000006",  # WETH (OP Stack predeploy)
+    "Arbitrum": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",  # WETH
+    "BNB": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # WBNB
 }
 
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"

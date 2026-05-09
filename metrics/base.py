@@ -49,7 +49,9 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
     """eth_getBalance latency for Base."""
 
-    probe_address = "0xF977814e90dA44bFA03b6295A0616a897441aceC"
+    # WETH — canonical OP Stack predeploy on Base. Hundreds of thousands of ETH;
+    # active wraps/unwraps make balance vary block to block.
+    probe_address = "0x4200000000000000000000000000000000000006"
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):

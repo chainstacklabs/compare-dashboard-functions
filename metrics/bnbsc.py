@@ -49,7 +49,9 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
 class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
     """eth_getBalance latency for BNB Smart Chain."""
 
-    probe_address = "0x6807dc923806fE8Fd134338EABCA509979a7e0cB"
+    # WBNB — canonical wrap contract on BSC. Holds 1M+ BNB; active
+    # wraps/unwraps produce frequent balance deltas at OLD_BLOCK.
+    probe_address = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
 
 
 class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):

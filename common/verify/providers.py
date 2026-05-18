@@ -38,17 +38,28 @@ def all_providers_for(chain: str) -> list[str]:
     Returns:
         List of HTTP endpoint URLs. Empty if no providers are configured.
     """
+    return [url for _, url in all_provider_entries_for(chain)]
+
+
+def all_provider_entries_for(chain: str) -> list[tuple[str, str]]:
+    """Return (name, http_endpoint) pairs for every provider on the chain.
+
+    Used by v2.1's per-provider balance probe step, which needs the provider
+    name as a Grafana tag — ``all_providers_for`` drops the name. Order
+    matches the ENDPOINTS config so the per-round emission order is stable.
+    """
     config = _load_endpoints_config()
     target = chain.lower()
-    out: list[str] = []
+    out: list[tuple[str, str]] = []
     for provider in config.get("providers", []):
         if not isinstance(provider, dict):
             continue
         if provider.get("blockchain", "").lower() != target:
             continue
+        name = provider.get("name")
         endpoint = provider.get("http_endpoint")
-        if isinstance(endpoint, str) and endpoint:
-            out.append(endpoint)
+        if isinstance(name, str) and name and isinstance(endpoint, str) and endpoint:
+            out.append((name, endpoint))
     return out
 
 

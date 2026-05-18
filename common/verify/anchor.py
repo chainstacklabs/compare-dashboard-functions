@@ -14,7 +14,11 @@ from typing import Any, Optional
 import aiohttp
 
 _RPC_TIMEOUT = aiohttp.ClientTimeout(total=15)
-_PROOF_TIMEOUT = aiohttp.ClientTimeout(total=25)
+# Ethereum eth_getProof at ~8000-block depth on Chainstack mainstream nodes
+# takes ~45-50s empirically (large MPT walk on the server). The previous 25s
+# limit was the silent reason production Ethereum verifier rounds were
+# timing out and reporting empty errors.
+_PROOF_TIMEOUT = aiohttp.ClientTimeout(total=55)
 
 
 class AnchorError(Exception):
@@ -113,6 +117,73 @@ async def _fetch_state_root(
         # Reject non-32-byte stateRoots so a malformed-but-unanimous response
         # fails as anchor-unavailable instead of surfacing later as proof-math-invalid.
         return state_root if len(state_root) == 32 else None
+
+
+async def fetch_latest_block(session: aiohttp.ClientSession, url: str) -> Optional[int]:
+    """Return latest block height (eth_blockNumber) as an int, or None on failure."""
+    payload: dict[str, Any] = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "eth_blockNumber",
+        "params": [],
+    }
+    try:
+        async with session.post(
+            url,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(payload),
+            timeout=_RPC_TIMEOUT,
+        ) as response:
+            if response.status != 200:
+                return None
+            body = await response.json()
+            if not isinstance(body, dict) or "error" in body:
+                return None
+            result = body.get("result")
+            if not isinstance(result, str):
+                return None
+            return int(result, 16)
+    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError):
+        return None
+
+
+async def fetch_balance_at(
+    session: aiohttp.ClientSession,
+    url: str,
+    address_hex: str,
+    block_hex: str,
+) -> Optional[int]:
+    """Call ``eth_getBalance`` for an address at a specific block.
+
+    Returns the balance as an int on success, ``None`` on any failure
+    (HTTP error, RPC error, malformed response, timeout). Callers
+    skip emission for ``None`` results so the dashboard shows a clean
+    gap for provider blips instead of a fake zero.
+    """
+    payload: dict[str, Any] = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "eth_getBalance",
+        "params": [address_hex, block_hex],
+    }
+    try:
+        async with session.post(
+            url,
+            headers={"Content-Type": "application/json"},
+            data=json.dumps(payload),
+            timeout=_RPC_TIMEOUT,
+        ) as response:
+            if response.status != 200:
+                return None
+            body = await response.json()
+            if not isinstance(body, dict) or "error" in body:
+                return None
+            result = body.get("result")
+            if not isinstance(result, str):
+                return None
+            return int(result, 16)
+    except (aiohttp.ClientError, asyncio.TimeoutError, ValueError):
+        return None
 
 
 async def fetch_account_proof(

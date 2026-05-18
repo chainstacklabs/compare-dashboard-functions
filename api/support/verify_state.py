@@ -1,12 +1,21 @@
 """Verifier function: emits balance_verified + verifier_status for EVM chains.
 
-Per cron round (fra1-only, every 15 min, offset 5 min from update_state):
-- Read OLD_BLOCK from shared blob storage (set by update_state).
-- For each chain in [Ethereum, Base, Arbitrum, BNB]:
-  - Multi-provider stateRoot quorum at OLD_BLOCK.
+Per cron round (fra1-only, every 15 min). For each chain in
+[Ethereum, Base, Arbitrum, BNB]:
+  - Compute VERIFY_BLOCK = latest_head - random(VERIFY_BLOCK_OFFSET_RANGES[chain]).
+    Self-contained: no blob coordination with update_state.
+  - Multi-provider stateRoot quorum at VERIFY_BLOCK.
   - eth_getProof from Chainstack for the chain's probe address.
   - Local MPT verification against the agreed stateRoot.
-  - Emit balance_verified (hashed) on success, verifier_status code on any failure.
+  - Probe each provider's eth_getBalance at VERIFY_BLOCK (per-provider
+    balance_observed_verified emission, hashed identically to balance_verified
+    so dashboards can join the two on block_number and compare per-provider
+    reporting against the proof-anchored truth).
+
+The per-chain offsets are sized to fit Chainstack's empirically-measured
+proof-retention window — proofs are MPT trie nodes, pruned ~128 blocks deep
+on geth-family clients, much shallower than the snapshot-served balance
+window. See ``config/defaults.py:VERIFY_BLOCK_OFFSET_RANGES``.
 
 See ``spec-verified-correctness-v2.md`` (local design doc).
 """
@@ -15,33 +24,33 @@ import asyncio
 import hmac
 import logging
 import os
+import random
 import time
 from http.server import BaseHTTPRequestHandler
-from typing import Any
+from typing import Optional
 
 import aiohttp
 
 from common.balance_hash import hash_balance_to_float
-from common.state.blockchain_state import BlockchainState
 from common.verify import (
     AnchorDisagreementError,
     AnchorPartialResponseError,
     ProofError,
-    all_providers_for,
+    all_provider_entries_for,
     chainstack_endpoint_for,
     fetch_account_proof,
     fetch_agreed_anchor,
+    fetch_balance_at,
+    fetch_latest_block,
     verify_account_proof,
 )
 from config.defaults import MetricsServiceConfig
 
 ALLOWED_REGIONS: set[str] = {"fra1"}
 
-# Probe addresses must stay in sync with v1's HTTPAccBalanceLatencyMetric.probe_address
-# per chain so balance_observed (v1) and balance_verified (v2) measure the same
-# account and can be joined by block_number in Grafana. Each is the canonical
-# wrap contract (WETH / WBNB) — high-volume, well-known, balance changes
-# frequently so successive rounds exercise the proof system on different values.
+# Probe addresses: canonical wrap contracts on each chain (WETH / WBNB).
+# Held balances are high and change on every wrap/unwrap, so successive
+# rounds sample meaningfully different values at VERIFY_BLOCK.
 PROBE_ADDRESSES: dict[str, str] = {
     "Ethereum": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",  # WETH9
     "Base": "0x4200000000000000000000000000000000000006",  # WETH (OP Stack predeploy)
@@ -72,6 +81,30 @@ def _format_balance_verified_line(
     )
 
 
+def _format_balance_observed_verified_line(
+    chain: str,
+    provider_name: str,
+    block_hex: str,
+    hash_value: float,
+    ts_ns: int,
+) -> str:
+    """Format an Influx line for per-provider ``balance_observed_verified``.
+
+    Distinct from v1's ``balance_observed`` (which is emitted at v1's deep
+    OLD_BLOCK alongside the latency cron) so dashboards can pair each
+    provider's report at VERIFY_BLOCK with the proof-anchored truth at the
+    same block without colliding on the legacy v1 series.
+    """
+    return (
+        f"{METRIC_NAME},"
+        f"source_region=fra1,target_region=default,blockchain={chain},"
+        f"provider={provider_name},api_method=eth_getBalance,"
+        f"response_status=success,metric_type=balance_observed_verified,"
+        f"block_number={block_hex} "
+        f"value={hash_value} {ts_ns}"
+    )
+
+
 def _format_verifier_status_line(chain: str, code: int, ts_ns: int) -> str:
     """Format an Influx line for ``metric_type=verifier_status``."""
     return (
@@ -82,10 +115,54 @@ def _format_verifier_status_line(chain: str, code: int, ts_ns: int) -> str:
     )
 
 
+def _pick_verify_block(chain: str, head: int) -> Optional[int]:
+    """Compute VERIFY_BLOCK for a chain, or None if no offset configured."""
+    offset_range = MetricsServiceConfig.VERIFY_BLOCK_OFFSET_RANGES.get(chain.lower())
+    if not offset_range:
+        return None
+    lo, hi = offset_range
+    return head - random.randint(lo, hi)
+
+
+async def _probe_observed_balances(
+    session: aiohttp.ClientSession,
+    chain: str,
+    provider_entries: list[tuple[str, str]],
+    addr_hex: str,
+    block_hex: str,
+    ts_ns: int,
+) -> list[str]:
+    """Probe each provider's eth_getBalance at VERIFY_BLOCK in parallel.
+
+    Returns Influx lines for providers that responded successfully. Failures
+    (timeout, RPC error, malformed) are silently skipped — dashboards show
+    a clean gap, which is the right shape for a transient provider blip.
+    Quorum/proof emission has already happened by the time this runs, so a
+    per-provider balance failure is informational, not a verifier failure.
+    """
+    tasks = [
+        fetch_balance_at(session, url, addr_hex, block_hex)
+        for _, url in provider_entries
+    ]
+    balances = await asyncio.gather(*tasks, return_exceptions=True)
+
+    lines: list[str] = []
+    for (name, _url), balance in zip(provider_entries, balances):
+        if isinstance(balance, BaseException) or balance is None:
+            continue
+        if not isinstance(balance, int) or balance < 0:
+            continue
+        lines.append(
+            _format_balance_observed_verified_line(
+                chain, name, block_hex, hash_balance_to_float(balance), ts_ns
+            )
+        )
+    return lines
+
+
 async def _verify_chain(
     session: aiohttp.ClientSession,
     chain: str,
-    state_data: dict[str, Any],
 ) -> list[str]:
     """Run one verifier round for a chain. Returns Influx-format lines to emit.
 
@@ -93,19 +170,11 @@ async def _verify_chain(
     "verifier round happened" from "no sample" — never returns an empty list.
     """
     ts_ns = time.time_ns()
-    chain_lower = chain.lower()
-    chain_state = state_data.get(chain_lower)
-    if not chain_state or not chain_state.get("old_block"):
-        # Missing OLD_BLOCK — could be update_state outage, blob read failure, etc.
-        # Treat as anchor unavailable so the failure is visible, not silent.
-        logging.warning(f"verify_state: no old_block for {chain}")
-        return [_format_verifier_status_line(chain, STATUS_ANCHOR_UNAVAILABLE, ts_ns)]
-
-    block_hex = chain_state["old_block"]
     addr_hex = PROBE_ADDRESSES[chain]
     addr_bytes = bytes.fromhex(addr_hex.removeprefix("0x"))
 
-    providers = all_providers_for(chain)
+    provider_entries = all_provider_entries_for(chain)
+    providers = [url for _, url in provider_entries]
     chainstack_url = chainstack_endpoint_for(chain)
 
     if not providers:
@@ -115,7 +184,23 @@ async def _verify_chain(
         logging.warning(f"verify_state: no Chainstack endpoint configured for {chain}")
         return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 
-    # 1. Anchor — multi-provider stateRoot quorum.
+    # 0. Compute VERIFY_BLOCK from current head. We sample head from Chainstack
+    #    because Chainstack also serves the proof — its head determines whether
+    #    the chosen block falls inside the proof window. Other providers can be
+    #    a few blocks behind without breaking anything (offsets are large enough
+    #    to absorb normal cross-provider lag).
+    head = await fetch_latest_block(session, chainstack_url)
+    if head is None:
+        logging.warning(f"verify_state: failed to fetch latest block for {chain}")
+        return [_format_verifier_status_line(chain, STATUS_ANCHOR_UNAVAILABLE, ts_ns)]
+
+    verify_block = _pick_verify_block(chain, head)
+    if verify_block is None:
+        logging.warning(f"verify_state: no VERIFY_BLOCK_OFFSET_RANGES for {chain}")
+        return [_format_verifier_status_line(chain, STATUS_ANCHOR_UNAVAILABLE, ts_ns)]
+    block_hex = hex(verify_block)
+
+    # 1. Anchor — multi-provider stateRoot quorum at VERIFY_BLOCK.
     try:
         anchor = await fetch_agreed_anchor(session, block_hex, providers)
     except AnchorDisagreementError:
@@ -131,7 +216,12 @@ async def _verify_chain(
     try:
         proof = await fetch_account_proof(session, chainstack_url, addr_hex, block_hex)
     except Exception as e:
-        logging.warning(f"verify_state: proof fetch failed for {chain}: {e}")
+        # Use type(e).__name__ + repr so silent failures like
+        # asyncio.TimeoutError (which has an empty str()) are visible.
+        logging.warning(
+            f"verify_state: proof fetch failed for {chain}: "
+            f"{type(e).__name__}: {e!r}"
+        )
         return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 
     # 3. Local MPT verification.
@@ -143,51 +233,43 @@ async def _verify_chain(
 
     if balance is None:
         # Cryptographically valid exclusion proof for our funded probe address —
-        # not a math failure. Most likely root causes: wrong probe address in
-        # config, stale OLD_BLOCK from blob, or chain reorg deeper than our
-        # offset. Mapped to STATUS_PROOF_UNAVAILABLE because the proof yielded
-        # nothing to verify against, not because the math was invalid.
+        # not a math failure. Most likely root causes: wrong probe address, or
+        # chain reorg deeper than VERIFY_BLOCK_OFFSET_RANGES (very unlikely on
+        # post-finality blocks; possible at L2 sequencer-settle depth).
         logging.error(
             f"verify_state: unexpected exclusion proof for {chain} "
             f"address={addr_hex} block={block_hex}"
         )
         return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 
-    # 4. Emit balance_verified + verifier_status=0.
+    # 4. Probe per-provider balances at VERIFY_BLOCK in parallel. Failures
+    #    here don't change verifier_status — proof+quorum already succeeded.
+    observed_lines = await _probe_observed_balances(
+        session, chain, provider_entries, addr_hex, block_hex, ts_ns
+    )
+
+    # 5. Emit balance_verified + verifier_status=0 + per-provider observations.
     return [
         _format_balance_verified_line(
             chain, block_hex, hash_balance_to_float(balance), ts_ns
         ),
         _format_verifier_status_line(chain, STATUS_OK, ts_ns),
+        *observed_lines,
     ]
-
-
-async def _gather_state_data() -> dict[str, dict[str, Any]]:
-    """Read OLD_BLOCK + other state for each in-scope chain from blob storage."""
-    out: dict[str, dict[str, Any]] = {}
-    for chain in PROBE_ADDRESSES:
-        try:
-            chain_state = await BlockchainState.get_data(chain.lower())
-            if chain_state:
-                out[chain.lower()] = chain_state
-        except Exception:
-            logging.exception(f"verify_state: failed to read state for {chain}")
-    return out
 
 
 async def _verify_all() -> str:
     """Run the verifier across all in-scope chains. Returns Influx text.
 
     If a per-chain task raises an unexpected exception (i.e. something not
-    handled inside ``_verify_chain``), emit ``verifier_status=2`` for that
+    handled inside ``_verify_chain``), emit ``verifier_status=4`` for that
     chain so the failure is visible in dashboards rather than silently dropped.
     """
-    state_data = await _gather_state_data()
     chains = list(PROBE_ADDRESSES)
 
     async with aiohttp.ClientSession() as session:
         results = await asyncio.gather(
-            *[_verify_chain(session, chain, state_data) for chain in chains],
+            *[_verify_chain(session, chain) for chain in chains],
             return_exceptions=True,
         )
 

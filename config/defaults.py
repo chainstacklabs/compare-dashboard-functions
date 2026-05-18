@@ -44,6 +44,30 @@ class MetricsServiceConfig:
         "monad": (216000, 256000),
     }
 
+    # Per-chain offset for the v2 verifier (eth_getProof at VERIFY_BLOCK).
+    # Sized to fit Chainstack's empirically-measured proof-retention window
+    # per chain — proofs are MPT trie nodes which prune ~128 blocks deep on
+    # geth-family clients, much shallower than the snapshot-served balance
+    # window that BLOCK_OFFSET_RANGES targets. Verified ranges as of 2026-05:
+    #   Ethereum max retention ≈ 10,000 blocks, but proof latency scales
+    #                            linearly with depth on Chainstack (~6 ms
+    #                            per block, ~48 s at 8000-block depth).
+    #                            Tightened to (200, 500) for proof times
+    #                            of ~4-7s, well within Vercel's 59 s budget.
+    #                            200 blocks (~40 min) is way past finality
+    #                            (~64 blocks).
+    #   Base     max retention ≈   121 blocks (~4 min)
+    #   BNB      max retention ≈   117 blocks (~5.8 min)
+    #   Arbitrum max retention ≈   107 blocks (~27 s) — tightest; arb head
+    #                            moves fast so we keep extra headroom for
+    #                            in-cron drift.
+    VERIFY_BLOCK_OFFSET_RANGES: ClassVar[dict[str, tuple[int, int]]] = {
+        "ethereum": (200, 500),
+        "base": (60, 100),
+        "arbitrum": (50, 70),
+        "bnb": (30, 100),
+    }
+
 
 class BlobStorageConfig:
     """Default configuration for blob storage."""

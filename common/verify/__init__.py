@@ -9,18 +9,27 @@ from common.verify.anchor import (
     AnchorPartialResponseError,
     fetch_account_proof,
     fetch_agreed_anchor,
+    fetch_balance_at,
+    fetch_latest_block,
 )
 from common.verify.proof import ProofError, verify_account_proof
-from common.verify.providers import all_providers_for, chainstack_endpoint_for
+from common.verify.providers import (
+    all_provider_entries_for,
+    all_providers_for,
+    chainstack_endpoint_for,
+)
 
 __all__ = [
     "AnchorDisagreementError",
     "AnchorError",
     "AnchorPartialResponseError",
     "ProofError",
+    "all_provider_entries_for",
     "all_providers_for",
     "chainstack_endpoint_for",
     "fetch_account_proof",
     "fetch_agreed_anchor",
+    "fetch_balance_at",
+    "fetch_latest_block",
     "verify_account_proof",
 ]

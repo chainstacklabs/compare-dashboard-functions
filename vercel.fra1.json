@@ -43,6 +43,10 @@
       "memory": 160,
       "maxDuration": 65
     },
+    "api/write/solana_p2p_syncro.py": {
+      "memory": 160,
+      "maxDuration": 65
+    },
     "api/support/update_state.py": {
       "memory": 128,
       "maxDuration": 59
@@ -91,6 +95,10 @@
     },
     {
       "path": "/api/write/solana",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/write/solana_p2p_syncro",
       "schedule": "*/15 * * * *"
     },
     {

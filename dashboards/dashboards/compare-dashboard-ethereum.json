@@ -2025,7 +2025,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Verifier health code. 0=OK (stateRoot quorum + MPT proof verified). 1=stateRoot disagreement among beacon providers. 2=proof math invalid. 3=anchor unavailable (no beacon/stateRoot). 4=proof unavailable (eth_getProof failed). Non-zero values mean the verifier could not produce an authoritative balance_verified for this round.",
+          "description": "Health of the independent state-root verifier (api/support/verify_state.py), a Vercel cron that runs from fra1 every 15 minutes. Each round it picks a recent block, asks a quorum of independent beacon providers (Alchemy and other non-Chainstack/non-dRPC nodes) for that block's stateRoot, then uses eth_getProof to derive the canonical eth_getBalance answer at PROBE_ADDRESS. That proof-anchored value is balance_verified — the ground truth the 'Provider verified' panel above compares every provider's response against. Status codes: 0 = OK (stateRoot quorum + MPT proof succeeded). 1 = stateRoot disagreement among beacon providers. 2 = proof math invalid. 3 = anchor unavailable (no beacon stateRoot). 4 = proof unavailable (eth_getProof failed). Non-zero values mean no balance_verified was emitted this round, so 'Provider verified' will show grey for that interval.",
           "fieldConfig": {
             "defaults": {
               "color": {

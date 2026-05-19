@@ -1233,7 +1233,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Per provider in this region (JP), did this provider's answer match the majority answer for the same block at this moment. Green - matched the majority. Red - was an outlier. Grey - no data captured.",
+          "description": "Per provider, did this provider's eth_getBalance at VERIFY_BLOCK match the proof-anchored truth (balance_verified) at the same block. Green - matched. Red - mismatched. Grey - no sample.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1255,10 +1255,25 @@
               "mappings": [
                 {
                   "options": {
+                    "0": {
+                      "color": "red",
+                      "index": 0,
+                      "text": "Mismatched"
+                    },
+                    "1": {
+                      "color": "green",
+                      "index": 1,
+                      "text": "Verified"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
                     "match": "null",
                     "result": {
                       "color": "grey",
-                      "index": 0,
+                      "index": 2,
                       "text": "No data"
                     }
                   },
@@ -1310,7 +1325,7 @@
             "h": 8,
             "w": 18,
             "x": 0,
-            "y": 39
+            "y": 28
           },
           "id": 1301,
           "options": {
@@ -1322,7 +1337,7 @@
             "legend": {
               "displayMode": "list",
               "placement": "bottom",
-              "showLegend": true
+              "showLegend": false
             },
             "mergeValues": true,
             "rowHeight": 0.8,
@@ -1341,13 +1356,13 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "min by (provider) (\n  (\n    group by (provider, block_number, value) (\n      response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n    )\n    *\n    on(block_number, value) group_left()\n    count by (block_number, value) (\n      response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n    )\n  )\n  ==\n  bool on(block_number) group_left()\n  max by (block_number) (\n    count by (block_number, value) (\n      response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n    )\n  )\n)",
+              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Base\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Base\"}[16m])\n)",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
             }
           ],
-          "title": "Provider agreement",
+          "title": "Provider verified",
           "type": "state-timeline"
         },
         {
@@ -1355,7 +1370,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "For each provider in this region (JP), the percentage of samples that matched the majority answer for the same block, over the chosen time range. 100% means always agreed with the majority. Sorted highest first.",
+          "description": "Per provider, the percentage of samples whose hashed balance at VERIFY_BLOCK matched the proof-anchored truth (balance_verified) over the chosen time range. 100% means always verified. Sorted highest first.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1414,7 +1429,7 @@
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Agreed %"
+                  "options": "Verified %"
                 },
                 "properties": [
                   {
@@ -1467,7 +1482,7 @@
             "h": 8,
             "w": 6,
             "x": 18,
-            "y": 39
+            "y": 28
           },
           "id": 1302,
           "options": {
@@ -1484,7 +1499,7 @@
             "sortBy": [
               {
                 "desc": true,
-                "displayName": "Agreed %"
+                "displayName": "Verified %"
               }
             ]
           },
@@ -1496,14 +1511,14 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider) (\n  max_over_time(\n    (\n      (\n        group by (provider, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n        )\n        *\n        on(block_number, value) group_left()\n        count by (block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n        )\n      )\n      ==\n      bool on(block_number) group_left()\n      max by (block_number) (\n        count by (block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n        )\n      )\n    )[$__range:1m]\n  ) > bool 0\n)\n/\nsum by (provider) (\n  max_over_time(\n    (\n      group by (provider, block_number, value) (\n        response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Base\", source_region=\"hnd1\"}\n      )\n    )[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Base\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Base\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Base\"}[$__range:1m]\n  )\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",
               "refId": "A"
             }
           ],
-          "title": "Agreement summary",
+          "title": "Verification summary",
           "transformations": [
             {
               "id": "organize",
@@ -1516,16 +1531,139 @@
                   "provider": 0
                 },
                 "renameByName": {
-                  "Value": "Agreed %",
+                  "Value": "Verified %",
                   "provider": "Provider"
                 }
               }
             }
           ],
           "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "State-root verifier health. Each round queries all configured providers for the block's stateRoot \u2014 requires unanimous agreement \u2014 then runs eth_getProof via Chainstack and locally MPT-verifies it to derive the canonical eth_getBalance at PROBE_ADDRESS (= balance_verified). Codes: 0 OK \u00b7 1 stateRoot disagreement \u00b7 2 proof math invalid \u00b7 3 anchor unavailable \u00b7 4 proof unavailable. Non-zero \u2192 no balance_verified this round.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "axisPlacement": "auto",
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "mappings": [
+                {
+                  "options": {
+                    "0": {
+                      "color": "green",
+                      "index": 0,
+                      "text": "OK"
+                    },
+                    "1": {
+                      "color": "red",
+                      "index": 1,
+                      "text": "stateRoot disagreement"
+                    },
+                    "2": {
+                      "color": "red",
+                      "index": 2,
+                      "text": "proof math invalid"
+                    },
+                    "3": {
+                      "color": "yellow",
+                      "index": 3,
+                      "text": "anchor unavailable"
+                    },
+                    "4": {
+                      "color": "yellow",
+                      "index": 4,
+                      "text": "proof unavailable"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
+                    "match": "null",
+                    "result": {
+                      "color": "grey",
+                      "index": 5,
+                      "text": "No data"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 4,
+            "w": 24,
+            "x": 0,
+            "y": 36
+          },
+          "id": 1303,
+          "options": {
+            "alignValue": "left",
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.1.0-24455754975",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Base\"}[16m])",
+              "legendFormat": "status",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Verifier status",
+          "type": "state-timeline"
         }
       ],
-      "title": "Data agreement",
+      "title": "Data correctness",
       "type": "row"
     },
     {
@@ -7341,6 +7479,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Base (Japan)",
   "uid": "fe3mtxna6483ke-base-sing",
-  "version": 98,
+  "version": 99,
   "weekStart": "monday"
 }

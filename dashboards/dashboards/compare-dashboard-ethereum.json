@@ -2093,6 +2093,14 @@
                   {
                     "color": "green",
                     "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 1
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 3
                   }
                 ]
               }

@@ -1718,9 +1718,6 @@
       "type": "row"
     },
     {
-      "id": 300,
-      "type": "row",
-      "title": "Data agreement",
       "collapsed": true,
       "datasource": {
         "type": "prometheus",
@@ -1732,43 +1729,14 @@
         "x": 0,
         "y": 34
       },
+      "id": 300,
       "panels": [
         {
-          "id": 301,
-          "type": "state-timeline",
-          "title": "Provider agreement",
-          "description": "Per provider, did this provider's answer match the majority answer in every region it participated in at this moment. Green - matched the majority everywhere. Red - was an outlier in at least one region. Grey - no data captured.",
           "datasource": {
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "gridPos": {
-            "h": 8,
-            "w": 18,
-            "x": 0,
-            "y": 36
-          },
-          "pluginVersion": "13.1.0-24455754975",
-          "options": {
-            "alignValue": "left",
-            "annotations": {
-              "clustering": -1,
-              "multiLane": false
-            },
-            "legend": {
-              "displayMode": "list",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "mergeValues": true,
-            "rowHeight": 0.8,
-            "showValue": "never",
-            "tooltip": {
-              "hideZeros": false,
-              "mode": "single",
-              "sort": "none"
-            }
-          },
+          "description": "Per provider, did this provider's answer match the majority answer in every region it participated in at this moment. Green - matched the majority everywhere. Red - was an outlier in at least one region. Grey - no data captured.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1789,7 +1757,6 @@
               "decimals": 0,
               "mappings": [
                 {
-                  "type": "special",
                   "options": {
                     "match": "null",
                     "result": {
@@ -1797,7 +1764,8 @@
                       "index": 0,
                       "text": "No data"
                     }
-                  }
+                  },
+                  "type": "special"
                 }
               ],
               "thresholds": {
@@ -1841,6 +1809,34 @@
               }
             ]
           },
+          "gridPos": {
+            "h": 8,
+            "w": 18,
+            "x": 0,
+            "y": 36
+          },
+          "id": 301,
+          "options": {
+            "alignValue": "left",
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
@@ -1853,42 +1849,16 @@
               "range": true,
               "refId": "A"
             }
-          ]
+          ],
+          "title": "Provider agreement",
+          "type": "state-timeline"
         },
         {
-          "id": 302,
-          "type": "table",
-          "title": "Agreement summary",
-          "description": "For each provider in each region, the percentage of samples this provider returned that matched the majority answer for the same block, over the chosen time range. 100% means always agreed with the majority. Sorted highest first.",
           "datasource": {
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "gridPos": {
-            "h": 8,
-            "w": 6,
-            "x": 18,
-            "y": 36
-          },
-          "pluginVersion": "13.1.0-24455754975",
-          "options": {
-            "cellHeight": "sm",
-            "showHeader": true,
-            "sortBy": [
-              {
-                "displayName": "Agreed %",
-                "desc": true
-              }
-            ],
-            "footer": {
-              "show": false,
-              "reducer": [
-                "sum"
-              ],
-              "countRows": false,
-              "fields": ""
-            }
-          },
+          "description": "For each provider in each region, the percentage of samples this provider returned that matched the majority answer for the same block, over the chosen time range. 100% means always agreed with the majority. Sorted highest first.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1928,17 +1898,17 @@
                     "id": "mappings",
                     "value": [
                       {
-                        "type": "value",
                         "options": {
                           "Chainstack": {
-                            "text": "Chainstack-Growth",
-                            "index": 0
+                            "index": 0,
+                            "text": "Chainstack-Growth"
                           },
                           "dRPC": {
-                            "text": "dRPC-Growth",
-                            "index": 1
+                            "index": 1,
+                            "text": "dRPC-Growth"
                           }
-                        }
+                        },
+                        "type": "value"
                       }
                     ]
                   }
@@ -1958,21 +1928,21 @@
                     "id": "mappings",
                     "value": [
                       {
-                        "type": "value",
                         "options": {
                           "fra1": {
-                            "text": "EU",
-                            "index": 0
-                          },
-                          "sin1": {
-                            "text": "SG",
-                            "index": 1
+                            "index": 0,
+                            "text": "EU"
                           },
                           "sfo1": {
-                            "text": "US West",
-                            "index": 2
+                            "index": 2,
+                            "text": "US West"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
                           }
-                        }
+                        },
+                        "type": "value"
                       }
                     ]
                   }
@@ -2030,6 +2000,32 @@
               }
             ]
           },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 36
+          },
+          "id": 302,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Agreed %"
+              }
+            ]
+          },
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
@@ -2044,6 +2040,7 @@
               "refId": "A"
             }
           ],
+          "title": "Agreement summary",
           "transformations": [
             {
               "id": "organize",
@@ -2052,20 +2049,23 @@
                   "Time": true
                 },
                 "indexByName": {
+                  "Value": 2,
                   "provider": 0,
-                  "source_region": 1,
-                  "Value": 2
+                  "source_region": 1
                 },
                 "renameByName": {
+                  "Value": "Agreed %",
                   "provider": "Provider",
-                  "source_region": "Region",
-                  "Value": "Agreed %"
+                  "source_region": "Region"
                 }
               }
             }
-          ]
+          ],
+          "type": "table"
         }
-      ]
+      ],
+      "title": "Data agreement",
+      "type": "row"
     },
     {
       "collapsed": true,
@@ -4790,6 +4790,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: BNB Smart Chain",
   "uid": "bnbsc-global-1",
-  "version": 55,
+  "version": 56,
   "weekStart": "monday"
 }

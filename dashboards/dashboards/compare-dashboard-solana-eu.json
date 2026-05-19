@@ -2788,7 +2788,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Number of slots between transaction submission and confirmation, both using confirmed commitment level. Lower values indicate faster transaction landing on chain.\n\nTransactions are sent every 15 minutes. Compute unit price (priority fee) fixed at 200,000 microlamports per compute unit.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
+          "description": "Number of slots between transaction submission and confirmation, both using confirmed commitment level. Lower values indicate faster transaction landing on chain.\n\nTransactions are sent every 15 minutes. Compute unit price (priority fee) fixed at 200,000 microlamports per compute unit.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.\n\nP2P-Syncro means P2P.org Syncro Sender (public endpoint) with a 100,000 lamport tip per tx.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2956,99 +2956,105 @@
           "description": "The success rate of transaction landing, calculated by dividing successful confirmations by total attempts over the selected time range. Data grouped by provider and displayed as a percentage.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
           "fieldConfig": {
             "defaults": {
-              "color": {
-                "fixedColor": "super-light-blue",
-                "mode": "continuous-YlBl"
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false,
+                "minWidth": 110
               },
-              "mappings": [],
-              "max": 1,
-              "min": 0,
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
                   }
                 ]
-              },
-              "unit": "percentunit"
+              }
             },
             "overrides": [
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack"
+                  "options": "Provider"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Default"
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Default"
+                          },
+                          "Chainstack_tx": {
+                            "index": 1,
+                            "text": "Chainstack-Warp"
+                          },
+                          "Helius-Developer": {
+                            "index": 2,
+                            "text": "Helius-Default"
+                          },
+                          "dRPC": {
+                            "index": 3,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 150
                   }
                 ]
               },
               {
                 "matcher": {
                   "id": "byName",
-                  "options": "Chainstack_tx"
+                  "options": "Success Rate"
                 },
                 "properties": [
                   {
-                    "id": "displayName",
-                    "value": "Chainstack-Warp"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Helius-Developer"
-                },
-                "properties": [
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
                   {
-                    "id": "displayName",
-                    "value": "Helius-Default"
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Helius-Developer_tx"
-                },
-                "properties": [
+                    "id": "decimals",
+                    "value": 2
+                  },
                   {
-                    "id": "displayName",
-                    "value": "Helius-Staked"
+                    "id": "custom.width",
+                    "value": 90
                   }
                 ]
               }
             ]
           },
           "gridPos": {
-            "h": 8,
-            "w": 4,
-            "x": 20,
-            "y": 42
+            "h": 12,
+            "w": 6,
+            "x": 18,
+            "y": 38
           },
           "id": 72,
           "options": {
-            "colorMode": "value",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "percentChangeColorMode": "standard",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showPercentChange": false,
-            "textMode": "auto",
-            "wideLayout": true
+            "cellHeight": "sm",
+            "showHeader": false,
+            "sortBy": []
           },
-          "pluginVersion": "12.1.0-88106",
+          "pluginVersion": "13.1.0-24455754975",
           "targets": [
             {
               "datasource": {
@@ -3058,18 +3064,47 @@
               "disableTextWrap": false,
               "editorMode": "code",
               "expr": "sum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\"}[$__range])) by (provider)",
+              "format": "table",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
-              "instant": false,
+              "instant": true,
               "interval": "",
-              "legendFormat": "{{provider}}",
-              "range": true,
               "refId": "A",
               "useBackend": false
             }
           ],
           "title": "Landing rate",
-          "type": "stat"
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 1,
+                  "provider": 0
+                },
+                "renameByName": {
+                  "Value": "Success Rate",
+                  "provider": "Provider"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Provider"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
         },
         {
           "gridPos": {
@@ -4119,6 +4154,429 @@
             {
               "id": "joinByField",
               "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Transactions are sent through P2P.org Syncro Sender (public endpoint) with a 100,000 lamport tip per tx.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 12,
+            "y": 59
+          },
+          "id": 1010,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.1.0-88106",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"P2P-Syncro\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "P2P-Syncro",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {}
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "includeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #1": "",
+                  "Value #2-5": "",
+                  "Value #6-10": "",
+                  "Value #>11": ""
+                }
+              }
+            },
+            {
+              "id": "transpose",
+              "options": {
+                "firstFieldName": "",
+                "restFieldsName": ""
+              }
+            }
+          ],
+          "type": "piechart"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "semi-dark-blue",
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [
+                {
+                  "options": {
+                    "Value #1": {
+                      "index": 0,
+                      "text": "Slot 1"
+                    },
+                    "Value #2-3": {
+                      "index": 1,
+                      "text": "Slots 2-3"
+                    },
+                    "Value #4-5": {
+                      "index": 2,
+                      "text": "Slots 4-5"
+                    },
+                    "Value #6-10": {
+                      "index": 3,
+                      "text": "Slots 6-10"
+                    },
+                    "Value #>11": {
+                      "index": 4,
+                      "text": "Slots >11"
+                    }
+                  },
+                  "type": "value"
+                }
+              ],
+              "unit": "none"
+            }
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 0,
+            "y": 59
+          },
+          "id": 1011,
+          "options": {
+            "displayLabels": [],
+            "legend": {
+              "displayMode": "table",
+              "placement": "right",
+              "showLegend": true,
+              "values": [
+                "percent"
+              ]
+            },
+            "pieType": "donut",
+            "reduceOptions": {
+              "calcs": [
+                "mean"
+              ],
+              "fields": "/^1$/",
+              "values": true
+            },
+            "sort": "desc",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.1.0-24455754975",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} == 1)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "1",
+              "range": false,
+              "refId": "1",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 2 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} <= 3)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "2-5",
+              "range": false,
+              "refId": "2-3",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 4 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} <= 5)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "4-5",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 6 and \r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} <= 10)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "6-10",
+              "range": false,
+              "refId": "6-10",
+              "useBackend": false
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "disableTextWrap": false,
+              "editorMode": "code",
+              "exemplar": false,
+              "expr": "sum(\r\n  count_over_time(\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", provider=\"dRPC\", metric_type=\"slot_latency\", response_status=\"success\"} >= 11)[${__range}:1m]\r\n  )\r\n)",
+              "format": "table",
+              "fullMetaSearch": false,
+              "includeNullMetadata": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": ">11",
+              "range": false,
+              "refId": ">11",
+              "useBackend": false
+            }
+          ],
+          "title": "dRPC-Growth",
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "mode": "outer"
+              }
             },
             {
               "id": "organize",

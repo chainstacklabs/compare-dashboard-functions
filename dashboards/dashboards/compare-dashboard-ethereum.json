@@ -2093,14 +2093,6 @@
                   {
                     "color": "green",
                     "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 1
-                  },
-                  {
-                    "color": "yellow",
-                    "value": 3
                   }
                 ]
               }
@@ -2127,7 +2119,7 @@
             },
             "mergeValues": true,
             "rowHeight": 0.8,
-            "showValue": "auto",
+            "showValue": "never",
             "tooltip": {
               "hideZeros": false,
               "mode": "single",

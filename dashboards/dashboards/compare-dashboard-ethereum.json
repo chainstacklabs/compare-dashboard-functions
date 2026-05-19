@@ -1822,7 +1822,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}\n== bool on(block_number) group_left()\nresponse_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Ethereum\"}",
+              "expr": "min by (provider) (\n  response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}\n  == bool on(block_number) group_left()\n  response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Ethereum\"}\n)",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
@@ -1977,7 +1977,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider) (\n  max_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Ethereum\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Ethereum\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}[$__range:1m]\n  )\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",

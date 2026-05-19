@@ -1818,7 +1818,7 @@
             "legend": {
               "displayMode": "list",
               "placement": "bottom",
-              "showLegend": true
+              "showLegend": false
             },
             "mergeValues": true,
             "rowHeight": 0.8,
@@ -2119,7 +2119,7 @@
             },
             "mergeValues": true,
             "rowHeight": 0.8,
-            "showValue": "always",
+            "showValue": "auto",
             "tooltip": {
               "hideZeros": false,
               "mode": "single",

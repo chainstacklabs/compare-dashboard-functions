@@ -34,3 +34,23 @@ def hash_balance_to_float(balance: int) -> float:
         raise ValueError(f"balance must be non-negative, got {balance}")
     digest: bytes = hashlib.sha256(str(balance).encode("utf-8")).digest()
     return float(int.from_bytes(digest[:7], "big") & _MASK_52)
+
+
+def hash_bytes_to_float(payload: bytes) -> float:
+    """Hash an arbitrary byte string to a 52-bit float64.
+
+    Same shape and collision profile as ``hash_balance_to_float``, but skips
+    the decimal-string step so callers can hash a canonicalised account-state
+    blob (Solana ``getAccountInfo`` fields; TON v3 ``account_state_hash`` or
+    v2 ``code``+``data``) without first deriving an int. Identical inputs
+    produce identical floats.
+
+    Args:
+        payload: Canonicalised account-state bytes.
+
+    Returns:
+        The low 52 bits of ``sha256(payload)`` as a float, exactly
+        representable in float64.
+    """
+    digest: bytes = hashlib.sha256(payload).digest()
+    return float(int.from_bytes(digest[:7], "big") & _MASK_52)

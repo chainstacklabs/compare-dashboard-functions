@@ -105,7 +105,7 @@ class P2PSyncroLandingMetric(SolanaLandingMetric):
 
             confirmation_slot: int = await self._wait_for_confirmation(
                 read_client,
-                str(signature_response.value),
+                signature_response.value,  # type: ignore
                 self.config.timeout,
             )
 

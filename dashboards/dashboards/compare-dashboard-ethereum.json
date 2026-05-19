@@ -1736,10 +1736,25 @@
               "mappings": [
                 {
                   "options": {
+                    "0": {
+                      "color": "red",
+                      "index": 0,
+                      "text": "Mismatched"
+                    },
+                    "1": {
+                      "color": "green",
+                      "index": 1,
+                      "text": "Verified"
+                    }
+                  },
+                  "type": "value"
+                },
+                {
+                  "options": {
                     "match": "null",
                     "result": {
                       "color": "grey",
-                      "index": 0,
+                      "index": 2,
                       "text": "No data"
                     }
                   },

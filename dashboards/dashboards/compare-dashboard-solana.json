@@ -1823,11 +1823,361 @@
     },
     {
       "collapsed": true,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 36
+      },
+      "id": 720,
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "Per provider, did this provider's getAccountInfo for the USDC mint, pinned to the probe slot via minContextSlot match the majority answer in every region it participated in at this moment. Green - matched the majority everywhere. Red - was an outlier in at least one region. Grey - no data captured.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "axisPlacement": "auto",
+                "fillOpacity": 80,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineWidth": 0,
+                "spanNulls": false
+              },
+              "decimals": 0,
+              "mappings": [
+                {
+                  "options": {
+                    "match": "null",
+                    "result": {
+                      "color": "grey",
+                      "index": 0,
+                      "text": "No data"
+                    }
+                  },
+                  "type": "special"
+                }
+              ],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "red",
+                    "value": null
+                  },
+                  {
+                    "color": "green",
+                    "value": 1
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Chainstack"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "Chainstack-Growth"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "dRPC"
+                },
+                "properties": [
+                  {
+                    "id": "displayName",
+                    "value": "dRPC-Growth"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 18,
+            "x": 0,
+            "y": 38
+          },
+          "id": 721,
+          "options": {
+            "alignValue": "left",
+            "annotations": {
+              "clustering": -1,
+              "multiLane": false
+            },
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "mergeValues": true,
+            "rowHeight": 0.8,
+            "showValue": "never",
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "13.1.0-24455754975",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "min by (provider) (\n  (\n    group by (provider, source_region, block_number, value) (\n      response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n    )\n    *\n    on(source_region, block_number, value) group_left()\n    count by (source_region, block_number, value) (\n      response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n    )\n  )\n  ==\n  bool on(source_region, block_number) group_left()\n  max by (source_region, block_number) (\n    count by (source_region, block_number, value) (\n      response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n    )\n  )\n)",
+              "legendFormat": "{{provider}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Provider agreement",
+          "type": "state-timeline"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "description": "For each provider in each region, the percentage of samples (getAccountInfo for the USDC mint, pinned to the probe slot via minContextSlot) that matched the majority answer for the same block, over the chosen time range. 100% means always agreed with the majority. Sorted highest first.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "filterable": false,
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Provider"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 130
+                  },
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "Chainstack": {
+                            "index": 0,
+                            "text": "Chainstack-Growth"
+                          },
+                          "dRPC": {
+                            "index": 1,
+                            "text": "dRPC-Growth"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Region"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  },
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "fra1": {
+                            "index": 0,
+                            "text": "EU"
+                          },
+                          "sfo1": {
+                            "index": 2,
+                            "text": "US West"
+                          },
+                          "sin1": {
+                            "index": 1,
+                            "text": "SG"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Agreed %"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percentunit"
+                  },
+                  {
+                    "id": "decimals",
+                    "value": 2
+                  },
+                  {
+                    "id": "min",
+                    "value": 0
+                  },
+                  {
+                    "id": "max",
+                    "value": 1
+                  },
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "type": "color-text"
+                    }
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 0.95
+                        },
+                        {
+                          "color": "green",
+                          "value": 0.99
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 6,
+            "x": 18,
+            "y": 38
+          },
+          "id": 722,
+          "options": {
+            "cellHeight": "sm",
+            "footer": {
+              "countRows": false,
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "Agreed %"
+              }
+            ]
+          },
+          "pluginVersion": "13.1.0-24455754975",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "grafanacloud-prom"
+              },
+              "editorMode": "code",
+              "expr": "sum by (provider, source_region) (\n  max_over_time(\n    (\n      (\n        group by (provider, source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n        *\n        on(source_region, block_number, value) group_left()\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n      )\n      ==\n      bool on(source_region, block_number) group_left()\n      max by (source_region, block_number) (\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n      )\n    )[$__range:1m]\n  ) > bool 0\n)\n/\nsum by (provider, source_region) (\n  max_over_time(\n    (\n      group by (provider, source_region, block_number, value) (\n        response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n      )\n    )[$__range:1m]\n  )\n)",
+              "format": "table",
+              "instant": true,
+              "legendFormat": "__auto",
+              "refId": "A"
+            }
+          ],
+          "title": "Agreement summary",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time": true
+                },
+                "indexByName": {
+                  "Value": 2,
+                  "provider": 0,
+                  "source_region": 1
+                },
+                "renameByName": {
+                  "Value": "Agreed %",
+                  "provider": "Provider",
+                  "source_region": "Region"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "Data agreement",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 37
       },
       "id": 118,
       "panels": [
@@ -3985,7 +4335,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 38
       },
       "id": 119,
       "panels": [

@@ -4,7 +4,11 @@ For Hyperliquid Info API metrics (clearinghouseState, openOrders, etc.),
 see metrics.hyperliquid_info module.
 """
 
-from common.metric_types import EVMBlockNumberLatencyMetric, HttpCallLatencyMetricBase
+from common.metric_types import (
+    EVMAccBalanceLatencyMetric,
+    EVMBlockNumberLatencyMetric,
+    HttpCallLatencyMetricBase,
+)
 
 
 class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
@@ -46,22 +50,17 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
         return [state_data["tx"]]
 
 
-class HTTPAccBalanceLatencyMetric(HttpCallLatencyMetricBase):
-    """Collects latency for account balance queries."""
+class HTTPAccBalanceLatencyMetric(EVMAccBalanceLatencyMetric):
+    """eth_getBalance latency for Hyperliquid (HyperEVM).
 
-    @property
-    def method(self) -> str:
-        """Return the RPC method name."""
-        return "eth_getBalance"
+    Probes Wrapped HYPE at a historical block from ``state_data["old_block"]``,
+    enabling cross-provider Data agreement on the captured balance (emitted as
+    ``balance_observed`` by ``MetricsHandler._emit_observed_balances``). Empirical
+    re-test 2026-05-19 confirmed dRPC and Alchemy converge byte-for-byte at
+    depth; Quicknode's archive is shallow and will show as the outlier.
+    """
 
-    @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
-        """Get parameters with fixed monitoring address."""
-        return [
-            "0xFC1286EeddF81d6955eDAd5C8D99B8Aa32F3D2AA",
-            # state_data["old_block"],
-            "latest",
-        ]  # Only latest block is supported
+    probe_address = "0x5555555555555555555555555555555555555555"
 
 
 class HTTPBlockNumberLatencyMetric(EVMBlockNumberLatencyMetric):

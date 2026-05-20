@@ -3,6 +3,7 @@
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.ton import (
+    HTTPAccountAgreementMetric,
     HTTPGetAddressBalanceLatencyMetric,
     HTTPGetBlockHeaderLatencyMetric,
     HTTPGetBlockTxsLatencyMetric,
@@ -20,6 +21,7 @@ METRICS = [
     (HTTPGetAddressBalanceLatencyMetric, METRIC_NAME),
     (HTTPGetBlockTxsLatencyMetric, METRIC_NAME),
     (HTTPGetWalletTxsLatencyMetric, METRIC_NAME),
+    (HTTPAccountAgreementMetric, METRIC_NAME),
 ]
 
 

@@ -66,7 +66,8 @@ class MetricsHandler:
 
         Only ``EVMAccBalanceLatencyMetric`` subclasses carry both
         ``_captured_balance`` and ``_old_block_hex``; everything else is
-        skipped via getattr.
+        skipped via getattr. Hyperliquid joined this path 2026-05-19 (Data
+        agreement on HyperEVM balances at depth where dRPC/Alchemy converge).
 
         Returns:
             None
@@ -82,6 +83,37 @@ class MetricsHandler:
                 hash_balance_to_float(balance),
                 "balance_observed",
                 labels={"block_number": block_hex},
+            )
+
+    def _emit_observed_accounts(self) -> None:
+        """Emit hashed observed account states (Solana/TON Data agreement).
+
+        Structurally identical to ``_emit_observed_balances`` but for non-EVM
+        chains: Solana's ``getAccountInfo`` at a pinned finalised slot and
+        TON's ``runGetMethod(get_jetton_data)`` at a bucketed masterchain
+        seqno. The captured hash already lives on the instance as
+        ``_captured_account_hash`` (pre-hashed to a 52-bit float by
+        ``common.balance_hash.hash_bytes_to_float``). The per-value
+        ``block_number`` label carries the anchor hex (slot for Solana,
+        bucketed seqno for TON) so the follow-up Grafana panel joins on the
+        same string across providers.
+
+        Returns:
+            None
+        """
+        for instance in self._instances:
+            account_hash = getattr(instance, "_captured_account_hash", None)
+            if account_hash is None:
+                continue
+            anchor_hex = getattr(instance, "_anchor_slot_hex", None) or getattr(
+                instance, "_anchor_seqno_hex", None
+            )
+            if not anchor_hex:
+                continue
+            instance.update_metric_value(
+                account_hash,
+                "account_observed",
+                labels={"block_number": anchor_hex},
             )
 
     def get_metrics_influx_format(self) -> list[str]:
@@ -177,6 +209,7 @@ class MetricsHandler:
 
             self._emit_block_numbers()
             self._emit_observed_balances()
+            self._emit_observed_accounts()
 
             metrics_text: str = self.get_metrics_text()
             if metrics_text:

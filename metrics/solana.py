@@ -1,7 +1,8 @@
 """Solana metrics implementation for HTTP endpoints."""
 
-from typing import Any
+from typing import Any, Optional
 
+from common.balance_hash import hash_bytes_to_float
 from common.metric_types import HttpCallLatencyMetricBase
 
 
@@ -111,6 +112,84 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
                 "rewards": False,  # Further reduce response size
             },
         ]
+
+
+# USDC mint: an SPL token mint with a moving but deterministic ``supply``
+# field embedded in the account ``data`` (changes with mints/burns). Pinning
+# ``getAccountInfo`` to a finalized slot via ``minContextSlot`` makes every
+# healthy provider return identical bytes, so the canonical hash diverges
+# only when a provider serves stale or non-canonical state.
+_AGREEMENT_PROBE_ACCOUNT: str = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"
+
+
+class HTTPAccountAgreementMetric(HttpCallLatencyMetricBase):
+    """Cross-provider Data agreement for Solana account state.
+
+    Pins ``getAccountInfo`` to the same historical slot across providers via
+    ``minContextSlot`` so each provider returns identical bytes. The slot is
+    taken verbatim from ``state_data["old_block"]`` (already populated by the
+    state-update cron, same field the v1 balance probes use). The captured
+    fields (owner, lamports, executable, rentEpoch, base64 data) are
+    canonicalised and hashed to a 52-bit float, then emitted as
+    ``metric_type=account_observed`` with ``block_number=<slot_hex>`` so the
+    follow-up Grafana panel can join on the slot.
+    """
+
+    @property
+    def method(self) -> str:
+        """Return the RPC method name."""
+        return "getAccountInfo"
+
+    @staticmethod
+    def validate_state(state_data: dict[str, Any]) -> bool:
+        """Require the historical-slot anchor in state data."""
+        return bool(state_data and state_data.get("old_block"))
+
+    @staticmethod
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
+        """Build getAccountInfo params pinned to the historical slot."""
+        anchor_slot = int(state_data["old_block"])
+        return [
+            _AGREEMENT_PROBE_ACCOUNT,
+            {
+                "encoding": "base64",
+                "commitment": "finalized",
+                "minContextSlot": anchor_slot,
+            },
+        ]
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Stash the anchor slot hex for the account_observed emit step."""
+        state_data = kwargs.get("state_data") or {}
+        super().__init__(*args, **kwargs)
+        anchor_slot = int(state_data["old_block"])
+        self._anchor_slot_hex: str = hex(anchor_slot)
+        self._captured_account_hash: Optional[float] = None
+
+    def mark_failure(self) -> None:
+        """Clear the captured hash on failure to suppress the emit."""
+        super().mark_failure()
+        self._captured_account_hash = None
+
+    def _on_json_response(self, json_response: dict[str, Any]) -> None:
+        """Canonicalise the account value fields and hash them."""
+        result = json_response.get("result")
+        if not isinstance(result, dict):
+            return
+        value = result.get("value")
+        if not isinstance(value, dict):
+            # Account may legitimately be missing at this slot; skip emit.
+            return
+        owner = str(value.get("owner", ""))
+        lamports = int(value.get("lamports", 0))
+        executable = bool(value.get("executable", False))
+        rent_epoch = int(value.get("rentEpoch", 0))
+        data_field = value.get("data", [])
+        data_b64 = data_field[0] if isinstance(data_field, list) and data_field else ""
+        canonical = (
+            f"{owner}|{lamports}|{int(executable)}|{rent_epoch}|{data_b64}"
+        ).encode()
+        self._captured_account_hash = hash_bytes_to_float(canonical)
 
 
 class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):

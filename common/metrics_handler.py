@@ -90,8 +90,8 @@ class MetricsHandler:
 
         Structurally identical to ``_emit_observed_balances`` but for non-EVM
         chains: Solana's ``getAccountInfo`` at a pinned finalised slot and
-        TON's ``getAddressInformation`` at a bucketed masterchain seqno. The
-        captured hash already lives on the instance as
+        TON's ``runGetMethod(get_jetton_data)`` at a bucketed masterchain
+        seqno. The captured hash already lives on the instance as
         ``_captured_account_hash`` (pre-hashed to a 52-bit float by
         ``common.balance_hash.hash_bytes_to_float``). The per-value
         ``block_number`` label carries the anchor hex (slot for Solana,

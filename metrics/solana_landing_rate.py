@@ -21,6 +21,7 @@ from solders.rpc.responses import (
     GetSlotResp,
     SendTransactionResp,
 )
+from solders.signature import Signature
 from solders.transaction import Transaction
 from solders.transaction_status import TransactionConfirmationStatus, TransactionStatus
 
@@ -30,6 +31,27 @@ from common.metrics_handler import MetricsHandler
 from config.defaults import MetricsServiceConfig
 
 LOG_TAG = "[solana-landing]"
+
+
+def _is_rate_limited_exc(exc: BaseException) -> bool:
+    """Check if an exception chain bottoms out in an ignored HTTP status.
+
+    ``SolanaRpcException`` wraps ``httpx.HTTPStatusError`` for 4xx responses
+    from the upstream RPC. Walk ``__cause__``/``__context__`` chains and inspect
+    ``.response.status_code`` (httpx-style). Returns True for any status in
+    ``IGNORED_HTTP_ERRORS`` (401/403/404/429) — these are policy responses, not
+    bugs.
+    """
+    seen: set[int] = set()
+    current: Optional[BaseException] = exc
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        response = getattr(current, "response", None)
+        status_code = getattr(response, "status_code", None)
+        if status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
+            return True
+        current = current.__cause__ or current.__context__
+    return False
 
 
 class RegionCode(str, Enum):
@@ -131,7 +153,9 @@ class SolanaLandingMetric(HttpMetric):
             raise ValueError(f"getSlot returned empty {self._log_ctx()}")
         return response.value
 
-    async def _check_status(self, client: AsyncClient, signature: str) -> int | None:
+    async def _check_status(
+        self, client: AsyncClient, signature: Signature
+    ) -> int | None:
         """Check single transaction status.
 
         Returns the confirmation slot if the tx is Confirmed/Finalized, ``None``
@@ -141,7 +165,7 @@ class SolanaLandingMetric(HttpMetric):
         full polling timeout.
         """
         response: GetSignatureStatusesResp = await client.get_signature_statuses(
-            [signature]  # type: ignore
+            [signature]
         )
         if not response or not response.value:
             return None
@@ -168,7 +192,7 @@ class SolanaLandingMetric(HttpMetric):
         return None
 
     async def _wait_for_confirmation(
-        self, client: AsyncClient, signature: str, timeout: int
+        self, client: AsyncClient, signature: Signature, timeout: int
     ) -> int:
         """Wait for transaction confirmation using direct status checks."""
         self._last_status = None
@@ -227,24 +251,39 @@ class SolanaLandingMetric(HttpMetric):
 
     async def _submit(
         self, client: AsyncClient, tx: Transaction, tag: str = LOG_TAG
-    ) -> str:
+    ) -> Signature:
         """Send the transaction; log RPC errors with context before re-raising.
 
-        Returns the signature as a string. Falsy response is treated as a send
-        failure and raises ``ValueError`` with provider context.
+        Returns the ``Signature`` object from solders so it can be passed
+        directly to downstream ``get_signature_statuses`` calls (which require
+        ``Signature``, not ``str``). For log lines, ``Signature.__str__``
+        renders the same base58 form a raw string would.
+
+        Rate-limit responses (HTTP 401/403/404/429 wrapped in
+        ``SolanaRpcException``) are logged at WARNING instead of ERROR — the
+        429 from Syncro's 1-RPS public endpoint is expected intermittent noise,
+        not a regression. The exception still propagates so the metric framework
+        treats it as a send failure (which it is — we couldn't land via this
+        path this scrape).
         """
         try:
             signature_response: SendTransactionResp = await client.send_transaction(
                 tx, TxOpts(skip_preflight=True, max_retries=0)
             )
         except Exception as e:
-            logging.error(f"{tag} sendTransaction failed {self._log_ctx()}: {e!r}")
+            if _is_rate_limited_exc(e):
+                logging.warning(
+                    f"{tag} sendTransaction rate-limited {self._log_ctx()}: "
+                    f"{type(e).__name__}"
+                )
+            else:
+                logging.error(f"{tag} sendTransaction failed {self._log_ctx()}: {e!r}")
             raise
         if not signature_response or not signature_response.value:
             raise ValueError(
                 f"sendTransaction returned empty response {self._log_ctx()}"
             )
-        return str(signature_response.value)
+        return signature_response.value
 
     async def fetch_data(self) -> Optional[float]:
         """Send a memo transaction and return elapsed wall-clock time.
@@ -269,7 +308,7 @@ class SolanaLandingMetric(HttpMetric):
             start_slot: int = await self._get_slot(client)
             start_time: float = time.monotonic()
 
-            signature: str = await self._submit(client, tx)
+            signature: Signature = await self._submit(client, tx)
             logging.info(
                 f"{LOG_TAG} submitted sig={signature} start_slot={start_slot} "
                 f"{self._log_ctx()}"

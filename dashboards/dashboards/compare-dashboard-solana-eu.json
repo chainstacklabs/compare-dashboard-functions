@@ -3267,7 +3267,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "The success rate of transaction landing, calculated by dividing successful confirmations by total attempts over the selected time range. Data grouped by provider and displayed as a percentage.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
+          "description": "The success rate of transaction landing, calculated by dividing successful confirmations by total attempts over the selected time range. Data grouped by provider and displayed as a percentage.\n\nAttempts where the fee wallet had ≤ 0.0002 SOL at probe time are excluded from the denominator, so wallet drain doesn't penalize providers.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -3377,7 +3377,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "sum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(\r\n  (\r\n    transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"slot_latency\", api_method=\"sendTransaction\"}\r\n    unless ignoring(metric_type)\r\n    (transaction_landing_latency{blockchain=\"Solana\", source_region=\"fra1\", metric_type=\"signer_balance\", response_status=\"failed\"} <= 200000)\r\n  )[$__range:]\r\n)) by (provider)",
               "format": "table",
               "fullMetaSearch": false,
               "includeNullMetadata": true,

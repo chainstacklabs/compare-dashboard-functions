@@ -17,6 +17,7 @@ from solana.rpc.async_api import AsyncClient
 from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
 from solders.instruction import Instruction
 from solders.pubkey import Pubkey
+from solders.signature import Signature
 from solders.system_program import TransferParams, transfer
 from solders.transaction import Transaction
 
@@ -103,7 +104,7 @@ class P2PSyncroLandingMetric(SolanaLandingMetric):
             start_slot: int = await self._get_slot(read_client)
             start_time: float = time.monotonic()
 
-            signature: str = await self._submit(tx_client, tx, tag=SYNCRO_LOG_TAG)
+            signature: Signature = await self._submit(tx_client, tx, tag=SYNCRO_LOG_TAG)
             logging.info(
                 f"{SYNCRO_LOG_TAG} submitted sig={signature} start_slot={start_slot} "
                 f"{self._log_ctx()}"

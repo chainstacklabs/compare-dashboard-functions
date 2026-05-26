@@ -146,7 +146,7 @@ class BaseMetric(ABC):
                     f"Ignoring HTTP error [{status_code}] for "
                     f"{self.labels.get_prometheus_labels()}"
                 )
-                return  # Skip metric submission for ignored errors
+                return  # Suppress noisy log; mark_failure already recorded the metric
 
         if isinstance(error, websockets.exceptions.InvalidStatusCode):
             status_code = error.status_code
@@ -155,7 +155,7 @@ class BaseMetric(ABC):
                     f"Ignoring WebSocket connection error [{status_code}] for "
                     f"{self.labels.get_prometheus_labels()}"
                 )
-                return  # Skip metric submission for ignored errors
+                return  # Suppress noisy log; mark_failure already recorded the metric
 
         if not self.values:
             self.update_metric_value(0)

@@ -8,22 +8,26 @@ lamports) to a Syncro tip account so the public endpoint accepts the tx.
 Public endpoint is rate-limited to 1 RPS — do not increase send cadence.
 """
 
+import logging
 import random
 import time
 from typing import Optional
 
 from solana.rpc.async_api import AsyncClient
-from solana.rpc.types import TxOpts
 from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
 from solders.instruction import Instruction
 from solders.pubkey import Pubkey
-from solders.rpc.responses import SendTransactionResp
 from solders.system_program import TransferParams, transfer
 from solders.transaction import Transaction
 
 from common.metric_config import MetricLabelKey
 from config.defaults import MetricsServiceConfig
-from metrics.solana_landing_rate import SolanaLandingMetric, generate_fixed_memo
+from metrics.solana_landing_rate import (
+    SolanaLandingMetric,
+    generate_memo,
+)
+
+SYNCRO_LOG_TAG = "[solana-landing-syncro]"
 
 
 class P2PSyncroLandingMetric(SolanaLandingMetric):
@@ -48,8 +52,9 @@ class P2PSyncroLandingMetric(SolanaLandingMetric):
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
         """Build the memo transaction with a Syncro tip transfer prepended."""
-        memo_text: str = generate_fixed_memo(
-            self.labels.get_label(MetricLabelKey.SOURCE_REGION)  # type: ignore[arg-type]
+        memo_text: str = generate_memo(
+            self.labels.get_label(MetricLabelKey.SOURCE_REGION),  # type: ignore[arg-type]
+            self.labels.get_label(MetricLabelKey.PROVIDER),  # type: ignore[arg-type]
         )
 
         tip_ix = transfer(
@@ -73,7 +78,7 @@ class P2PSyncroLandingMetric(SolanaLandingMetric):
 
         blockhash = await client.get_latest_blockhash()
         if not blockhash or not blockhash.value:
-            raise ValueError("Failed to get latest blockhash")
+            raise ValueError(f"getLatestBlockhash returned empty {self._log_ctx()}")
 
         return Transaction.new_signed_with_payer(
             [tip_ix, compute_limit_ix, compute_price_ix, memo_ix],
@@ -93,28 +98,32 @@ class P2PSyncroLandingMetric(SolanaLandingMetric):
             read_client = await self._create_client()
             tx_client = AsyncClient(self.SYNCRO_TX_ENDPOINT)
 
+            await self._capture_signer_balance(read_client)
             tx: Transaction = await self._prepare_memo_transaction(read_client)
             start_slot: int = await self._get_slot(read_client)
             start_time: float = time.monotonic()
 
-            signature_response: SendTransactionResp = await tx_client.send_transaction(
-                tx, TxOpts(skip_preflight=True, max_retries=0)
+            signature: str = await self._submit(tx_client, tx, tag=SYNCRO_LOG_TAG)
+            logging.info(
+                f"{SYNCRO_LOG_TAG} submitted sig={signature} start_slot={start_slot} "
+                f"{self._log_ctx()}"
             )
-            if not signature_response or not signature_response.value:
-                raise ValueError("Failed to send transaction")
 
             confirmation_slot: int = await self._wait_for_confirmation(
-                read_client,
-                signature_response.value,  # type: ignore
-                self.config.timeout,
+                read_client, signature, self.config.timeout
             )
 
             response_time: float = time.monotonic() - start_time
             self._slot_diff = confirmation_slot - start_slot
             if self._slot_diff < 0:
+                logging.warning(
+                    f"{SYNCRO_LOG_TAG} negative slot diff sig={signature} "
+                    f"confirmation_slot={confirmation_slot} "
+                    f"start_slot={start_slot} {self._log_ctx()}"
+                )
                 raise ValueError(
-                    f"Negative slot difference: {self._slot_diff} "
-                    f"(confirmation_slot={confirmation_slot}, start_slot={start_slot})"
+                    f"negative slot diff: {self._slot_diff} "
+                    f"(confirmation={confirmation_slot}, start={start_slot})"
                 )
             self.update_metric_value(self._slot_diff, "slot_latency")
             return response_time

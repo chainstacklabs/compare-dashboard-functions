@@ -3267,7 +3267,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "The success rate of transaction landing, calculated by dividing successful confirmations by total attempts over the selected time range. Data grouped by provider and displayed as a percentage.\n\nFailed attempts where the fee wallet had ≤ 0.0002 SOL at probe time are excluded from the denominator, so wallet drain doesn't penalize providers.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
+          "description": "The success rate of transaction landing, calculated by dividing successful confirmations by total attempts over the selected time range. Data grouped by provider and displayed as a percentage.\n\nFailed attempts where the fee wallet had \u2264 0.0002 SOL at probe time are excluded from the denominator, so wallet drain doesn't penalize providers.\n\nChainstack-Default means a default Solana RPC endpoint (not bloXroute) under Growth plan.\n\nChainstack-Warp means a Solana Trader Node (bloXroute) under Growth plan.\n\nHelius-Default means a default Solana RPC endpoint (staked) under Developer plan.",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -8586,6 +8586,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana (EU)",
   "uid": "be82wni0bhukgd",
-  "version": 111,
+  "version": 113,
   "weekStart": "monday"
 }

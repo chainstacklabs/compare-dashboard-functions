@@ -10,6 +10,7 @@ from typing import Optional
 
 import base58
 from solana.rpc.async_api import AsyncClient
+from solana.rpc.commitment import Confirmed
 from solana.rpc.types import TxOpts
 from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
 from solders.instruction import Instruction
@@ -17,13 +18,12 @@ from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 from solders.rpc.responses import (
     GetLatestBlockhashResp,
-    GetSignatureStatusesResp,
     GetSlotResp,
+    GetTransactionResp,
     SendTransactionResp,
 )
 from solders.signature import Signature
 from solders.transaction import Transaction
-from solders.transaction_status import TransactionConfirmationStatus, TransactionStatus
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpMetric
@@ -108,7 +108,6 @@ class SolanaLandingMetric(HttpMetric):
         self.private_key: bytes = base58.b58decode(os.environ["SOLANA_PRIVATE_KEY"])
         self.keypair: Keypair = Keypair.from_bytes(self.private_key)
         self._slot_diff = 0
-        self._last_status: Optional[TransactionStatus] = None
 
     def _log_ctx(self) -> str:
         """Return short structured context (provider, region) for log lines."""
@@ -156,46 +155,45 @@ class SolanaLandingMetric(HttpMetric):
     async def _check_status(
         self, client: AsyncClient, signature: Signature
     ) -> int | None:
-        """Check single transaction status.
+        """Return the landing slot once the tx is confirmed, else ``None``.
 
-        Returns the confirmation slot if the tx is Confirmed/Finalized, ``None``
-        if it has not yet reached that threshold. Raises immediately if the
-        status carries an ``err`` (on-chain revert) — that is a distinct
-        failure mode from "not landed yet" and we don't want it masked by the
-        full polling timeout.
+        Uses ``getTransaction`` at ``confirmed`` commitment instead of
+        ``getSignatureStatuses``. The latter reads the validator's in-memory
+        status cache, which is unreliable across providers — a freshly-landed
+        sig can read back ``null``, or stay pinned at ``processed`` for the
+        entire poll window, even though it confirmed on-chain in ~1s.
+        ``getTransaction`` reads the ledger, so a non-null result is a
+        definitive "landed and confirmed" signal on every provider we tested.
+
+        Raises immediately if the tx carries an on-chain error (revert) — a
+        distinct failure mode from "not landed yet" that we don't want masked by
+        the polling timeout.
         """
-        response: GetSignatureStatusesResp = await client.get_signature_statuses(
-            [signature]
+        response: GetTransactionResp = await client.get_transaction(
+            signature,
+            commitment=Confirmed,
+            max_supported_transaction_version=0,
         )
-        if not response or not response.value:
+        confirmed_tx = response.value
+        if confirmed_tx is None:
             return None
 
-        status: TransactionStatus | None = response.value[0]
-        if not status:
-            return None
-
-        if status.err is not None:
+        meta = confirmed_tx.transaction.meta
+        if meta is not None and meta.err is not None:
             logging.error(
-                f"{LOG_TAG} on-chain revert sig={signature} slot={status.slot} "
-                f"err={status.err!r} {self._log_ctx()}"
+                f"{LOG_TAG} on-chain revert sig={signature} "
+                f"slot={confirmed_tx.slot} err={meta.err!r} {self._log_ctx()}"
             )
-            raise ValueError(f"on-chain revert at slot {status.slot}: {status.err!r}")
+            raise ValueError(
+                f"on-chain revert at slot {confirmed_tx.slot}: {meta.err!r}"
+            )
 
-        self._last_status = status
-
-        if status.confirmation_status in [
-            TransactionConfirmationStatus.Confirmed,
-            TransactionConfirmationStatus.Finalized,
-        ]:
-            return status.slot
-
-        return None
+        return confirmed_tx.slot
 
     async def _wait_for_confirmation(
         self, client: AsyncClient, signature: Signature, timeout: int
     ) -> int:
-        """Wait for transaction confirmation using direct status checks."""
-        self._last_status = None
+        """Poll getTransaction until the tx confirms or the timeout elapses."""
         end_time: float = time.monotonic() + timeout
         polls = 0
         while time.monotonic() < end_time:
@@ -205,19 +203,11 @@ class SolanaLandingMetric(HttpMetric):
                 return confirmation_slot
             await asyncio.sleep(self.POLL_INTERVAL)
 
-        last = self._last_status
-        last_repr = (
-            f"status={last.confirmation_status} slot={last.slot}"
-            if last is not None
-            else "never_seen"
-        )
         logging.warning(
             f"{LOG_TAG} confirmation timeout sig={signature} polls={polls} "
-            f"last={last_repr} timeout={timeout}s {self._log_ctx()}"
+            f"timeout={timeout}s {self._log_ctx()}"
         )
-        raise ValueError(
-            f"confirmation timeout after {timeout}s sig={signature} last={last_repr}"
-        )
+        raise ValueError(f"confirmation timeout after {timeout}s sig={signature}")
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
         memo_text: str = generate_memo(
@@ -255,8 +245,8 @@ class SolanaLandingMetric(HttpMetric):
         """Send the transaction; log RPC errors with context before re-raising.
 
         Returns the ``Signature`` object from solders so it can be passed
-        directly to downstream ``get_signature_statuses`` calls (which require
-        ``Signature``, not ``str``). For log lines, ``Signature.__str__``
+        directly to the downstream ``get_transaction`` confirmation poll (which
+        requires ``Signature``, not ``str``). For log lines, ``Signature.__str__``
         renders the same base58 form a raw string would.
 
         Rate-limit responses (HTTP 401/403/404/429 wrapped in

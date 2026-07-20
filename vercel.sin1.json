@@ -11,15 +11,7 @@
       "memory": 300,
       "maxDuration": 59
     },
-    "api/read/ton.py": {
-      "memory": 200,
-      "maxDuration": 59
-    },
     "api/read/bnbsc.py": {
-      "memory": 400,
-      "maxDuration": 59
-    },
-    "api/read/monad.py": {
       "memory": 400,
       "maxDuration": 59
     },
@@ -38,15 +30,7 @@
       "schedule": "*/3 * * * *"
     },
     {
-      "path": "/api/read/ton",
-      "schedule": "*/3 * * * *"
-    },
-    {
       "path": "/api/read/bnbsc",
-      "schedule": "*/3 * * * *"
-    },
-    {
-      "path": "/api/read/monad",
       "schedule": "*/3 * * * *"
     },
     {

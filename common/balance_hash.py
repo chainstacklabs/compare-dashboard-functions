@@ -41,9 +41,8 @@ def hash_bytes_to_float(payload: bytes) -> float:
 
     Same shape and collision profile as ``hash_balance_to_float``, but skips
     the decimal-string step so callers can hash a canonicalised account-state
-    blob (Solana ``getAccountInfo`` fields; TON v3 ``account_state_hash`` or
-    v2 ``code``+``data``) without first deriving an int. Identical inputs
-    produce identical floats.
+    blob (e.g. Solana ``getAccountInfo`` fields) without first deriving an
+    int. Identical inputs produce identical floats.
 
     Args:
         payload: Canonicalised account-state bytes.

@@ -60,24 +60,6 @@
             "websocket_endpoint": "wss://solana-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://solana-mainnet.core.chainstack.com/...",
             "tx_endpoint": "https://solana-mainnet.core.chainstack.com/..."
-        },
-        {
-            "blockchain": "TON",
-            "name": "Chainstack",
-            "websocket_endpoint": "not_supported",
-            "http_endpoint": "https://ton-mainnet.core.chainstack.com/.../api/v2/jsonRPC"
-        },
-        {
-            "blockchain": "TON",
-            "name": "Quicknode-Growth",
-            "websocket_endpoint": "not_supported",
-            "http_endpoint": "https://ton-mainnet.quiknode.pro/.../jsonRPC"
-        },
-        {
-            "blockchain": "TON",
-            "name": "TonCenter-WithAPIKey",
-            "websocket_endpoint": "not_supported",
-            "http_endpoint": "https://toncenter.com/api/v2/jsonRPC?api_key=..."
         }
     ]
 }

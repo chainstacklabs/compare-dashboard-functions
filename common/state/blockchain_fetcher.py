@@ -180,56 +180,6 @@ class BlockchainDataFetcher:
             self._logger.error(f"Solana fetch failed: {e!s}")
             return BlockchainData.empty()
 
-    async def _fetch_ton_data(self) -> BlockchainData:
-        """Fetches latest block data from TON."""
-        try:
-            info = await self._make_rpc_request("getMasterchainInfo")
-            if not isinstance(info, dict) or "last" not in info:
-                return BlockchainData.empty()
-
-            last_block = info["last"]
-            if not isinstance(last_block, dict):
-                return BlockchainData.empty()
-
-            offset_range = MetricsServiceConfig.BLOCK_OFFSET_RANGES.get(
-                "ton", (1555200, 1572480)
-            )
-            offset = random.randint(offset_range[0], offset_range[1])
-            old_seqno = max(0, last_block["seqno"] - offset)
-
-            latest_block_id = (
-                f"{last_block['workchain']}:{last_block['shard']}:{last_block['seqno']}"
-            )
-            old_block_id = (
-                f"{last_block['workchain']}:{last_block['shard']}:{old_seqno}"
-            )
-
-            block = await self._make_rpc_request(
-                "getBlockTransactions",
-                {
-                    "workchain": last_block["workchain"],
-                    "shard": last_block["shard"],
-                    "seqno": last_block["seqno"],
-                    "count": 1,
-                },
-            )
-
-            tx_id = (
-                block.get("transactions", [{}])[0].get("hash", "")
-                if isinstance(block, dict)
-                else ""
-            )
-
-            return BlockchainData(
-                block_id=latest_block_id,
-                transaction_id=tx_id,
-                old_block_id=old_block_id,
-            )
-
-        except Exception as e:
-            self._logger.error(f"TON fetch failed: {e!s}")
-            return BlockchainData.empty()
-
     async def fetch_latest_data(self, blockchain: str) -> BlockchainData:
         """Fetches latest block and transaction data for specified blockchain."""
         try:
@@ -239,13 +189,10 @@ class BlockchainDataFetcher:
                 "arbitrum",
                 "bnb",
                 "hyperliquid",
-                "monad",
             ):
                 return await self._fetch_evm_data(blockchain)
             elif blockchain.lower() == "solana":
                 return await self._fetch_solana_data()
-            elif blockchain.lower() == "ton":
-                return await self._fetch_ton_data()
             raise ValueError(f"Unsupported blockchain: {blockchain}")
 
         except Exception as e:

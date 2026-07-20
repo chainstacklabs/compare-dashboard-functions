@@ -37,11 +37,9 @@ class MetricsServiceConfig:
         "ethereum": (7200, 10000),
         "base": (7200, 10000),
         "solana": (432000, 648000),
-        "ton": (1555200, 1572480),
         "arbitrum": (7200, 10000),
         "bnb": (7200, 10000),
         "hyperliquid": (3600, 7200),
-        "monad": (216000, 256000),
     }
 
     # Per-chain offset for the v2 verifier (eth_getProof at VERIFY_BLOCK).

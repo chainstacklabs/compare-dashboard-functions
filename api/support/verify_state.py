@@ -1,7 +1,7 @@
 """Verifier function: emits balance_verified + verifier_status for EVM chains.
 
 Per cron round (fra1-only, every 15 min). For each chain in
-[Ethereum, Base, Arbitrum, BNB]:
+[Ethereum, Base, Arbitrum, BNB, Robinhood]:
   - Compute VERIFY_BLOCK = latest_head - random(VERIFY_BLOCK_OFFSET_RANGES[chain]).
     Self-contained: no blob coordination with update_state.
   - Multi-provider stateRoot quorum at VERIFY_BLOCK.
@@ -56,6 +56,9 @@ PROBE_ADDRESSES: dict[str, str] = {
     "Base": "0x4200000000000000000000000000000000000006",  # WETH (OP Stack predeploy)
     "Arbitrum": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",  # WETH
     "BNB": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # WBNB
+    # WETH on Robinhood — same address as the v1 balance probe
+    # (metrics/robinhood.py) so the observed↔verified dashboard join lines up.
+    "Robinhood": "0x0bd7d308f8e1639fab988df18a8011f41eacad73",
 }
 
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"

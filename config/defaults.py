@@ -40,6 +40,7 @@ class MetricsServiceConfig:
         "arbitrum": (7200, 10000),
         "bnb": (7200, 10000),
         "hyperliquid": (3600, 7200),
+        "robinhood": (18000, 25000),
     }
 
     # Per-chain offset for the v2 verifier (eth_getProof at VERIFY_BLOCK).

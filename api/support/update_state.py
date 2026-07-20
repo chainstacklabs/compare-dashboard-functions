@@ -16,12 +16,10 @@ from common.state.blockchain_state import BlockchainState
 SUPPORTED_BLOCKCHAINS: list[str] = [
     "ethereum",
     "solana",
-    "ton",
     "base",
     "arbitrum",
     "bnb",
     "hyperliquid",
-    "monad",
 ]
 ALLOWED_PROVIDERS: set[str] = {
     "Chainstack"

@@ -86,17 +86,15 @@ class MetricsHandler:
             )
 
     def _emit_observed_accounts(self) -> None:
-        """Emit hashed observed account states (Solana/TON Data agreement).
+        """Emit hashed observed account states (Solana Data agreement).
 
         Structurally identical to ``_emit_observed_balances`` but for non-EVM
-        chains: Solana's ``getAccountInfo`` at a pinned finalised slot and
-        TON's ``runGetMethod(get_jetton_data)`` at a bucketed masterchain
-        seqno. The captured hash already lives on the instance as
+        chains: Solana's ``getAccountInfo`` at a pinned finalised slot. The
+        captured hash already lives on the instance as
         ``_captured_account_hash`` (pre-hashed to a 52-bit float by
         ``common.balance_hash.hash_bytes_to_float``). The per-value
-        ``block_number`` label carries the anchor hex (slot for Solana,
-        bucketed seqno for TON) so the follow-up Grafana panel joins on the
-        same string across providers.
+        ``block_number`` label carries the anchor hex (the pinned slot) so the
+        follow-up Grafana panel joins on the same string across providers.
 
         Returns:
             None
@@ -105,9 +103,7 @@ class MetricsHandler:
             account_hash = getattr(instance, "_captured_account_hash", None)
             if account_hash is None:
                 continue
-            anchor_hex = getattr(instance, "_anchor_slot_hex", None) or getattr(
-                instance, "_anchor_seqno_hex", None
-            )
+            anchor_hex = getattr(instance, "_anchor_slot_hex", None)
             if not anchor_hex:
                 continue
             instance.update_metric_value(

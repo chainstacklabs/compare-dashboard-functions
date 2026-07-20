@@ -27,10 +27,6 @@
       "memory": 400,
       "maxDuration": 59
     },
-    "api/read/monad.py": {
-      "memory": 400,
-      "maxDuration": 59
-    },
     "api/read/test_blockchain.py": {
       "memory": 150,
       "maxDuration": 59
@@ -59,10 +55,6 @@
     },
     {
       "path": "/api/read/hyperliquid",
-      "schedule": "*/3 * * * *"
-    },
-    {
-      "path": "/api/read/monad",
       "schedule": "*/3 * * * *"
     },
     {

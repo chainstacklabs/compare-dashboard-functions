@@ -32,7 +32,7 @@ Metrics are pushed to Grafana Cloud in Influx line protocol format for visualiza
 
 ## Supported Blockchains
 
-Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, TON, Hyperliquid, Monad
+Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, Hyperliquid
 
 Each blockchain has region-specific deployment configurations detailed in the [Multi-Region Deployment Guide](#multi-region-deployment-guide).
 
@@ -212,7 +212,7 @@ By default, test scripts import specific blockchain handlers. Modify the import 
 # In tests/test_api_read.py, change:
 from api.read.ethereum import handler
 # to:
-from api.read.monad import handler
+from api.read.base import handler
 ```
 
 ### Project Structure
@@ -281,8 +281,8 @@ BLOCK_OFFSET_RANGES = {
 
 ```python
 SUPPORTED_BLOCKCHAINS = [
-    "ethereum", "solana", "ton", "base",
-    "arbitrum", "bnb", "hyperliquid", "monad",
+    "ethereum", "solana", "base",
+    "arbitrum", "bnb", "hyperliquid",
     "yourblockchain",  # Add here
 ]
 ```
@@ -292,7 +292,7 @@ SUPPORTED_BLOCKCHAINS = [
 ```python
 if blockchain.lower() in (
     "ethereum", "base", "arbitrum", "bnb",
-    "hyperliquid", "monad", "yourblockchain",  # Add here
+    "hyperliquid", "yourblockchain",  # Add here
 ):
     return await self._fetch_evm_data(blockchain)
 ```

@@ -34,7 +34,7 @@ SYNCRO_LOG_TAG = "[solana-landing-syncro]"
 class P2PSyncroLandingMetric(SolanaLandingMetric):
     """Solana landing-rate probe through P2P.org Syncro Sender public endpoint."""
 
-    SYNCRO_TX_ENDPOINT = "https://sfls-geo-fra.l2.p2p.org/public"
+    SYNCRO_TX_ENDPOINT = "https://sfls-geo-fra.l2.p2p.org/"
     TIP_LAMPORTS = 100_000
     TIP_ACCOUNTS: tuple[Pubkey, ...] = tuple(
         Pubkey.from_string(addr)

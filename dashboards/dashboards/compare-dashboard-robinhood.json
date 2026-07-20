@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 55,
+  "id": 3060743616942080,
   "liveNow": false,
   "panels": [
     {
@@ -35,7 +35,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <!-- Image Link -->\n    <a href=\"https://chainstack.com/\" target=\"_blank\" style=\"margin-right: 25px; display: inline-block;\">\n        <img src=\"https://chainstack.com/wp-content/themes/chainstack/img/press-kit-logo-white-text.svg\" alt=\"chainstack_logo\" style=\"max-width: 150px; height: auto; display: block;\">\n    </a>\n    \n    <!-- Text Links with Highlight on the First Link -->\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #e0f7fa; border: 1px solid #007bff;\">\n        Ethereum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Arbitrum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/11861148d82247128307025fac628b6e\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Base\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/059a680a502a4d8782e93fcc1f2f1be9\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        BNB\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5f957bbcc3ae4c9d8d9669a299a24676\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Hyperliquid\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5e422a0d05c74da493846cace52d2aa3\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Robinhood\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Solana\n    </a>\n</div>\n\n",
+        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <!-- Image Link -->\n    <a href=\"https://chainstack.com/\" target=\"_blank\" style=\"margin-right: 25px; display: inline-block;\">\n        <img src=\"https://chainstack.com/wp-content/themes/chainstack/img/press-kit-logo-white-text.svg\" alt=\"chainstack_logo\" style=\"max-width: 150px; height: auto; display: block;\">\n    </a>\n    \n    <!-- Text Links with Highlight on the First Link -->\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Ethereum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Arbitrum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/11861148d82247128307025fac628b6e\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Base\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/059a680a502a4d8782e93fcc1f2f1be9\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        BNB\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5f957bbcc3ae4c9d8d9669a299a24676\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Hyperliquid\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5e422a0d05c74da493846cace52d2aa3\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #e0f7fa; border: 1px solid #007bff;\">\n        Robinhood\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Solana\n    </a>\n</div>\n\n",
         "mode": "html"
       },
       "pluginVersion": "13.0.0-23605486576",
@@ -58,7 +58,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #f8f9fa; border: 1px solid #dee2e6;\">\n        Global\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/c41b6d145f5a4f7ebd70cbf0d606b2d7\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        US West\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/7b313155f59740c086db5527c4409b11\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        EU\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/f675c8f915f247c8b114ab4fbfbc40bc\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Asia\n    </a>\n</div>",
+        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5e422a0d05c74da493846cace52d2aa3\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #f8f9fa; border: 1px solid #dee2e6;\">\n        Global\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/afedb10e533d46168027ac4cbf63c7b4\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        US West\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/45459984dfe84e22bf85d3745d9c5086\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        EU\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/526a5592aa4c4f3ebb346fb9e95a9120\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Asia\n    </a>\n</div>",
         "mode": "html"
       },
       "pluginVersion": "13.0.0-23605486576",
@@ -74,7 +74,7 @@
         "x": 0,
         "y": 3
       },
-      "id": 94,
+      "id": 5,
       "options": {
         "code": {
           "language": "plaintext",
@@ -98,7 +98,7 @@
         "x": 10,
         "y": 3
       },
-      "id": 96,
+      "id": 85,
       "options": {
         "code": {
           "language": "plaintext",
@@ -135,7 +135,7 @@
               },
               {
                 "color": "text",
-                "value": 0.8
+                "value": 0.6
               },
               {
                 "color": "text",
@@ -177,7 +177,7 @@
         "x": 10,
         "y": 4
       },
-      "id": 95,
+      "id": 86,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -205,7 +205,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider, source_region) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"} > 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"} > 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"} > 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -271,7 +271,6 @@
               "mode": "off"
             }
           },
-          "max": 1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -298,13 +297,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
+                      "hnd1": {
                         "index": 2,
-                        "text": "US West"
+                        "text": "JP"
                       },
-                      "sin1": {
-                        "index": 1,
-                        "text": "SG"
+                      "sfo1": {
+                        "index": 3,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -378,7 +377,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", source_region=~\"fra1|sfo1|hnd1\"} > 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -518,13 +517,13 @@
                         "index": 0,
                         "text": "EU"
                       },
+                      "hnd1": {
+                        "index": 1,
+                        "text": "JP"
+                      },
                       "sfo1": {
                         "index": 2,
                         "text": "US West"
-                      },
-                      "sin1": {
-                        "index": 1,
-                        "text": "SG"
                       }
                     },
                     "type": "value"
@@ -579,7 +578,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range])) by (provider, source_region)",
+          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"}[$__range])) by (provider, source_region)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -639,8 +638,9 @@
             "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
+            "axisGridShow": true,
             "axisLabel": "",
-            "axisPlacement": "auto",
+            "axisPlacement": "left",
             "fillOpacity": 80,
             "gradientMode": "none",
             "hideFrom": {
@@ -656,7 +656,8 @@
               "mode": "off"
             }
           },
-          "max": 3,
+          "decimals": 0,
+          "max": 1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -665,13 +666,14 @@
                 "value": 0
               }
             ]
-          }
+          },
+          "unit": "s"
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "source_region"
+              "options": "api_method"
             },
             "properties": [
               {
@@ -679,17 +681,37 @@
                 "value": [
                   {
                     "options": {
-                      "fra1": {
-                        "index": 0,
-                        "text": "EU"
+                      "Value #debug_traceBlockByNumber": {
+                        "index": 4,
+                        "text": "debug_traceBlockByNumber"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
+                      "Value #debug_traceTransaction": {
+                        "index": 5,
+                        "text": "debug_traceTransaction"
                       },
-                      "sin1": {
+                      "Value #eth_blockNumber": {
                         "index": 1,
-                        "text": "SG"
+                        "text": "eth_blockNumber"
+                      },
+                      "Value #eth_call": {
+                        "index": 0,
+                        "text": "eth_call"
+                      },
+                      "Value #eth_getBalance": {
+                        "index": 2,
+                        "text": "eth_getBalance"
+                      },
+                      "Value #eth_getLogs": {
+                        "index": 7,
+                        "text": "eth_getLogs"
+                      },
+                      "Value #eth_getTransactionReceipt": {
+                        "index": 6,
+                        "text": "eth_getTransactionReceipt"
+                      },
+                      "Value #eth_subscribe": {
+                        "index": 3,
+                        "text": "eth_subscribe"
                       }
                     },
                     "type": "value"
@@ -730,7 +752,7 @@
         "x": 10,
         "y": 15
       },
-      "id": 99,
+      "id": 65,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.79,
@@ -745,6 +767,7 @@
         "orientation": "horizontal",
         "showValue": "never",
         "stacking": "none",
+        "text": {},
         "tooltip": {
           "hideZeros": false,
           "mode": "single",
@@ -763,7 +786,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"} >= 0)[$__range:$__interval]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -879,7 +902,7 @@
         "x": 0,
         "y": 26
       },
-      "id": 84,
+      "id": 68,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.79,
@@ -912,7 +935,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -961,32 +984,36 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
+              "Alchemy-Growth hnd1": 2,
               "Alchemy-Growth sfo1": 3,
-              "Alchemy-Growth sin1": 2,
               "Chainstack fra1": 4,
+              "Chainstack hnd1": 5,
               "Chainstack sfo1": 6,
-              "Chainstack sin1": 5,
               "Quicknode-Growth fra1": 7,
+              "Quicknode-Growth hnd1": 8,
               "Quicknode-Growth sfo1": 9,
-              "Quicknode-Growth sin1": 8,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC sfo1": 12,
-              "dRPC sin1": 11
+              "dRPC hnd1": 11,
+              "dRPC sfo1": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth hnd1": "Alchemy-Growth - JP",
+              "Alchemy-Growth kix1": "Alchemy-Growth - JP",
               "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
-              "Alchemy-Growth sin1": "Alchemy-Growth - SG",
               "Chainstack fra1": "Chainstack-Growth - EU",
+              "Chainstack hnd1": "Chainstack-Growth - JP",
+              "Chainstack kix1": "Chainstack-Growth - JP",
               "Chainstack sfo1": "Chainstack-Growth - US West",
-              "Chainstack sin1": "Chainstack-Growth - SG",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth hnd1": "Quicknode-Growth - JP",
+              "Quicknode-Growth kix1": "Quicknode-Growth - JP",
               "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
-              "Quicknode-Growth sin1": "Quicknode-Growth - SG",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC hnd1": "dRPC-Growth - JP",
+              "dRPC kix1": "dRPC-Growth - JP",
+              "dRPC sfo1": "dRPC-Growth - US West"
             }
           }
         }
@@ -1036,7 +1063,6 @@
               "type": "value"
             }
           ],
-          "max": 1,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1054,7 +1080,7 @@
         "x": 7,
         "y": 26
       },
-      "id": 85,
+      "id": 84,
       "options": {
         "barRadius": 0.1,
         "barWidth": 0.79,
@@ -1087,7 +1113,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1136,32 +1162,36 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
+              "Alchemy-Growth hnd1": 2,
               "Alchemy-Growth sfo1": 3,
-              "Alchemy-Growth sin1": 2,
               "Chainstack fra1": 4,
+              "Chainstack hnd1": 5,
               "Chainstack sfo1": 6,
-              "Chainstack sin1": 5,
               "Quicknode-Growth fra1": 7,
+              "Quicknode-Growth hnd1": 8,
               "Quicknode-Growth sfo1": 9,
-              "Quicknode-Growth sin1": 8,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC sfo1": 12,
-              "dRPC sin1": 11
+              "dRPC hnd1": 11,
+              "dRPC sfo1": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth hnd1": "Alchemy-Growth - JP",
+              "Alchemy-Growth kix1": "Alchemy-Growth - JP",
               "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
-              "Alchemy-Growth sin1": "Alchemy-Growth - SG",
               "Chainstack fra1": "Chainstack-Growth - EU",
+              "Chainstack hnd1": "Chainstack-Growth - JP",
+              "Chainstack kix1": "Chainstack-Growth - JP",
               "Chainstack sfo1": "Chainstack-Growth - US West",
-              "Chainstack sin1": "Chainstack-Growth - SG",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth hnd1": "Quicknode-Growth - JP",
+              "Quicknode-Growth kix1": "Quicknode-Growth - JP",
               "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
-              "Quicknode-Growth sin1": "Quicknode-Growth - SG",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC hnd1": "dRPC-Growth - JP",
+              "dRPC kix1": "dRPC-Growth - JP",
+              "dRPC sfo1": "dRPC-Growth - US West"
             }
           }
         }
@@ -1200,7 +1230,7 @@
               "mode": "off"
             }
           },
-          "max": 3,
+          "max": 2,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -1251,7 +1281,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:$__interval]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1300,32 +1330,36 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
+              "Alchemy-Growth hnd1": 2,
               "Alchemy-Growth sfo1": 3,
-              "Alchemy-Growth sin1": 2,
               "Chainstack fra1": 4,
+              "Chainstack hnd1": 5,
               "Chainstack sfo1": 6,
-              "Chainstack sin1": 5,
               "Quicknode-Growth fra1": 7,
+              "Quicknode-Growth hnd1": 8,
               "Quicknode-Growth sfo1": 9,
-              "Quicknode-Growth sin1": 8,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC sfo1": 12,
-              "dRPC sin1": 11
+              "dRPC hnd1": 11,
+              "dRPC sfo1": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
+              "Alchemy-Growth hnd1": "Alchemy-Growth - JP",
+              "Alchemy-Growth kix1": "Alchemy-Growth - JP",
               "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
-              "Alchemy-Growth sin1": "Alchemy-Growth - SG",
               "Chainstack fra1": "Chainstack-Growth - EU",
+              "Chainstack hnd1": "Chainstack-Growth - JP",
+              "Chainstack kix1": "Chainstack-Growth - JP",
               "Chainstack sfo1": "Chainstack-Growth - US West",
-              "Chainstack sin1": "Chainstack-Growth - SG",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
+              "Quicknode-Growth hnd1": "Quicknode-Growth - JP",
+              "Quicknode-Growth kix1": "Quicknode-Growth - JP",
               "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
-              "Quicknode-Growth sin1": "Quicknode-Growth - SG",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC hnd1": "dRPC-Growth - JP",
+              "dRPC kix1": "dRPC-Growth - JP",
+              "dRPC sfo1": "dRPC-Growth - US West"
             }
           }
         }
@@ -1340,7 +1374,7 @@
         "x": 0,
         "y": 34
       },
-      "id": 200,
+      "id": 304,
       "panels": [
         {
           "datasource": {
@@ -1432,7 +1466,7 @@
             "h": 8,
             "w": 18,
             "x": 0,
-            "y": 36
+            "y": 37
           },
           "id": 201,
           "options": {
@@ -1463,7 +1497,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "max by (provider) (-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Ethereum\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Ethereum\", response_status=\"success\"})))",
+              "expr": "max by (provider) (-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", response_status=\"success\"})))",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
@@ -1612,7 +1646,7 @@
             "h": 8,
             "w": 6,
             "x": 18,
-            "y": 36
+            "y": 37
           },
           "id": 202,
           "options": {
@@ -1634,7 +1668,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "100 * (1 - avg_over_time((avg by (provider) (clamp_min(-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Ethereum\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Ethereum\", response_status=\"success\"})), 0) > bool 2))[$__range:1m]))",
+              "expr": "100 * (1 - avg_over_time((avg by (provider) (clamp_min(-1 * (max by (provider, source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", response_status=\"success\"}) - on(source_region) group_left max by (source_region) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", response_status=\"success\"})), 0) > bool 2))[$__range:1m]))",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -1646,7 +1680,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider) (\r\n  count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"}[$__range])\r\n  or on(provider, source_region)\r\n  (0 * count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range]))\r\n)\r\n/\r\nsum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range]))",
+              "expr": "sum by (provider) (\r\n  count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\"}[$__range])\r\n  or on(provider, source_region)\r\n  (0 * count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"}[$__range]))\r\n)\r\n/\r\nsum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\"}[$__range]))",
               "format": "table",
               "instant": true,
               "refId": "B"
@@ -1697,17 +1731,13 @@
     },
     {
       "collapsed": true,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 35
       },
-      "id": 300,
+      "id": 305,
       "panels": [
         {
           "datasource": {
@@ -1837,7 +1867,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Ethereum\"}[16m])\n)",
+              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\"}[16m])\n)",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
@@ -1865,7 +1895,6 @@
                 "filterable": false,
                 "inspect": false
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -1941,8 +1970,7 @@
                       "mode": "absolute",
                       "steps": [
                         {
-                          "color": "red",
-                          "value": null
+                          "color": "red"
                         },
                         {
                           "color": "yellow",
@@ -1992,7 +2020,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Ethereum\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Ethereum\"}[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}[$__range:1m]\n  )\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",
@@ -2096,8 +2124,7 @@
                   }
                 ]
               }
-            },
-            "overrides": []
+            }
           },
           "gridPos": {
             "h": 4,
@@ -2134,7 +2161,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Ethereum\"}[16m])",
+              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Robinhood\"}[16m])",
               "legendFormat": "status",
               "range": true,
               "refId": "A"
@@ -2155,7 +2182,7 @@
         "x": 0,
         "y": 36
       },
-      "id": 100,
+      "id": 306,
       "panels": [
         {
           "datasource": {
@@ -2223,14 +2250,10 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 35
+            "y": 36
           },
           "id": 3,
           "options": {
-            "annotations": {
-              "clustering": -1,
-              "multiLane": false
-            },
             "legend": {
               "calcs": [
                 "p95",
@@ -2248,7 +2271,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "13.0.0-23605486576",
+          "pluginVersion": "12.4.0-19378664917",
           "targets": [
             {
               "datasource": {
@@ -2256,7 +2279,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2280,32 +2303,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2391,13 +2422,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -2436,7 +2467,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 35
+            "y": 36
           },
           "id": 83,
           "options": {
@@ -2453,7 +2484,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_call\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2560,14 +2591,10 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 47
+            "y": 48
           },
           "id": 71,
           "options": {
-            "annotations": {
-              "clustering": -1,
-              "multiLane": false
-            },
             "legend": {
               "calcs": [
                 "p95",
@@ -2585,7 +2612,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "13.0.0-23605486576",
+          "pluginVersion": "12.4.0-19378664917",
           "targets": [
             {
               "datasource": {
@@ -2593,7 +2620,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2617,32 +2644,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2728,13 +2763,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -2773,7 +2808,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 47
+            "y": 48
           },
           "id": 72,
           "options": {
@@ -2790,7 +2825,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getBalance\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2897,9 +2932,9 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 59
+            "y": 60
           },
-          "id": 97,
+          "id": 87,
           "options": {
             "legend": {
               "calcs": [
@@ -2926,7 +2961,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2950,32 +2985,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3061,13 +3104,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -3106,9 +3149,9 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 59
+            "y": 60
           },
-          "id": 98,
+          "id": 88,
           "options": {
             "cellHeight": "sm",
             "showHeader": false,
@@ -3123,7 +3166,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3230,7 +3273,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 71
+            "y": 72
           },
           "id": 73,
           "options": {
@@ -3259,7 +3302,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3283,32 +3326,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3394,13 +3445,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -3439,7 +3490,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 71
+            "y": 72
           },
           "id": 74,
           "options": {
@@ -3456,7 +3507,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3563,7 +3614,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 83
+            "y": 84
           },
           "id": 75,
           "options": {
@@ -3592,7 +3643,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3616,32 +3667,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3727,13 +3786,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -3772,7 +3831,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 83
+            "y": 84
           },
           "id": 76,
           "options": {
@@ -3789,7 +3848,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3896,7 +3955,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 95
+            "y": 96
           },
           "id": 77,
           "options": {
@@ -3925,9 +3984,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)",
-              "instant": false,
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3951,32 +4008,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4062,13 +4127,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -4107,7 +4172,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 95
+            "y": 96
           },
           "id": 78,
           "options": {
@@ -4124,7 +4189,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4170,7 +4235,7 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "Historical response time per provider-region pair, showing trends in debug_traceBlockByNumber requests.",
+          "description": "Shows how the response time of debug_traceBlockByNumber has changed over time.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -4231,7 +4296,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 107
+            "y": 108
           },
           "id": 79,
           "options": {
@@ -4260,7 +4325,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0)",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -4284,32 +4349,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4395,13 +4468,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -4440,7 +4513,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 107
+            "y": 108
           },
           "id": 80,
           "options": {
@@ -4457,7 +4530,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4564,7 +4637,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 119
+            "y": 120
           },
           "id": 81,
           "options": {
@@ -4593,7 +4666,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -4617,33 +4690,40 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
-                  "Alchemy-Growth - sin1": 2,
-                  "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
-                  "Chainstack - sin1": 5,
-                  "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
-                  "Quicknode-Growth - sin1": 8,
+                  "Alchemy-Growth - hnd1": 2,
+                  "Alchemy-Growth - kix1": 3,
+                  "Alchemy-Growth - sfo1": 5,
+                  "Chainstack - fra1": 6,
+                  "Chainstack - hnd1": 7,
+                  "Chainstack - kix1": 8,
+                  "Chainstack - sfo1": 10,
+                  "Quicknode-Growth - fra1": 11,
+                  "Quicknode-Growth - hnd1": 12,
+                  "Quicknode-Growth - kix1": 13,
+                  "Quicknode-Growth - sfo1": 15,
                   "Time": 0,
-                  "dRPC - fra1": 10,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - fra1": 16,
+                  "dRPC - hnd1": 17,
+                  "dRPC - kix1": 18,
+                  "dRPC - sfo1": 20
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
+                  "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - hnd1": "Chainstack-Growth - JP",
+                  "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
-                  "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
+                  "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
-                  "Time": "",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - hnd1": "dRPC-Growth - JP",
+                  "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
+                  "dRPC - sfo1": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4729,13 +4809,13 @@
                             "index": 0,
                             "text": "EU"
                           },
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
                           "sfo1": {
                             "index": 2,
                             "text": "US"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -4774,7 +4854,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 119
+            "y": 120
           },
           "id": 82,
           "options": {
@@ -4791,7 +4871,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_subscribe\"}[$__range])) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4841,8 +4921,8 @@
   "refresh": "1m",
   "schemaVersion": 42,
   "tags": [
-    "ethereum",
-    "global"
+    "global",
+    "robinhood"
   ],
   "templating": {
     "list": [
@@ -4879,8 +4959,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "Compare Dashboard: Ethereum",
-  "uid": "fe3mtxna6483ke-global",
-  "version": 126,
+  "title": "Compare Dashboard: Robinhood",
+  "uid": "robinhood-global-1",
+  "version": 3,
   "weekStart": "monday"
 }

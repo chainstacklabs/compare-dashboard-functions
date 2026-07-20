@@ -40,6 +40,7 @@ class MetricsServiceConfig:
         "arbitrum": (7200, 10000),
         "bnb": (7200, 10000),
         "hyperliquid": (3600, 7200),
+        "robinhood": (18000, 25000),
     }
 
     # Per-chain offset for the v2 verifier (eth_getProof at VERIFY_BLOCK).
@@ -59,11 +60,19 @@ class MetricsServiceConfig:
     #   Arbitrum max retention ≈   107 blocks (~27 s) — tightest; arb head
     #                            moves fast so we keep extra headroom for
     #                            in-cron drift.
+    #   Robinhood max retention ≈   128 blocks but only ~12.8 s (~100 ms
+    #                            blocks) — shortest wall-clock window of any
+    #                            chain. Kept at (30, 70): measured round is
+    #                            ~0.1 s with 1-7 block head-drift, so
+    #                            effective proof depth stays ~<100, leaving
+    #                            ~28 blocks of margin under the 128 prune edge
+    #                            for slower/cold prod rounds.
     VERIFY_BLOCK_OFFSET_RANGES: ClassVar[dict[str, tuple[int, int]]] = {
         "ethereum": (200, 500),
         "base": (60, 100),
         "arbitrum": (50, 70),
         "bnb": (30, 100),
+        "robinhood": (30, 70),
     }
 
 

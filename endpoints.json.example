@@ -60,6 +60,12 @@
             "websocket_endpoint": "wss://solana-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://solana-mainnet.core.chainstack.com/...",
             "tx_endpoint": "https://solana-mainnet.core.chainstack.com/..."
+        },
+        {
+            "blockchain": "Robinhood",
+            "name": "Chainstack",
+            "websocket_endpoint": "wss://robinhood-mainnet.core.chainstack.com/...",
+            "http_endpoint": "https://robinhood-mainnet.core.chainstack.com/..."
         }
     ]
 }

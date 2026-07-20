@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 63,
+  "id": 3061079660384256,
   "liveNow": false,
   "panels": [
     {
@@ -35,10 +35,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <!-- Image Link -->\n    <a href=\"https://chainstack.com/\" target=\"_blank\" style=\"margin-right: 25px; display: inline-block;\">\n        <img src=\"https://chainstack.com/wp-content/themes/chainstack/img/press-kit-logo-white-text.svg\" alt=\"chainstack_logo\" style=\"max-width: 150px; height: auto; display: block;\">\n    </a>\n    \n    <!-- Text Links with Highlight on the First Link -->\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Ethereum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #e0f7fa; border: 1px solid #007bff;\">\n        Arbitrum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/11861148d82247128307025fac628b6e\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Base\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/059a680a502a4d8782e93fcc1f2f1be9\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        BNB\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5f957bbcc3ae4c9d8d9669a299a24676\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Hyperliquid\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5e422a0d05c74da493846cace52d2aa3\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Robinhood\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Solana\n    </a>\n</div>\n\n",
+        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <!-- Image Link -->\n    <a href=\"https://chainstack.com/\" target=\"_blank\" style=\"margin-right: 25px; display: inline-block;\">\n        <img src=\"https://chainstack.com/wp-content/themes/chainstack/img/press-kit-logo-white-text.svg\" alt=\"chainstack_logo\" style=\"max-width: 150px; height: auto; display: block;\">\n    </a>\n    \n    <!-- Text Links with Highlight on the First Link -->\n    <a href=\"https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Ethereum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Arbitrum\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/11861148d82247128307025fac628b6e\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Base\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/059a680a502a4d8782e93fcc1f2f1be9\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        BNB\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5f957bbcc3ae4c9d8d9669a299a24676\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Hyperliquid\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5e422a0d05c74da493846cace52d2aa3\" target=\"_self\" \n    style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #e0f7fa; border: 1px solid #007bff;\">\n        Robinhood\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/254601572d9a4b7a90122e46248f82b0\" target=\"_self\" \n       style=\"text-decoration: none; color: #007bff; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Solana\n    </a>\n</div>\n\n",
         "mode": "html"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [],
       "title": "",
       "transparent": true,
@@ -58,10 +58,10 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <a href=\"https://chainstack.grafana.net/public-dashboards/b8f98de094e84c17becb38a1b318e2f2\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Global\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/398b405559254d1fa99f71844b64c091\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        US West\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/d8532de7b4f3435081951d2f03bfffb4\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #f8f9fa; border: 1px solid #dee2e6;\">\n        EU\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/ae8a2c9a647f460db6923feef4620910\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Asia\n    </a>\n</div>",
+        "content": "<div style=\"display: inline-flex; align-items: center; margin: 5px; height: 70px;\">\n    <a href=\"https://chainstack.grafana.net/public-dashboards/5e422a0d05c74da493846cace52d2aa3\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        Global\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/afedb10e533d46168027ac4cbf63c7b4\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        US West\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/45459984dfe84e22bf85d3745d9c5086\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px;\">\n        EU\n    </a>\n    <a href=\"https://chainstack.grafana.net/public-dashboards/526a5592aa4c4f3ebb346fb9e95a9120\" target=\"_self\" \n       style=\"text-decoration: none; color: #6c757d; font-weight: bold; margin-right: 15px; padding: 5px 10px; border-radius: 5px; \n       background-color: #f8f9fa; border: 1px solid #dee2e6;\">\n        Asia\n    </a>\n</div>",
         "mode": "html"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [],
       "title": "",
       "transparent": true,
@@ -84,7 +84,7 @@
         "content": "#### Description\n\nThis dashboard provides real-time and historical performance analytics for RPC nodes across major providers.\n\n* Click region buttons to view metrics from different locations\n* Adjust time range for historical analysis\n* Hover over info icons for detailed metric descriptions\n\n&nbsp;\n\n#### Data collection\n\nResponse times are measured by our Python service on [Vercel serverless functions](https://github.com/chainstacklabs/compare-dashboard-functions), sending requests every 1-3 minutes from three regions.\n\nResponse times exceeding 55 seconds are considered failures and excluded from charts.\n\nAll requests use latest blocks except \"archive\" methods (\u231b), which query historical blocks (1-2 days ago).\n\n\u2139\ufe0f If not specified, the first paid RPC provider plan (named Growth as a rule) is used for monitoring.\n\n&nbsp;\n\n#### How we rank providers\n\nWe evaluate RPC providers based on their **speed** (response time) and **reliability** (success rate) across three regions.\n\n* The **lower** the score, the **better** the provider\n* Even small success rate drops (99% vs 97%) significantly impact the final score\n* Performance is measured equally across all regions\n\n```plaintext\nScore = 1 / ((1/ResponseTime) \u00d7 (SuccessRate\u00b3))\n```",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [],
       "title": "",
       "transparent": true,
@@ -98,7 +98,7 @@
         "x": 10,
         "y": 3
       },
-      "id": 95,
+      "id": 59,
       "options": {
         "code": {
           "language": "plaintext",
@@ -108,7 +108,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [],
       "title": "Provider score (lower is better)",
       "transparent": true,
@@ -131,7 +131,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [],
       "title": "What is the overall success rate of all requests sent from the region?",
       "transparent": true,
@@ -204,7 +204,7 @@
         "x": 10,
         "y": 4
       },
-      "id": 94,
+      "id": 60,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -223,7 +223,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [
         {
           "datasource": {
@@ -232,7 +232,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", response_status=\"success\", source_region=\"fra1\"} >= 0)[$__range:$__interval]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", response_status=\"success\", source_region=\"fra1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", response_status=\"success\", source_region=\"fra1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", response_status=\"success\", source_region=\"fra1\"} >= 0)[$__range:$__interval]))\r\n          /\r\n          sum by (provider) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"} >= 0)[$__range:$__interval]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(  # Using sort instead of sort_desc since lower is better now\r\n  1 / (\r\n    avg by (provider) (\r\n      (\r\n        1 / avg by (provider) (\r\n          quantile_over_time(0.95, \r\n            response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", source_region=\"hnd1\"}[$__range]\r\n          )\r\n        )\r\n      )\r\n      *\r\n      (\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n        *\r\n        (\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", response_status=\"success\", source_region=\"hnd1\"}[$__range]))\r\n          /\r\n          sum by (provider) (count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range]))\r\n        )\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -304,14 +304,6 @@
       },
       "id": 1,
       "options": {
-        "barShape": "flat",
-        "barWidthFactor": 0.5,
-        "effects": {
-          "barGlow": false,
-          "centerGlow": false,
-          "gradient": false
-        },
-        "endpointMarker": "point",
         "minVizHeight": 75,
         "minVizWidth": 75,
         "orientation": "auto",
@@ -322,17 +314,12 @@
           "fields": "",
           "values": false
         },
-        "segmentCount": 1,
-        "segmentSpacing": 0.3,
-        "shape": "gauge",
         "showThresholdLabels": false,
-        "showThresholdMarkers": false,
+        "showThresholdMarkers": true,
         "sizing": "auto",
-        "sparkline": false,
-        "text": {},
-        "textMode": "auto"
+        "text": {}
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [
         {
           "datasource": {
@@ -341,14 +328,13 @@
           },
           "disableTextWrap": false,
           "editorMode": "code",
-          "exemplar": false,
-          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"}[$__range])) by (provider)\r\n  or on(provider)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider)",
+          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", response_status=\"success\"}[$__range])) by (provider)\r\n  or on(provider)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range])) by (provider))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range])) by (provider)",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "instant": true,
+          "instant": false,
           "interval": "",
           "legendFormat": "{{provider}}",
-          "range": false,
+          "range": true,
           "refId": "A",
           "useBackend": false
         }
@@ -373,7 +359,7 @@
         "content": "",
         "mode": "markdown"
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [],
       "title": "What is the p95 response time?",
       "transparent": true,
@@ -457,10 +443,6 @@
                         "index": 2,
                         "text": "eth_getBalance"
                       },
-                      "Value #eth_getLogs": {
-                        "index": 7,
-                        "text": "eth_getLogs"
-                      },
                       "Value #eth_getTransactionReceipt": {
                         "index": 6,
                         "text": "eth_getTransactionReceipt"
@@ -533,7 +515,7 @@
         "xTickLabelRotation": 0,
         "xTickLabelSpacing": 100
       },
-      "pluginVersion": "13.0.0-23173728269",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [
         {
           "datasource": {
@@ -543,7 +525,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"eth_call\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_call\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -562,7 +544,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"eth_getBalance\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getBalance\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -581,7 +563,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"eth_getTransactionReceipt\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getTransactionReceipt\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -600,7 +582,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"debug_traceTransaction\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceTransaction\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -619,7 +601,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"eth_blockNumber\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_blockNumber\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -638,7 +620,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"debug_traceBlockByNumber\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"debug_traceBlockByNumber\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -657,7 +639,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"eth_subscribe\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_subscribe\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -676,7 +658,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", api_method=\"eth_getLogs\", source_region=\"fra1\", response_status=\"success\"} >= 0)[$__range:$__interval])",
+          "expr": "quantile_over_time(0.95, response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", api_method=\"eth_getLogs\", source_region=\"hnd1\", response_status=\"success\"}[$__range])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -853,6 +835,7 @@
             },
             "renameByName": {
               "Value #eth_getBalance": "",
+              "Value #eth_getLogs": "eth_getLogs",
               "Value #eth_subscribe": "",
               "target_region 3": "",
               "target_region 4": ""
@@ -876,7 +859,7 @@
         "x": 0,
         "y": 25
       },
-      "id": 1100,
+      "id": 1304,
       "panels": [
         {
           "datasource": {
@@ -999,7 +982,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"})",
+              "expr": "scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", source_region=\"hnd1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", source_region=\"hnd1\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
@@ -1013,7 +996,6 @@
             "type": "prometheus",
             "uid": "grafanacloud-prom"
           },
-          "description": "",
           "fieldConfig": {
             "defaults": {
               "custom": {
@@ -1170,7 +1152,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"}), 0) > bool 2)[$__range:1m]))",
+              "expr": "100 * (1 - avg_over_time((clamp_min(scalar(max(response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", source_region=\"hnd1\", response_status=\"success\"})) - max by (provider) (response_latency_seconds{metric_type=\"block_number\", blockchain=\"Robinhood\", source_region=\"hnd1\", response_status=\"success\"}), 0) > bool 2)[$__range:1m]))",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -1182,7 +1164,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", response_status=\"success\"}[$__range])) by (provider)\r\n  or on(provider)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\"}[$__range])) by (provider)",
+              "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", response_status=\"success\"}[$__range])) by (provider)\r\n  or on(provider)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range])) by (provider))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "B"
@@ -1233,17 +1215,13 @@
     },
     {
       "collapsed": true,
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
         "y": 26
       },
-      "id": 1300,
+      "id": 1305,
       "panels": [
         {
           "datasource": {
@@ -1373,7 +1351,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Arbitrum\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Arbitrum\"}[16m])\n)",
+              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\"}[16m])\n)",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
@@ -1401,7 +1379,6 @@
                 "filterable": false,
                 "inspect": false
               },
-              "mappings": [],
               "thresholds": {
                 "mode": "absolute",
                 "steps": [
@@ -1477,8 +1454,7 @@
                       "mode": "absolute",
                       "steps": [
                         {
-                          "color": "red",
-                          "value": null
+                          "color": "red"
                         },
                         {
                           "color": "yellow",
@@ -1528,7 +1504,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Arbitrum\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Arbitrum\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Arbitrum\"}[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}[$__range:1m]\n  )\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",
@@ -1632,8 +1608,7 @@
                   }
                 ]
               }
-            },
-            "overrides": []
+            }
           },
           "gridPos": {
             "h": 4,
@@ -1670,7 +1645,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Arbitrum\"}[16m])",
+              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Robinhood\"}[16m])",
               "legendFormat": "status",
               "range": true,
               "refId": "A"
@@ -1689,9 +1664,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 27
       },
-      "id": 1008,
+      "id": 1306,
       "panels": [
         {
           "datasource": {
@@ -1733,7 +1708,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -1785,7 +1759,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 26
+            "y": 8
           },
           "id": 3,
           "options": {
@@ -1806,7 +1780,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.2.0-16677249643",
           "targets": [
             {
               "datasource": {
@@ -1814,7 +1788,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -1913,7 +1887,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 26
+            "y": 8
           },
           "id": 33,
           "options": {
@@ -1930,7 +1904,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_call\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_call\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2009,7 +1983,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -2065,7 +2038,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 34
+            "y": 16
           },
           "id": 21,
           "options": {
@@ -2086,7 +2059,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.2.0-16677249643",
           "targets": [
             {
               "datasource": {
@@ -2094,7 +2067,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2193,7 +2166,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 34
+            "y": 16
           },
           "id": 35,
           "options": {
@@ -2210,7 +2183,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getBalance\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getBalance\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2289,7 +2262,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -2345,9 +2317,9 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 42
+            "y": 24
           },
-          "id": 96,
+          "id": 61,
           "options": {
             "legend": {
               "calcs": [
@@ -2366,7 +2338,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.2.0-16677249643",
           "targets": [
             {
               "datasource": {
@@ -2374,7 +2346,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2473,9 +2445,9 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 42
+            "y": 24
           },
-          "id": 97,
+          "id": 62,
           "options": {
             "cellHeight": "sm",
             "showHeader": false,
@@ -2490,7 +2462,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getLogs\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getLogs\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2569,7 +2541,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -2621,7 +2592,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 50
+            "y": 32
           },
           "id": 43,
           "options": {
@@ -2642,7 +2613,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -2650,7 +2621,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -2749,7 +2720,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 50
+            "y": 32
           },
           "id": 44,
           "options": {
@@ -2766,7 +2737,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2845,7 +2816,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -2897,7 +2867,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 58
+            "y": 40
           },
           "id": 45,
           "options": {
@@ -2918,7 +2888,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -2926,7 +2896,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -3025,7 +2995,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 58
+            "y": 40
           },
           "id": 46,
           "options": {
@@ -3042,7 +3012,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3121,7 +3091,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -3177,7 +3146,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 66
+            "y": 48
           },
           "id": 20,
           "options": {
@@ -3198,7 +3167,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -3206,7 +3175,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -3305,7 +3274,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 66
+            "y": 48
           },
           "id": 34,
           "options": {
@@ -3322,7 +3291,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_blockNumber\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_blockNumber\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3401,7 +3370,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -3453,7 +3421,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 74
+            "y": 56
           },
           "id": 47,
           "options": {
@@ -3474,7 +3442,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -3482,7 +3450,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -3581,7 +3549,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 74
+            "y": 56
           },
           "id": 48,
           "options": {
@@ -3598,7 +3566,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3677,7 +3645,6 @@
                   "type": "log"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -3729,7 +3696,7 @@
             "h": 12,
             "w": 18,
             "x": 0,
-            "y": 82
+            "y": 64
           },
           "id": 22,
           "options": {
@@ -3750,7 +3717,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -3758,7 +3725,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "C"
@@ -3857,7 +3824,7 @@
             "h": 12,
             "w": 6,
             "x": 18,
-            "y": 82
+            "y": 64
           },
           "id": 36,
           "options": {
@@ -3874,7 +3841,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", api_method=\"eth_subscribe\"}[$__range])) by (provider)",
+              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", api_method=\"eth_subscribe\"}[$__range])) by (provider)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3923,9 +3890,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 28
       },
-      "id": 1009,
+      "id": 1307,
       "panels": [
         {
           "datasource": {
@@ -3964,7 +3931,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4010,7 +3976,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 27
+            "y": 345
           },
           "id": 24,
           "options": {
@@ -4026,7 +3992,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4034,7 +4000,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_call\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4046,7 +4012,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4109,7 +4075,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4155,7 +4120,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 27
+            "y": 345
           },
           "id": 26,
           "options": {
@@ -4171,7 +4136,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4179,7 +4144,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4191,7 +4156,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4254,7 +4219,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4300,7 +4264,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 32
+            "y": 370
           },
           "id": 52,
           "options": {
@@ -4316,7 +4280,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4324,7 +4288,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4336,7 +4300,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4399,7 +4363,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4445,7 +4408,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 32
+            "y": 370
           },
           "id": 53,
           "options": {
@@ -4461,7 +4424,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4469,7 +4432,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4481,7 +4444,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4544,7 +4507,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4590,7 +4552,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 37
+            "y": 375
           },
           "id": 25,
           "options": {
@@ -4606,7 +4568,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4614,7 +4576,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4626,7 +4588,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4689,7 +4651,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4735,7 +4696,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 37
+            "y": 375
           },
           "id": 55,
           "options": {
@@ -4751,7 +4712,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4759,7 +4720,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4771,7 +4732,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4809,12 +4770,14 @@
             "defaults": {
               "color": {
                 "fixedColor": "#61bbfb",
-                "mode": "thresholds"
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
                 "axisCenteredZero": true,
                 "axisColorMode": "text",
+                "axisGridShow": true,
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -4835,7 +4798,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -4881,7 +4843,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 42
+            "y": 380
           },
           "id": 27,
           "options": {
@@ -4897,7 +4859,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -4905,7 +4867,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -4917,7 +4879,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -4980,7 +4942,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5026,9 +4987,9 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 42
+            "y": 380
           },
-          "id": 98,
+          "id": 64,
           "options": {
             "legend": {
               "calcs": [],
@@ -5042,7 +5003,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5050,7 +5011,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Alchemy-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Alchemy-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5062,7 +5023,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5100,9 +5061,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 29
       },
-      "id": 1010,
+      "id": 1308,
       "panels": [
         {
           "datasource": {
@@ -5141,7 +5102,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5187,7 +5147,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 28
+            "y": 346
           },
           "id": 1000,
           "options": {
@@ -5203,7 +5163,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5211,7 +5171,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_call\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5223,7 +5183,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5286,7 +5246,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5332,7 +5291,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 28
+            "y": 346
           },
           "id": 1001,
           "options": {
@@ -5348,7 +5307,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5356,7 +5315,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5368,7 +5327,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5431,7 +5390,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5477,7 +5435,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 33
+            "y": 351
           },
           "id": 1002,
           "options": {
@@ -5493,7 +5451,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5501,7 +5459,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5513,7 +5471,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5576,7 +5534,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5622,7 +5579,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 33
+            "y": 351
           },
           "id": 1003,
           "options": {
@@ -5638,7 +5595,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5646,7 +5603,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5658,7 +5615,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5721,7 +5678,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5767,7 +5723,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 38
+            "y": 356
           },
           "id": 1004,
           "options": {
@@ -5783,7 +5739,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5791,7 +5747,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5803,7 +5759,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5866,7 +5822,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -5912,7 +5867,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 38
+            "y": 356
           },
           "id": 1005,
           "options": {
@@ -5928,7 +5883,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -5936,7 +5891,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -5948,7 +5903,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -5986,12 +5941,14 @@
             "defaults": {
               "color": {
                 "fixedColor": "#61bbfb",
-                "mode": "thresholds"
+                "mode": "thresholds",
+                "seriesBy": "last"
               },
               "custom": {
                 "axisBorderShow": false,
                 "axisCenteredZero": true,
                 "axisColorMode": "text",
+                "axisGridShow": true,
                 "axisLabel": "",
                 "axisPlacement": "auto",
                 "barAlignment": 0,
@@ -6012,7 +5969,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6058,7 +6014,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 43
+            "y": 361
           },
           "id": 1006,
           "options": {
@@ -6074,7 +6030,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6082,7 +6038,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6094,7 +6050,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6157,7 +6113,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6203,7 +6158,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 43
+            "y": 361
           },
           "id": 1007,
           "options": {
@@ -6219,7 +6174,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6227,7 +6182,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"dRPC\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"dRPC\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6239,7 +6194,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6277,9 +6232,9 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 30
       },
-      "id": 1011,
+      "id": 1309,
       "panels": [
         {
           "datasource": {
@@ -6316,7 +6271,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6362,7 +6316,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 29
+            "y": 386
           },
           "id": 31,
           "options": {
@@ -6378,7 +6332,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6386,7 +6340,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_call\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6398,7 +6352,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_call\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6461,7 +6415,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6507,7 +6460,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 29
+            "y": 386
           },
           "id": 28,
           "options": {
@@ -6523,7 +6476,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6531,7 +6484,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6543,7 +6496,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getBalance\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6606,7 +6559,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6652,7 +6604,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 34
+            "y": 391
           },
           "id": 49,
           "options": {
@@ -6668,7 +6620,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6676,7 +6628,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6688,7 +6640,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6751,7 +6703,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6797,7 +6748,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 34
+            "y": 391
           },
           "id": 51,
           "options": {
@@ -6813,7 +6764,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6821,7 +6772,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6833,7 +6784,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -6896,7 +6847,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -6942,7 +6892,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 39
+            "y": 396
           },
           "id": 30,
           "options": {
@@ -6958,7 +6908,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -6966,7 +6916,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -6978,7 +6928,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_blockNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -7041,7 +6991,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -7087,7 +7036,7 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 39
+            "y": 396
           },
           "id": 50,
           "options": {
@@ -7103,7 +7052,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -7111,7 +7060,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -7123,7 +7072,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -7186,7 +7135,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -7232,7 +7180,7 @@
             "h": 5,
             "w": 12,
             "x": 0,
-            "y": 44
+            "y": 401
           },
           "id": 29,
           "options": {
@@ -7248,7 +7196,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -7256,7 +7204,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -7268,7 +7216,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_subscribe\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -7331,7 +7279,6 @@
                   "type": "linear"
                 },
                 "showPoints": "auto",
-                "showValues": false,
                 "spanNulls": true,
                 "stacking": {
                   "group": "A",
@@ -7377,9 +7324,9 @@
             "h": 5,
             "w": 12,
             "x": 12,
-            "y": 44
+            "y": 401
           },
-          "id": 99,
+          "id": 63,
           "options": {
             "legend": {
               "calcs": [],
@@ -7393,7 +7340,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.4.0-19378664917",
+          "pluginVersion": "12.1.0-90058",
           "targets": [
             {
               "datasource": {
@@ -7401,7 +7348,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Quicknode-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Quicknode-Growth\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "instant": false,
               "legendFormat": "{{provider}}",
               "range": true,
@@ -7413,7 +7360,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) ((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Arbitrum\", source_region=\"fra1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0))",
+              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Robinhood\", source_region=\"hnd1\", provider=\"Chainstack\", api_method=\"eth_getLogs\", response_status=\"success\"})",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "Chainstack"
@@ -7450,8 +7397,8 @@
   "refresh": "1m",
   "schemaVersion": 42,
   "tags": [
-    "arbitrum",
-    "eu"
+    "robinhood",
+    "japan"
   ],
   "templating": {
     "list": [
@@ -7488,8 +7435,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "Compare Dashboard: Arbitrum (EU)",
-  "uid": "arbitrum-eu-1",
-  "version": 58,
+  "title": "Compare Dashboard: Robinhood (Japan)",
+  "uid": "robinhood-japan-1",
+  "version": 3,
   "weekStart": "monday"
 }

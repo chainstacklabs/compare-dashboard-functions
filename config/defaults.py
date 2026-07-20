@@ -69,7 +69,7 @@ class MetricsServiceConfig:
     #                            for slower/cold prod rounds.
     VERIFY_BLOCK_OFFSET_RANGES: ClassVar[dict[str, tuple[int, int]]] = {
         "ethereum": (200, 500),
-        "base": (60, 100),
+        # base deferred — no historical proofs available (see verify_state.py)
         "arbitrum": (50, 70),
         "bnb": (30, 100),
         "robinhood": (30, 70),

@@ -1,7 +1,7 @@
 """Verifier function: emits balance_verified + verifier_status for EVM chains.
 
 Per cron round (fra1-only, every 15 min). For each chain in
-[Ethereum, Base, Arbitrum, BNB, Robinhood]:
+[Ethereum, Arbitrum, BNB, Robinhood]:
   - Compute VERIFY_BLOCK = latest_head - random(VERIFY_BLOCK_OFFSET_RANGES[chain]).
     Self-contained: no blob coordination with update_state.
   - Multi-provider stateRoot quorum at VERIFY_BLOCK.
@@ -53,7 +53,10 @@ ALLOWED_REGIONS: set[str] = {"fra1"}
 # rounds sample meaningfully different values at VERIFY_BLOCK.
 PROBE_ADDRESSES: dict[str, str] = {
     "Ethereum": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",  # WETH9
-    "Base": "0x4200000000000000000000000000000000000006",  # WETH (OP Stack predeploy)
+    # Base is deferred: eth_getProof is not currently available at a usable
+    # VERIFY_BLOCK depth for this chain, so v2 verification can't run. Base keeps
+    # its v1 balance_observed + latency metrics; re-add here once historical
+    # proofs are available. (Same shape as the Robinhood v2 deferral.)
     "Arbitrum": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",  # WETH
     "BNB": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",  # WBNB
     # WETH on Robinhood — same address as the v1 balance probe

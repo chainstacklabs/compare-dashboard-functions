@@ -14,10 +14,6 @@
     "api/read/hyperliquid.py": {
       "memory": 400,
       "maxDuration": 59
-    },
-    "api/read/robinhood.py": {
-      "memory": 400,
-      "maxDuration": 59
     }
   },
   "crons": [
@@ -31,10 +27,6 @@
     },
     {
       "path": "/api/read/hyperliquid",
-      "schedule": "*/3 * * * *"
-    },
-    {
-      "path": "/api/read/robinhood",
       "schedule": "*/3 * * * *"
     }
   ]

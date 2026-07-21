@@ -1351,7 +1351,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\"}[16m])\n)",
+              "expr": "min by (provider) (\n  last_over_time(response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\", source_region=~\"fra1|sfo1|sin1\"}[16m])\n  == bool on(block_number) group_left()\n  last_over_time(response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\", source_region=~\"fra1|sfo1|sin1\"}[16m])\n)",
               "legendFormat": "{{provider}}",
               "range": true,
               "refId": "A"
@@ -1504,7 +1504,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\"}[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider) (\n  sum_over_time(\n    (\n      response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\", source_region=~\"fra1|sfo1|sin1\"}\n      == bool on(block_number) group_left()\n      response_latency_seconds{metric_type=\"balance_verified\", blockchain=\"Robinhood\", source_region=~\"fra1|sfo1|sin1\"}\n    )[$__range:1m]\n  )\n)\n/\nsum by (provider) (\n  count_over_time(\n    response_latency_seconds{metric_type=\"balance_observed_verified\", blockchain=\"Robinhood\", source_region=~\"fra1|sfo1|sin1\"}[$__range:1m]\n  )\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",
@@ -1645,7 +1645,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Robinhood\"}[16m])",
+              "expr": "last_over_time(response_latency_seconds{metric_type=\"verifier_status\", blockchain=\"Robinhood\", source_region=~\"fra1|sfo1|sin1\"}[16m])",
               "legendFormat": "status",
               "range": true,
               "refId": "A"

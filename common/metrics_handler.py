@@ -135,18 +135,26 @@ class MetricsHandler:
         timeout is METRIC_REQUEST_TIMEOUT (55s), which alone exceeds the
         budget and the function's maxDuration. Whichever expires first wins,
         so no single stuck endpoint can cost the round its Grafana push.
+
+        A metric cancelled mid-flight is marked failed — it genuinely timed
+        out. A metric the budget starved before it even started emits nothing
+        instead: with no values it is skipped at push time and reads as "no
+        data" in Grafana, not as a provider failure it did not cause.
         """
         remaining: float = deadline - time.monotonic()
-        if remaining > 0:
-            try:
-                await asyncio.wait_for(metric.collect_metric(), timeout=remaining)
-                return
-            except asyncio.TimeoutError:
-                pass
-        metric.mark_failure()
-        metric.handle_error(
-            TimeoutError("Measurement budget exhausted before metric completed")
-        )
+        if remaining <= 0:
+            logging.warning(
+                "Measurement budget exhausted before metric started: "
+                f"{metric.labels.get_prometheus_labels()}"
+            )
+            return
+        try:
+            await asyncio.wait_for(metric.collect_metric(), timeout=remaining)
+        except asyncio.TimeoutError:
+            metric.mark_failure()
+            metric.handle_error(
+                TimeoutError("Measurement budget exhausted before metric completed")
+            )
 
     @staticmethod
     async def _collect_one(

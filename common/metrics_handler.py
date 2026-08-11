@@ -6,6 +6,7 @@ import logging
 import os
 import time
 from http.server import BaseHTTPRequestHandler
+from typing import Any
 
 import aiohttp
 
@@ -126,8 +127,59 @@ class MetricsHandler:
         metrics: list[str] = self.get_metrics_influx_format()
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
 
+    @staticmethod
+    async def _run_within_budget(metric: BaseMetric, deadline: float) -> None:
+        """Run ``metric``, failing it if the invocation budget is spent.
+
+        Every path is bounded, not just the serialised one: a metric's own
+        timeout is METRIC_REQUEST_TIMEOUT (55s), which alone exceeds the
+        budget and the function's maxDuration. Whichever expires first wins,
+        so no single stuck endpoint can cost the round its Grafana push.
+
+        A metric cancelled mid-flight is marked failed — it genuinely timed
+        out. A metric the budget starved before it even started emits nothing
+        instead: with no values it is skipped at push time and reads as "no
+        data" in Grafana, not as a provider failure it did not cause.
+        """
+        remaining: float = deadline - time.monotonic()
+        if remaining <= 0:
+            logging.warning(
+                "Measurement budget exhausted before metric started: "
+                f"{metric.labels.get_prometheus_labels()}"
+            )
+            return
+        try:
+            await asyncio.wait_for(metric.collect_metric(), timeout=remaining)
+        except asyncio.TimeoutError:
+            metric.mark_failure()
+            metric.handle_error(
+                TimeoutError("Measurement budget exhausted before metric completed")
+            )
+
+    @staticmethod
+    async def _collect_one(
+        metric: BaseMetric, gate: asyncio.Semaphore, deadline: float
+    ) -> None:
+        """Run one metric, serialising it behind ``gate`` if it is timed.
+
+        Exempt metrics skip the gate but keep the deadline — they run
+        concurrently, and the round still waits on them, so an unbounded one
+        would blow the budget just as surely as a serialised one.
+        """
+        if not metric.serialise_measurement:
+            await MetricsHandler._run_within_budget(metric, deadline)
+            return
+
+        async with gate:
+            await MetricsHandler._run_within_budget(metric, deadline)
+
     async def collect_metrics(
-        self, provider: dict, config: dict, state_data: dict
+        self,
+        provider: dict[str, Any],
+        config: dict[str, Any],
+        state_data: dict[str, Any],
+        gate: asyncio.Semaphore,
+        deadline: float,
     ) -> None:
         """Create and run all metric instances for a single provider."""
         metric_config = MetricConfig(
@@ -150,7 +202,7 @@ class MetricsHandler:
             state_data=state_data,
         )
 
-        await asyncio.gather(*(m.collect_metric() for m in metrics))
+        await asyncio.gather(*(self._collect_one(m, gate, deadline) for m in metrics))
 
     async def push_to_grafana(self, metrics_text: str) -> None:
         """Push metrics text to Grafana via HTTP with retry logic."""
@@ -195,10 +247,21 @@ class MetricsHandler:
                 if p["blockchain"] == self.blockchain
             ]
 
+            # Budget the whole invocation, not just the measurements: the
+            # state fetch shares the same maxDuration, so starting the clock
+            # after it would let a slow fetch push the round over the limit.
+            deadline: float = (
+                time.monotonic() + MetricsServiceConfig.MEASUREMENT_BUDGET_SECONDS
+            )
+
             state_data = await BlockchainState.get_data(self.blockchain)
 
+            # One timed request in flight at a time, across every provider and
+            # method, so each measurement reflects the provider rather than how
+            # many other requests happened to share the invocation.
+            gate = asyncio.Semaphore(1)
             collection_tasks = [
-                self.collect_metrics(provider, config, state_data)
+                self.collect_metrics(provider, config, state_data, gate, deadline)
                 for provider in rpc_providers
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)

@@ -18,7 +18,14 @@ MAX_RETRIES = 2
 
 
 class WebSocketMetric(BaseMetric):
-    """WebSocket metric for collecting real-time data."""
+    """WebSocket metric for collecting real-time data.
+
+    Measures time-to-next-block, which is dominated by chain block time
+    (seconds), so it is exempt from the measurement gate — see
+    ``BaseMetric.serialise_measurement``.
+    """
+
+    serialise_measurement: ClassVar[bool] = False
 
     def __init__(
         self,
@@ -294,7 +301,10 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 response_time = time.monotonic() - start_time
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
-                    wait_time = int(response.headers.get("Retry-After", 3))
+                    # Capped: this sleep runs while holding the measurement
+                    # gate, so an uncapped Retry-After header would let one
+                    # rate-limited provider burn the shared budget.
+                    wait_time = min(int(response.headers.get("Retry-After", 3)), 5)
                     response.release()
                     await asyncio.sleep(wait_time)
                     continue

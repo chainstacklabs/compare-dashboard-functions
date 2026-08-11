@@ -80,7 +80,16 @@ def generate_memo(region: str, provider: str) -> str:
 
 
 class SolanaLandingMetric(HttpMetric):
-    """Measures Solana transaction landing rate and slot latency via memo tx."""
+    """Measures Solana transaction landing rate and slot latency via memo tx.
+
+    Exempt from the measurement gate for the same reason as the WebSocket
+    block metrics — see ``BaseMetric.serialise_measurement``: the measured
+    quantity is on-chain confirmation time (seconds), so ms-scale event-loop
+    contention is irrelevant, and one probe holding the gate through a
+    confirmation poll would starve the rest of the round.
+    """
+
+    serialise_measurement = False
 
     POLL_INTERVAL = 5.0  # seconds for polling getSignatureStatuses
     MEMO_PROGRAM_ID = "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo"

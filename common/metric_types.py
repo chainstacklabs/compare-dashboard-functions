@@ -18,7 +18,14 @@ MAX_RETRIES = 2
 
 
 class WebSocketMetric(BaseMetric):
-    """WebSocket metric for collecting real-time data."""
+    """WebSocket metric for collecting real-time data.
+
+    Measures time-to-next-block, which is dominated by chain block time
+    (seconds), so it is exempt from the measurement gate — see
+    ``BaseMetric.serialise_measurement``.
+    """
+
+    serialise_measurement: ClassVar[bool] = False
 
     def __init__(
         self,

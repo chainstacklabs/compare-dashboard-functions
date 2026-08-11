@@ -4,7 +4,7 @@ import logging
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, Optional, Union
+from typing import Any, ClassVar, Optional, Union
 
 import aiohttp
 import websockets
@@ -25,7 +25,23 @@ class MetricValue:
 
 
 class BaseMetric(ABC):
-    """Base class for metric collection in single-invocation environments."""
+    """Base class for metric collection in single-invocation environments.
+
+    ``serialise_measurement`` opts a metric into the handler's measurement
+    gate, which allows only one timed request in flight at a time. Timed
+    HTTP metrics report ``response_time - conn_time``; that subtraction
+    removes DNS/TCP/TLS setup but *not* event-loop scheduling delay, so
+    running many measurements concurrently charges every one of them for
+    the others' TLS handshakes and JSON parsing. Serialising is what makes
+    the number a property of the provider rather than of the round size.
+
+    Metrics that measure a wall-clock event rather than a request — the
+    WebSocket block-arrival metrics — set this to ``False``: they idle for
+    seconds waiting on the chain, so ms-scale contention is irrelevant and
+    holding the gate would starve the timed metrics.
+    """
+
+    serialise_measurement: ClassVar[bool] = True
 
     def __init__(
         self,

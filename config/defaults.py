@@ -23,6 +23,13 @@ class MetricsServiceConfig:
     METRIC_REQUEST_TIMEOUT = 55
     METRIC_MAX_LATENCY = 55
 
+    # Wall-clock budget for the serialised measurement sequence. Timed metrics
+    # run one at a time (see BaseMetric.serialise_measurement), so the round
+    # costs the SUM of its measurements rather than the max. This caps that sum
+    # below the 59s function maxDuration, leaving room for the state fetch and
+    # the Grafana push — a stuck endpoint loses its own metric, not the round.
+    MEASUREMENT_BUDGET_SECONDS = 45
+
     # SOLANA TX SETTINGS
     SOLANA_CONFIRMATION_LEVEL = "confirmed"
     PRIORITY_FEE_MICROLAMPORTS = 200_000

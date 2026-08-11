@@ -6,6 +6,7 @@ import logging
 import os
 import time
 from http.server import BaseHTTPRequestHandler
+from typing import Any
 
 import aiohttp
 
@@ -126,8 +127,41 @@ class MetricsHandler:
         metrics: list[str] = self.get_metrics_influx_format()
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
 
+    @staticmethod
+    async def _collect_one(
+        metric: BaseMetric, gate: asyncio.Semaphore, deadline: float
+    ) -> None:
+        """Run one metric, serialising it behind ``gate`` if it is timed.
+
+        ``deadline`` bounds the whole serialised sequence. Without it, one
+        hung endpoint holding the gate for METRIC_REQUEST_TIMEOUT would run
+        the function past its maxDuration and lose the entire round for
+        every provider, not just the stuck one.
+        """
+        if not metric.serialise_measurement:
+            await metric.collect_metric()
+            return
+
+        async with gate:
+            remaining: float = deadline - time.monotonic()
+            if remaining > 0:
+                try:
+                    await asyncio.wait_for(metric.collect_metric(), timeout=remaining)
+                    return
+                except asyncio.TimeoutError:
+                    pass
+            metric.mark_failure()
+            metric.handle_error(
+                TimeoutError("Measurement budget exhausted before metric completed")
+            )
+
     async def collect_metrics(
-        self, provider: dict, config: dict, state_data: dict
+        self,
+        provider: dict[str, Any],
+        config: dict[str, Any],
+        state_data: dict[str, Any],
+        gate: asyncio.Semaphore,
+        deadline: float,
     ) -> None:
         """Create and run all metric instances for a single provider."""
         metric_config = MetricConfig(
@@ -150,7 +184,7 @@ class MetricsHandler:
             state_data=state_data,
         )
 
-        await asyncio.gather(*(m.collect_metric() for m in metrics))
+        await asyncio.gather(*(self._collect_one(m, gate, deadline) for m in metrics))
 
     async def push_to_grafana(self, metrics_text: str) -> None:
         """Push metrics text to Grafana via HTTP with retry logic."""
@@ -197,8 +231,15 @@ class MetricsHandler:
 
             state_data = await BlockchainState.get_data(self.blockchain)
 
+            # One timed request in flight at a time, across every provider and
+            # method, so each measurement reflects the provider rather than how
+            # many other requests happened to share the invocation.
+            gate = asyncio.Semaphore(1)
+            deadline: float = (
+                time.monotonic() + MetricsServiceConfig.MEASUREMENT_BUDGET_SECONDS
+            )
             collection_tasks = [
-                self.collect_metrics(provider, config, state_data)
+                self.collect_metrics(provider, config, state_data, gate, deadline)
                 for provider in rpc_providers
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)

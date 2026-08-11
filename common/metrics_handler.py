@@ -128,32 +128,42 @@ class MetricsHandler:
         return "\n".join(f"{metric} {current_time}" for metric in metrics)
 
     @staticmethod
+    async def _run_within_budget(metric: BaseMetric, deadline: float) -> None:
+        """Run ``metric``, failing it if the invocation budget is spent.
+
+        Every path is bounded, not just the serialised one: a metric's own
+        timeout is METRIC_REQUEST_TIMEOUT (55s), which alone exceeds the
+        budget and the function's maxDuration. Whichever expires first wins,
+        so no single stuck endpoint can cost the round its Grafana push.
+        """
+        remaining: float = deadline - time.monotonic()
+        if remaining > 0:
+            try:
+                await asyncio.wait_for(metric.collect_metric(), timeout=remaining)
+                return
+            except asyncio.TimeoutError:
+                pass
+        metric.mark_failure()
+        metric.handle_error(
+            TimeoutError("Measurement budget exhausted before metric completed")
+        )
+
+    @staticmethod
     async def _collect_one(
         metric: BaseMetric, gate: asyncio.Semaphore, deadline: float
     ) -> None:
         """Run one metric, serialising it behind ``gate`` if it is timed.
 
-        ``deadline`` bounds the whole serialised sequence. Without it, one
-        hung endpoint holding the gate for METRIC_REQUEST_TIMEOUT would run
-        the function past its maxDuration and lose the entire round for
-        every provider, not just the stuck one.
+        Exempt metrics skip the gate but keep the deadline — they run
+        concurrently, and the round still waits on them, so an unbounded one
+        would blow the budget just as surely as a serialised one.
         """
         if not metric.serialise_measurement:
-            await metric.collect_metric()
+            await MetricsHandler._run_within_budget(metric, deadline)
             return
 
         async with gate:
-            remaining: float = deadline - time.monotonic()
-            if remaining > 0:
-                try:
-                    await asyncio.wait_for(metric.collect_metric(), timeout=remaining)
-                    return
-                except asyncio.TimeoutError:
-                    pass
-            metric.mark_failure()
-            metric.handle_error(
-                TimeoutError("Measurement budget exhausted before metric completed")
-            )
+            await MetricsHandler._run_within_budget(metric, deadline)
 
     async def collect_metrics(
         self,
@@ -229,15 +239,19 @@ class MetricsHandler:
                 if p["blockchain"] == self.blockchain
             ]
 
+            # Budget the whole invocation, not just the measurements: the
+            # state fetch shares the same maxDuration, so starting the clock
+            # after it would let a slow fetch push the round over the limit.
+            deadline: float = (
+                time.monotonic() + MetricsServiceConfig.MEASUREMENT_BUDGET_SECONDS
+            )
+
             state_data = await BlockchainState.get_data(self.blockchain)
 
             # One timed request in flight at a time, across every provider and
             # method, so each measurement reflects the provider rather than how
             # many other requests happened to share the invocation.
             gate = asyncio.Semaphore(1)
-            deadline: float = (
-                time.monotonic() + MetricsServiceConfig.MEASUREMENT_BUDGET_SECONDS
-            )
             collection_tasks = [
                 self.collect_metrics(provider, config, state_data, gate, deadline)
                 for provider in rpc_providers

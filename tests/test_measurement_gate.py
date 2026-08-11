@@ -79,6 +79,17 @@ async def main():
     assert hung.failed, "hung metric was not marked failed"
     assert after.failed, "metric starved by the deadline was not marked failed"
 
+    # 4. Gate-EXEMPT metrics are bounded by the deadline too. Their own timeout
+    #    (METRIC_REQUEST_TIMEOUT, 55s) exceeds the budget, so leaving them
+    #    unbounded would blow the function's maxDuration and lose the round.
+    hung_ws = FakeMetric([], serialise=False, work=30)
+    gate = asyncio.Semaphore(1)
+    started = time.monotonic()
+    await MetricsHandler._collect_one(hung_ws, gate, time.monotonic() + 0.2)
+    elapsed = time.monotonic() - started
+    assert elapsed < 1.0, f"exempt metric ignored the budget: took {elapsed:.2f}s"
+    assert hung_ws.failed, "hung exempt metric was not marked failed"
+
     print("OK: measurement gate serialises, exempts WS, and honours the budget")
 
 

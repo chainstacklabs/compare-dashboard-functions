@@ -303,8 +303,13 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     # Capped: this sleep runs while holding the measurement
                     # gate, so an uncapped Retry-After header would let one
-                    # rate-limited provider burn the shared budget.
-                    wait_time = min(int(response.headers.get("Retry-After", 3)), 5)
+                    # rate-limited provider burn the shared budget. Retry-After
+                    # may also be an HTTP-date; fall back to the default then.
+                    try:
+                        retry_after = int(response.headers.get("Retry-After", 3))
+                    except ValueError:
+                        retry_after = 3
+                    wait_time = min(retry_after, 5)
                     response.release()
                     await asyncio.sleep(wait_time)
                     continue

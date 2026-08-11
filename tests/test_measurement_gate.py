@@ -24,7 +24,7 @@ Span = tuple[float, float]
 
 class FakeMetric:
     def __init__(
-        self, log: list[Span], serialise: bool = True, work: float = WORK
+        self, log: list[Span], *, serialise: bool = True, work: float = WORK
     ) -> None:
         self.serialise_measurement = serialise
         self.log = log

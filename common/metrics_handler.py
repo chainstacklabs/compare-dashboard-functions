@@ -254,7 +254,12 @@ class MetricsHandler:
                 time.monotonic() + MetricsServiceConfig.MEASUREMENT_BUDGET_SECONDS
             )
 
-            state_data = await BlockchainState.get_data(self.blockchain)
+            # The fetch itself is bounded too: unbounded, a hung blob request
+            # would run into maxDuration instead of failing cleanly here.
+            state_data = await asyncio.wait_for(
+                BlockchainState.get_data(self.blockchain),
+                timeout=deadline - time.monotonic(),
+            )
 
             # One timed request in flight at a time, across every provider and
             # method, so each measurement reflects the provider rather than how

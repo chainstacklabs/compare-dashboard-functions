@@ -7433,6 +7433,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Robinhood (US West)",
   "uid": "robinhood-us-west-1",
-  "version": 4,
+  "version": 5,
   "weekStart": "monday"
 }

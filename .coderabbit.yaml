@@ -3,7 +3,7 @@ reviews:
   auto_review:
     enabled: true
   path_instructions:
-    - path: "**"
+    - path: "**/*.py"
       instructions: |
         This is a Python 3.9 codebase. Enforce the following:
         - All functions must have full type annotations (mypy strict mode).

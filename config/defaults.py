@@ -23,6 +23,11 @@ class MetricsServiceConfig:
     METRIC_REQUEST_TIMEOUT = 55
     METRIC_MAX_LATENCY = 55
 
+    # Read crons fire every 3 minutes (see the schedules in vercel*.json).
+    # Used to quantise the provider rotation so every metric in a round agrees
+    # on the ordering, and so the lead position advances once per round.
+    CRON_PERIOD_SECONDS = 180
+
     # Wall-clock budget for one invocation's collection phase, measured from
     # the START of the handler so it covers the state fetch too. Timed metrics
     # run one at a time (see BaseMetric.serialise_measurement), so the round

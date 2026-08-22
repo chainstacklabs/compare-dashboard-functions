@@ -248,9 +248,7 @@ class SolanaLandingMetric(HttpMetric):
             blockhash.value.blockhash,
         )
 
-    async def _submit(
-        self, client: AsyncClient, tx: Transaction, tag: str = LOG_TAG
-    ) -> Signature:
+    async def _submit(self, client: AsyncClient, tx: Transaction) -> Signature:
         """Send the transaction; log RPC errors with context before re-raising.
 
         Returns the ``Signature`` object from solders so it can be passed
@@ -259,11 +257,10 @@ class SolanaLandingMetric(HttpMetric):
         renders the same base58 form a raw string would.
 
         Rate-limit responses (HTTP 401/403/404/429 wrapped in
-        ``SolanaRpcException``) are logged at WARNING instead of ERROR — the
-        429 from Syncro's 1-RPS public endpoint is expected intermittent noise,
-        not a regression. The exception still propagates so the metric framework
-        treats it as a send failure (which it is — we couldn't land via this
-        path this scrape).
+        ``SolanaRpcException``) are logged at WARNING instead of ERROR — an
+        endpoint throttling us is expected intermittent noise, not a regression.
+        The exception still propagates so the metric framework treats it as a
+        send failure (which it is — we couldn't land via this path this scrape).
         """
         try:
             signature_response: SendTransactionResp = await client.send_transaction(
@@ -272,11 +269,13 @@ class SolanaLandingMetric(HttpMetric):
         except Exception as e:
             if _is_rate_limited_exc(e):
                 logging.warning(
-                    f"{tag} sendTransaction rate-limited {self._log_ctx()}: "
+                    f"{LOG_TAG} sendTransaction rate-limited {self._log_ctx()}: "
                     f"{type(e).__name__}"
                 )
             else:
-                logging.error(f"{tag} sendTransaction failed {self._log_ctx()}: {e!r}")
+                logging.error(
+                    f"{LOG_TAG} sendTransaction failed {self._log_ctx()}: {e!r}"
+                )
             raise
         if not signature_response or not signature_response.value:
             raise ValueError(

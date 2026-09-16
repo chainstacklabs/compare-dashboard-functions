@@ -190,6 +190,7 @@ class BlockchainDataFetcher:
                 "bnb",
                 "hyperliquid",
                 "robinhood",
+                "arc",
             ):
                 return await self._fetch_evm_data(blockchain)
             elif blockchain.lower() == "solana":

@@ -62,6 +62,10 @@ PROBE_ADDRESSES: dict[str, str] = {
     # WETH on Robinhood — same address as the v1 balance probe
     # (metrics/robinhood.py) so the observed↔verified dashboard join lines up.
     "Robinhood": "0x0bd7d308f8e1639fab988df18a8011f41eacad73",
+    # Arc is deferred for the same reason as Base: eth_getProof is served
+    # only at the chain tip, so there is no VERIFY_BLOCK depth at which a
+    # proof can be anchored. Arc keeps its v1 balance_observed + latency
+    # metrics; re-add here once historical proofs are available.
 }
 
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"

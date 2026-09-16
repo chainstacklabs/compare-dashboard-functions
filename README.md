@@ -32,7 +32,7 @@ Metrics are pushed to Grafana Cloud in Influx line protocol format for visualiza
 
 ## Supported Blockchains
 
-Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, Hyperliquid
+Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, Hyperliquid, Robinhood, Arc
 
 Each blockchain has region-specific deployment configurations detailed in the [Multi-Region Deployment Guide](#multi-region-deployment-guide).
 

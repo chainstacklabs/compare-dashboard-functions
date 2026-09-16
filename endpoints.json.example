@@ -66,6 +66,12 @@
             "name": "Chainstack",
             "websocket_endpoint": "wss://robinhood-mainnet.core.chainstack.com/...",
             "http_endpoint": "https://robinhood-mainnet.core.chainstack.com/..."
+        },
+        {
+            "blockchain": "Arc",
+            "name": "Chainstack",
+            "websocket_endpoint": "wss://arc-mainnet.core.chainstack.com/...",
+            "http_endpoint": "https://arc-mainnet.core.chainstack.com/..."
         }
     ]
 }

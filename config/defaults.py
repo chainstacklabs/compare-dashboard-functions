@@ -51,6 +51,7 @@ class MetricsServiceConfig:
         "bnb": (7200, 10000),
         "hyperliquid": (3600, 7200),
         "robinhood": (18000, 25000),
+        "arc": (7200, 14400),
     }
 
     # Per-chain offset for the v2 verifier (eth_getProof at VERIFY_BLOCK).
@@ -83,6 +84,7 @@ class MetricsServiceConfig:
         "arbitrum": (50, 70),
         "bnb": (30, 100),
         "robinhood": (30, 70),
+        # arc deferred — no historical proofs available (see verify_state.py)
     }
 
 

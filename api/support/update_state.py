@@ -21,6 +21,7 @@ SUPPORTED_BLOCKCHAINS: list[str] = [
     "bnb",
     "hyperliquid",
     "robinhood",
+    "arc",
 ]
 ALLOWED_PROVIDERS: set[str] = {
     "Chainstack"

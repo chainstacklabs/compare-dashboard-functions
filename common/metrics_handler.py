@@ -18,6 +18,43 @@ from common.state.blockchain_state import BlockchainState
 from config.defaults import MetricsServiceConfig
 
 
+def rotate_providers(
+    providers: list[dict[str, Any]], now: float
+) -> list[dict[str, Any]]:
+    """Rotate which provider is measured first, once per cron period.
+
+    The first request through the measurement gate is reliably slower than the
+    ones behind it. Measured in production over 21h across all three probe
+    regions, the leading provider's first metric runs ~+9 to +12ms slower at
+    p50 than its own later metrics against the same endpoint in the same
+    round, and carries a 13-25% tail over 100ms that no other position shows.
+
+    The cause is not established — it reproduces only on Vercel, not from a
+    cluster running the same code, same endpoint, same concurrency and the
+    same CPU budget. So this does not try to remove the cost; it removes the
+    *bias*. Without rotation the cost lands on whoever is first in ENDPOINTS
+    every single round, which is a property of list position, not of the
+    provider. Rotating by cron period spreads it evenly, so over any window
+    longer than N periods each provider leads an equal share of rounds.
+
+    Keyed on wall-clock rather than a counter because each cron invocation is
+    a fresh process with no memory of the last one.
+
+    Args:
+        providers: Providers for this blockchain, in ENDPOINTS order.
+        now: Unix timestamp; quantised to the cron period so every metric in
+            a round shares one ordering.
+
+    Returns:
+        The same providers, rotated left by the current period index.
+    """
+    if len(providers) < 2:
+        return providers
+    period = int(now // MetricsServiceConfig.CRON_PERIOD_SECONDS)
+    offset = period % len(providers)
+    return providers[offset:] + providers[:offset]
+
+
 class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
 
@@ -267,7 +304,7 @@ class MetricsHandler:
             gate = asyncio.Semaphore(1)
             collection_tasks = [
                 self.collect_metrics(provider, config, state_data, gate, deadline)
-                for provider in rpc_providers
+                for provider in rotate_providers(rpc_providers, time.time())
             ]
             await asyncio.gather(*collection_tasks, return_exceptions=True)
 

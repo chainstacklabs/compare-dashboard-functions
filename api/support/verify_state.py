@@ -27,7 +27,6 @@ import os
 import random
 import time
 from http.server import BaseHTTPRequestHandler
-from typing import Optional
 
 import aiohttp
 
@@ -125,7 +124,7 @@ def _format_verifier_status_line(chain: str, code: int, ts_ns: int) -> str:
     )
 
 
-def _pick_verify_block(chain: str, head: int) -> Optional[int]:
+def _pick_verify_block(chain: str, head: int) -> int | None:
     """Compute VERIFY_BLOCK for a chain, or None if no offset configured."""
     offset_range = MetricsServiceConfig.VERIFY_BLOCK_OFFSET_RANGES.get(chain.lower())
     if not offset_range:
@@ -157,7 +156,7 @@ async def _probe_observed_balances(
     balances = await asyncio.gather(*tasks, return_exceptions=True)
 
     lines: list[str] = []
-    for (name, _url), balance in zip(provider_entries, balances):
+    for (name, _url), balance in zip(provider_entries, balances, strict=True):
         if isinstance(balance, BaseException) or balance is None:
             continue
         if not isinstance(balance, int) or balance < 0:
@@ -229,8 +228,7 @@ async def _verify_chain(
         # Use type(e).__name__ + repr so silent failures like
         # asyncio.TimeoutError (which has an empty str()) are visible.
         logging.warning(
-            f"verify_state: proof fetch failed for {chain}: "
-            f"{type(e).__name__}: {e!r}"
+            f"verify_state: proof fetch failed for {chain}: {type(e).__name__}: {e!r}"
         )
         return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 
@@ -285,7 +283,7 @@ async def _verify_all() -> str:
 
     lines: list[str] = []
     fallback_ts_ns = time.time_ns()
-    for chain, r in zip(chains, results):
+    for chain, r in zip(chains, results, strict=True):
         if isinstance(r, list):
             lines.extend(r)
         else:

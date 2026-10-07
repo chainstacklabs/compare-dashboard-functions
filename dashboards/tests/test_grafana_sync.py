@@ -82,11 +82,14 @@ def test_resolve_folder_uid_exits_if_not_found(monkeypatch):
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
     monkeypatch.setenv("GRAFANA_FOLDER", "Missing")
     m = import_module()
-    with patch.object(
-        m,
-        "api_get",
-        return_value=[{"uid": "d1", "folderTitle": "Other", "folderUid": "abc"}],
-    ), pytest.raises(SystemExit):
+    with (
+        patch.object(
+            m,
+            "api_get",
+            return_value=[{"uid": "d1", "folderTitle": "Other", "folderUid": "abc"}],
+        ),
+        pytest.raises(SystemExit),
+    ):
         m.resolve_folder_uid(m.load_config())
 
 

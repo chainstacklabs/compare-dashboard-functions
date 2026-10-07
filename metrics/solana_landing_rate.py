@@ -6,7 +6,6 @@ import os
 import random
 import time
 from enum import Enum
-from typing import Optional
 
 import base58
 from solana.rpc.async_api import AsyncClient
@@ -43,7 +42,7 @@ def _is_rate_limited_exc(exc: BaseException) -> bool:
     bugs.
     """
     seen: set[int] = set()
-    current: Optional[BaseException] = exc
+    current: BaseException | None = exc
     while current is not None and id(current) not in seen:
         seen.add(id(current))
         response = getattr(current, "response", None)
@@ -283,7 +282,7 @@ class SolanaLandingMetric(HttpMetric):
             )
         return signature_response.value
 
-    async def fetch_data(self) -> Optional[float]:
+    async def fetch_data(self) -> float | None:
         """Send a memo transaction and return elapsed wall-clock time.
 
         Initializes both response_time and slot_latency metric types, submits
@@ -297,7 +296,7 @@ class SolanaLandingMetric(HttpMetric):
         self.update_metric_value(0, "response_time")
         self.update_metric_value(0, "slot_latency")
 
-        client: Optional[AsyncClient] = None
+        client: AsyncClient | None = None
         try:
             client = await self._create_client()
             await self._capture_signer_balance(client)

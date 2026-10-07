@@ -2,7 +2,7 @@
 
 import logging
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 
 class MetricLabelKey(Enum):
@@ -21,16 +21,16 @@ class EndpointConfig:
 
     def __init__(
         self,
-        main_endpoint: Optional[str] = None,
-        tx_endpoint: Optional[str] = None,
-        ws_endpoint: Optional[str] = None,
+        main_endpoint: str | None = None,
+        tx_endpoint: str | None = None,
+        ws_endpoint: str | None = None,
     ) -> None:
         """Initialise endpoint config with optional HTTP, TX, and WebSocket URLs."""
         self.main_endpoint: str | None = main_endpoint
         self.tx_endpoint: str | None = tx_endpoint
         self.ws_endpoint: str | None = ws_endpoint
 
-    def get_endpoint(self) -> Optional[str]:
+    def get_endpoint(self) -> str | None:
         """Returns appropriate endpoint based on method."""
         return self.main_endpoint
 
@@ -42,8 +42,8 @@ class MetricConfig:
         self,
         timeout: int,
         max_latency: int,
-        extra_params: Optional[dict[str, Any]] = None,
-        endpoints: Optional[EndpointConfig] = None,
+        extra_params: dict[str, Any] | None = None,
+        endpoints: EndpointConfig | None = None,
     ) -> None:
         """Initialise metric config with timeout, latency cap, params, and endpoints."""
         self.timeout: int = timeout
@@ -107,7 +107,7 @@ class MetricLabels:
                 return
         self.labels.append(MetricLabel(label_name, label_value))
 
-    def get_label(self, label_name: MetricLabelKey) -> Optional[str]:
+    def get_label(self, label_name: MetricLabelKey) -> str | None:
         """Returns label value by key."""
         for label in self.labels:
             if label.key == label_name:

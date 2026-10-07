@@ -12,7 +12,7 @@ References:
 - eth.wiki Patricia Tree primer: https://eth.wiki/fundamentals/patricia-tree
 """
 
-from typing import Any, Optional
+from typing import Any
 
 import rlp
 from Crypto.Hash import keccak
@@ -100,7 +100,7 @@ def _step_branch(
     key_nibbles: list[int],
     path_index: int,
     proof_by_hash: dict[bytes, bytes],
-) -> tuple[Any, int, Optional[bytes], bool]:
+) -> tuple[Any, int, bytes | None, bool]:
     """Process a branch node.
 
     Returns ``(next_node, next_path_index, leaf_value, exclusion)``. Exactly one
@@ -128,7 +128,7 @@ def _step_two_element(
     key_nibbles: list[int],
     path_index: int,
     proof_by_hash: dict[bytes, bytes],
-) -> tuple[Any, int, Optional[bytes], bool]:
+) -> tuple[Any, int, bytes | None, bool]:
     """Process an extension or leaf node. Returns same shape as ``_step_branch``."""
     encoded_path, value_or_ref = node
     if not isinstance(encoded_path, bytes):
@@ -168,7 +168,7 @@ def verify_account_proof(
     address: bytes,
     account_proof: list[bytes],
     state_root: bytes,
-) -> Optional[int]:
+) -> int | None:
     """Verify an MPT account proof and return the canonical balance.
 
     Args:
@@ -201,7 +201,7 @@ def verify_account_proof(
     key_nibbles = _bytes_to_nibbles(_keccak256(address))
     current_node: Any = rlp.decode(proof_by_hash[state_root])
     path_index = 0
-    account_value: Optional[bytes] = None
+    account_value: bytes | None = None
 
     while True:
         if isinstance(current_node, list) and len(current_node) == 17:

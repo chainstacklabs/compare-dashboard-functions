@@ -9,7 +9,7 @@ codes (3 and 1 respectively).
 
 import asyncio
 import json
-from typing import Any, Optional
+from typing import Any
 
 import aiohttp
 
@@ -79,7 +79,7 @@ async def fetch_agreed_anchor(
 
 async def _fetch_state_root(
     session: aiohttp.ClientSession, url: str, block_hex: str
-) -> Optional[bytes]:
+) -> bytes | None:
     """Call ``eth_getBlockByNumber`` and extract ``stateRoot``.
 
     Returns:
@@ -119,7 +119,7 @@ async def _fetch_state_root(
         return state_root if len(state_root) == 32 else None
 
 
-async def fetch_latest_block(session: aiohttp.ClientSession, url: str) -> Optional[int]:
+async def fetch_latest_block(session: aiohttp.ClientSession, url: str) -> int | None:
     """Return latest block height (eth_blockNumber) as an int, or None on failure."""
     payload: dict[str, Any] = {
         "jsonrpc": "2.0",
@@ -152,7 +152,7 @@ async def fetch_balance_at(
     url: str,
     address_hex: str,
     block_hex: str,
-) -> Optional[int]:
+) -> int | None:
     """Call ``eth_getBalance`` for an address at a specific block.
 
     Returns the balance as an int on success, ``None`` on any failure

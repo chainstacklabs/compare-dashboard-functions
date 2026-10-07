@@ -221,8 +221,8 @@ class SolanaLandingMetric(HttpMetric):
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
         memo_text: str = generate_memo(
-            self.labels.get_label(MetricLabelKey.SOURCE_REGION),  # type: ignore
-            self.labels.get_label(MetricLabelKey.PROVIDER),  # type: ignore
+            self.labels.require_label(MetricLabelKey.SOURCE_REGION),
+            self.labels.require_label(MetricLabelKey.PROVIDER),
         )
 
         compute_limit_ix: Instruction = set_compute_unit_limit(

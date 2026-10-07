@@ -58,8 +58,10 @@ class WebSocketMetric(BaseMetric):
 
     async def connect(self) -> websockets.WebSocketClientProtocol:
         """Creates WebSocket connection."""
+        if self.ws_endpoint is None:
+            raise ValueError("No WebSocket endpoint configured for this metric")
         websocket: websockets.WebSocketClientProtocol = await websockets.connect(
-            self.ws_endpoint,  # type: ignore
+            self.ws_endpoint,
             ping_timeout=10,  # self.config.timeout,
             open_timeout=10,  # self.config.timeout,
             close_timeout=10,  # self.config.timeout,

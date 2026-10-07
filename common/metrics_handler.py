@@ -8,7 +8,7 @@ import time
 from collections.abc import Sequence
 from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler
-from typing import Any
+from typing import Any, ClassVar
 
 import aiohttp
 
@@ -252,7 +252,10 @@ class MetricsHandler:
         """Main handler for metric collection and pushing."""
         self._instances = []
         try:
-            config = json.loads(os.getenv("ENDPOINTS"))  # type: ignore
+            endpoints_json = os.getenv("ENDPOINTS")
+            if endpoints_json is None:
+                raise ValueError("ENDPOINTS environment variable is not set")
+            config = json.loads(endpoints_json)
             MetricFactory._registry.clear()
             MetricFactory.register({self.blockchain: self.metrics})
             rpc_providers = [
@@ -305,7 +308,8 @@ class MetricsHandler:
 class BaseVercelHandler(BaseHTTPRequestHandler):
     """HTTP handler for Vercel serverless endpoint."""
 
-    metrics_handler: MetricsHandler = None  # type: ignore
+    # Set by each api/ entry point subclass.
+    metrics_handler: ClassVar[MetricsHandler]
 
     def validate_token(self) -> bool:
         """Return True if the Authorization header matches the CRON_SECRET."""

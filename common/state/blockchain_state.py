@@ -20,10 +20,11 @@ class BlockchainState:
     @staticmethod
     def _get_headers() -> dict[str, str]:
         """Get the authorization headers for blob storage requests."""
-        return {
-            "Authorization": f"Bearer {os.getenv('VERCEL_BLOB_TOKEN')}",
-            "x-store-id": os.getenv("STORE_ID"),  # type: ignore
-        }
+        token = os.getenv("VERCEL_BLOB_TOKEN")
+        store_id = os.getenv("STORE_ID")
+        if not token or not store_id:
+            raise ValueError("VERCEL_BLOB_TOKEN and STORE_ID must be set")
+        return {"Authorization": f"Bearer {token}", "x-store-id": store_id}
 
     @staticmethod
     async def _get_blob_url(session: aiohttp.ClientSession) -> str:

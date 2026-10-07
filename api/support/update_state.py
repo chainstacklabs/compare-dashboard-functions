@@ -53,10 +53,10 @@ class StateUpdateManager:
         """Initialise blob storage config from environment variables."""
         store_id: str | None = os.getenv("STORE_ID")
         token: str | None = os.getenv("VERCEL_BLOB_TOKEN")
-        if not all([store_id, token]):
+        if not store_id or not token:
             raise ValueError("Missing required blob storage configuration")
 
-        self.blob_config = BlobConfig(store_id=store_id, token=token)  # type: ignore
+        self.blob_config = BlobConfig(store_id=store_id, token=token)
         self.logger: logging.Logger = logging.getLogger(__name__)
 
     async def _get_chainstack_endpoints(self) -> dict[str, str]:

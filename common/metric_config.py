@@ -113,3 +113,10 @@ class MetricLabels:
             if label.key == label_name:
                 return label.value
         return None
+
+    def require_label(self, label_name: MetricLabelKey) -> str:
+        """Returns label value by key, raising if the label is not set."""
+        value = self.get_label(label_name)
+        if value is None:
+            raise ValueError(f"Label {label_name.value} is not set")
+        return value

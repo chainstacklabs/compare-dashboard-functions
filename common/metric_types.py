@@ -58,8 +58,10 @@ class WebSocketMetric(BaseMetric):
 
     async def connect(self) -> websockets.WebSocketClientProtocol:
         """Creates WebSocket connection."""
+        if self.ws_endpoint is None:
+            raise ValueError("No WebSocket endpoint configured for this metric")
         websocket: websockets.WebSocketClientProtocol = await websockets.connect(
-            self.ws_endpoint,  # type: ignore
+            self.ws_endpoint,
             ping_timeout=10,  # self.config.timeout,
             open_timeout=10,  # self.config.timeout,
             close_timeout=10,  # self.config.timeout,
@@ -271,6 +273,8 @@ class HttpCallLatencyMetricBase(HttpMetric):
     async def fetch_data(self) -> float:
         """Measure single request latency with detailed timing."""
         endpoint: str | None = self.config.endpoints.get_endpoint()
+        if endpoint is None:
+            raise ValueError("No HTTP endpoint configured for this metric")
 
         # Add trace config for detailed timing
         trace_config = aiohttp.TraceConfig()

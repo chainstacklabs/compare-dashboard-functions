@@ -9,7 +9,7 @@ from enum import Enum
 
 import base58
 from solana.rpc.async_api import AsyncClient
-from solana.rpc.commitment import Confirmed
+from solana.rpc.commitment import Commitment, Confirmed
 from solana.rpc.types import TxOpts
 from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
 from solders.instruction import Instruction
@@ -103,6 +103,8 @@ class SolanaLandingMetric(HttpMetric):
     ) -> None:
         """Initialize with handler, metric name, labels, config, and endpoint kwargs."""
         http_endpoint = kwargs.get("http_endpoint")
+        if http_endpoint is not None and not isinstance(http_endpoint, str):
+            raise TypeError(f"http_endpoint must be str, got {type(http_endpoint)}")
         super().__init__(
             handler=handler,
             metric_name=metric_name,
@@ -115,7 +117,7 @@ class SolanaLandingMetric(HttpMetric):
 
         self.private_key: bytes = base58.b58decode(os.environ["SOLANA_PRIVATE_KEY"])
         self.keypair: Keypair = Keypair.from_bytes(self.private_key)
-        self._slot_diff = 0
+        self._slot_diff: int = 0
 
     def _log_ctx(self) -> str:
         """Return short structured context (provider, region) for log lines."""
@@ -154,8 +156,8 @@ class SolanaLandingMetric(HttpMetric):
 
     async def _get_slot(self, client: AsyncClient) -> int:
         response: GetSlotResp = await client.get_slot(
-            MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL
-        )  # type: ignore
+            Commitment(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)
+        )
         if not response or response.value is None:
             raise ValueError(f"getSlot returned empty {self._log_ctx()}")
         return response.value
@@ -219,8 +221,8 @@ class SolanaLandingMetric(HttpMetric):
 
     async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
         memo_text: str = generate_memo(
-            self.labels.get_label(MetricLabelKey.SOURCE_REGION),  # type: ignore
-            self.labels.get_label(MetricLabelKey.PROVIDER),  # type: ignore
+            self.labels.require_label(MetricLabelKey.SOURCE_REGION),
+            self.labels.require_label(MetricLabelKey.PROVIDER),
         )
 
         compute_limit_ix: Instruction = set_compute_unit_limit(
@@ -318,7 +320,7 @@ class SolanaLandingMetric(HttpMetric):
             # `response_time` is not representative,
             # we don't use it in the visualizations
             response_time: float = time.monotonic() - start_time
-            self._slot_diff: int = confirmation_slot - start_slot
+            self._slot_diff = confirmation_slot - start_slot
             if self._slot_diff < 0:
                 logging.warning(
                     f"{LOG_TAG} negative slot diff sig={signature} "

@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+from typing import Any
 
 import aiohttp
 
@@ -19,10 +20,11 @@ class BlockchainState:
     @staticmethod
     def _get_headers() -> dict[str, str]:
         """Get the authorization headers for blob storage requests."""
-        return {
-            "Authorization": f"Bearer {os.getenv('VERCEL_BLOB_TOKEN')}",
-            "x-store-id": os.getenv("STORE_ID"),  # type: ignore
-        }
+        token = os.getenv("VERCEL_BLOB_TOKEN")
+        store_id = os.getenv("STORE_ID")
+        if not token or not store_id:
+            raise ValueError("VERCEL_BLOB_TOKEN and STORE_ID must be set")
+        return {"Authorization": f"Bearer {token}", "x-store-id": store_id}
 
     @staticmethod
     async def _get_blob_url(session: aiohttp.ClientSession) -> str:
@@ -39,18 +41,21 @@ class BlockchainState:
             blobs = data.get("blobs", [])
             for blob in blobs:
                 if blob["pathname"].endswith(BlobStorageConfig.BLOB_FILENAME):
-                    return blob["url"]
+                    url: str = blob["url"]
+                    return url
             raise ValueError("Blockchain data blob not found")
 
     @staticmethod
-    async def _fetch_state_data(session: aiohttp.ClientSession, blob_url: str) -> dict:
+    async def _fetch_state_data(
+        session: aiohttp.ClientSession, blob_url: str
+    ) -> dict[str, Any]:
         """Fetch state data from blob storage."""
         headers: dict[str, str] = BlockchainState._get_headers()
 
         async with session.get(blob_url, headers=headers) as response:
             if response.status != 200:
                 raise ValueError(f"Failed to fetch state: {response.status}")
-            data = await response.json()
+            data: dict[str, Any] = await response.json()
 
             # Ensure backward compatibility for old state data
             for chain in data:
@@ -60,9 +65,9 @@ class BlockchainState:
             return data
 
     @staticmethod
-    async def get_data(blockchain: str) -> dict:
+    async def get_data(blockchain: str) -> dict[str, Any]:
         """Get blockchain state data with retries."""
-        last_exception = None  # type: ignore
+        last_exception: str | None = None
 
         for attempt in range(1, BlockchainState._RETRIES + 1):
             try:
@@ -73,9 +78,10 @@ class BlockchainState:
                     state_data = await BlockchainState._fetch_state_data(
                         session, blob_url
                     )
-                    return state_data.get(blockchain.lower(), {})
+                    chain_state: dict[str, Any] = state_data.get(blockchain.lower(), {})
+                    return chain_state
             except Exception as e:
-                last_exception: str = str(e) if str(e) else "Unknown error occurred"
+                last_exception = str(e) if str(e) else "Unknown error occurred"
                 logging.warning(
                     f"Attempt {attempt}: State fetch failed: {last_exception}"
                 )

@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import websockets
 
@@ -15,6 +15,9 @@ from common.metric_types import (
     HttpCallLatencyMetricBase,
     WebSocketMetric,
 )
+
+if TYPE_CHECKING:
+    from common.metrics_handler import MetricsHandler
 
 WS_DEFAULT_TIMEOUT = 20
 
@@ -28,7 +31,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_call"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters for eth_call with fixed USDC token query."""
         return [
             {
@@ -52,12 +55,12 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getTransactionReceipt"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required transaction hash exists in state data."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters using transaction hash from state."""
         return [state_data["tx"]]
 
@@ -80,7 +83,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
         return "debug_traceBlockByNumber"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters for tracing latest block."""
         return ["latest", {"tracer": "callTracer"}]
 
@@ -94,12 +97,12 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
         return "debug_traceTransaction"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required transaction hash exists in state data."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters using transaction hash from state."""
         return [state_data["tx"], {"tracer": "callTracer"}]
 
@@ -113,12 +116,12 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getLogs"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required block number exists in state data."""
         return bool(state_data and state_data.get("old_block"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters for USDC transfer logs from recent block range."""
         from_block_hex = state_data["old_block"]
         from_block_int = int(from_block_hex, 16)
@@ -147,7 +150,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
     def __init__(
         self,
-        handler: "MetricsHandler",  # type: ignore  # noqa: F821
+        handler: "MetricsHandler",
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
@@ -163,6 +166,8 @@ class WSBlockLatencyMetric(WebSocketMetric):
             **kwargs: Additional arguments including ws_endpoint
         """
         ws_endpoint = kwargs.pop("ws_endpoint", None)
+        if ws_endpoint is not None and not isinstance(ws_endpoint, str):
+            raise TypeError(f"ws_endpoint must be str, got {type(ws_endpoint)}")
         super().__init__(
             handler=handler,
             metric_name=metric_name,
@@ -276,7 +281,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
         response_data = json.loads(response)
         if "params" in response_data:
-            block = response_data["params"]["result"]
+            block: dict[str, Any] = response_data["params"]["result"]
             return block
         return None
 

@@ -1,5 +1,7 @@
 """Base EVM metrics implementation for HTTP endpoints."""
 
+from typing import Any
+
 from common.metric_types import (
     EVMAccBalanceLatencyMetric,
     EVMBlockNumberLatencyMetric,
@@ -16,7 +18,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_call"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get eth_call parameters for Aave Pool Addresses Provider query."""
         return [
             {
@@ -36,12 +38,12 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getTransactionReceipt"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validate blockchain state contains transaction hash."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters using transaction hash from state."""
         return [state_data["tx"]]
 
@@ -63,12 +65,12 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
         return "debug_traceTransaction"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validate blockchain state contains transaction hash."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters using transaction hash from state."""
         return [state_data["tx"], {"tracer": "callTracer"}]
 
@@ -82,7 +84,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
         return "debug_traceBlockByNumber"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get fixed parameters for latest block tracing."""
         return ["latest", {"tracer": "callTracer"}]
 
@@ -100,12 +102,12 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getLogs"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required old block number exists in state data."""
         return bool(state_data and state_data.get("block"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters for USDC transfer logs from recent block range."""
         from_block_hex = state_data["old_block"]
         from_block_int = int(from_block_hex, 16)

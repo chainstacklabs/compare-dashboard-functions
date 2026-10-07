@@ -15,7 +15,7 @@ class HTTPSimulateTxLatencyMetric(HttpCallLatencyMetricBase):
         return "simulateTransaction"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters for simulating a token transfer."""
         return [
             "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAEDArczbMia1tLmq7zz4DinMNN0pJ1JtLdqIJPUw3YrGCzYAMHBsgN27lcgB6H2WQvFgyZuJYHa46puOQo9yQ8CVQbd9uHXZaGT2cvhRs7reawctIXtX1s3kTqM9YV+/wCp20C7Wj2aiuk5TReAXo+VTVg8QTHjs0UjNMMKCvpzZ+ABAgEBARU=",
@@ -36,7 +36,7 @@ class HTTPGetRecentBlockhashLatencyMetric(HttpCallLatencyMetricBase):
         return "getLatestBlockhash"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get empty parameters list for blockhash retrieval."""
         return []
 
@@ -60,12 +60,12 @@ class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):
         return "getTransaction"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validate blockchain state contains transaction signature."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters using transaction signature from state."""
         return [
             state_data["tx"],
@@ -82,7 +82,7 @@ class HTTPGetBalanceLatencyMetric(HttpCallLatencyMetricBase):
         return "getBalance"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters for balance check of monitoring address."""
         return ["9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"]
 
@@ -96,12 +96,12 @@ class HTTPGetBlockLatencyMetric(HttpCallLatencyMetricBase):
         return "getBlock"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validate blockchain state contains block slot number."""
         return bool(state_data and state_data.get("old_block"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters using block slot from state."""
         return [
             int(state_data["old_block"]),
@@ -201,7 +201,7 @@ class HTTPGetProgramAccsLatencyMetric(HttpCallLatencyMetricBase):
         return "getProgramAccounts"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters for program accounts query."""
         return [
             "FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH",

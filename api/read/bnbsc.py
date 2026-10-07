@@ -1,5 +1,6 @@
 """Vercel cron entry point for BNB Smart Chain metrics collection."""
 
+from common.factory import MetricSpec
 from common.metrics_handler import BaseVercelHandler, MetricsHandler
 from config.defaults import MetricsServiceConfig
 from metrics.bnbsc import (
@@ -17,7 +18,7 @@ from metrics.ethereum import (
 
 METRIC_NAME = f"{MetricsServiceConfig.METRIC_PREFIX}response_latency_seconds"
 
-METRICS = [
+METRICS: list[MetricSpec] = [
     (WSBlockLatencyMetric, METRIC_NAME),
     (HTTPBlockNumberLatencyMetric, METRIC_NAME),
     (HTTPEthCallLatencyMetric, METRIC_NAME),

@@ -5,7 +5,7 @@ Python-based Vercel Functions that measure RPC node response times across multip
 ## Commands
 
 ```bash
-# Code quality (run before completing any task)
+# Code quality (run before completing any task; all three must be clean)
 uv run ruff format .
 uv run ruff check .
 uv run ruff check . --fix

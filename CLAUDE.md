@@ -15,6 +15,10 @@ uv run mypy .
 uv run python tests/test_api_read.py    # Read metrics (latency)
 uv run python tests/test_api_write.py   # Write metrics (Solana landing rate)
 uv run python tests/test_update_state.py  # State update via blob storage
+
+# Vercel build check — run before dependency or vercel*.json changes. Builds a temp copy,
+# imports every function from the bundle; no deploy, no env pull, no RPC calls.
+uv run scripts/vercel_build_check.py [--config vercel.<region>.json]
 ```
 
 ## Environment Setup
@@ -78,6 +82,7 @@ tests/         # Local test scripts (not unit tests) — load endpoints.json int
 ## Gotchas
 
 - **Do not deploy to Vercel during agent sessions** — crons run in production and could be disrupted.
+- `.vercelignore` is an allow-list: only `api/`, `common/`, `metrics/`, `config/`, `pyproject.toml`, `uv.lock` and `vercel*.json` are uploaded. A new top-level file or directory the functions need must be added there as `!/<path>`. Vercel installs dependencies from `uv.lock` (runtime group only), so `uv lock` is what changes production versions.
 - `endpoints.json` is gitignored; tests will fail without it.
 - Each chain has its own `vercel.<region>.json` for multi-region deployments — changes to function config in `vercel.json` usually need to be mirrored there.
 - `mypy` runs in strict mode (`strict = true`) — all new code needs full type annotations.

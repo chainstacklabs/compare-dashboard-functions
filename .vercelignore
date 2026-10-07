@@ -1,20 +1,10 @@
-dashboards
-tests
-README.md
-endpoints.json
-
-*.local*
-*.example*
-
-pyproject.toml
-uv.lock
-.coderabbit.yaml
-.ruff_cache
-.mypy_cache
-.claude
-.vscode
-
-AGENTS.md
-CLAUDE.md
-spec*.md
-LICENSE
+# Allow-list: only function code and what the build needs is uploaded.
+# Anything new stays local unless it is added here.
+/*
+!/api
+!/common
+!/metrics
+!/config
+!/pyproject.toml
+!/uv.lock
+!/vercel*.json

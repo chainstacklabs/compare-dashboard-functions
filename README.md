@@ -103,6 +103,8 @@ uv run python tests/test_api_write.py
 
 Checks: `uv run ruff format .`, `uv run ruff check .`, `uv run mypy .` (strict). Requires Python 3.10+.
 
+Before a dependency or `vercel*.json` change, `uv run scripts/vercel_build_check.py [--config vercel.<region>.json]` copies the files a deploy would upload (`.vercelignore` is an allow-list) to a temporary directory, fails if any of them is not function code or deploy config, runs `vercel build` there and imports every function from the resulting bundle on Vercel's Python version. It deploys nothing, pulls no environment variables and makes no RPC calls; it needs the Vercel CLI and a linked `.vercel/project.json`.
+
 ### Adding a chain
 
 1. `metrics/<chain>.py` — metric classes.

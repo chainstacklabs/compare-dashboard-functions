@@ -1,6 +1,6 @@
 """Solana metrics implementation for HTTP endpoints."""
 
-from typing import Any, Optional
+from typing import Any
 
 from common.balance_hash import hash_bytes_to_float
 from common.metric_types import HttpCallLatencyMetricBase
@@ -164,7 +164,7 @@ class HTTPAccountAgreementMetric(HttpCallLatencyMetricBase):
         super().__init__(*args, **kwargs)
         anchor_slot = int(state_data["old_block"])
         self._anchor_slot_hex: str = hex(anchor_slot)
-        self._captured_account_hash: Optional[float] = None
+        self._captured_account_hash: float | None = None
 
     def mark_failure(self) -> None:
         """Clear the captured hash on failure to suppress the emit."""

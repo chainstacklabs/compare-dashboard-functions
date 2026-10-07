@@ -21,7 +21,7 @@ dev = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py39"
+target-version = "py310"
 extend-exclude = [".claude"]
 
 [tool.ruff.lint]
@@ -55,7 +55,7 @@ convention = "google"
 "api/**/*.py" = ["N801"]
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 strict = true
 ignore_missing_imports = true
 disallow_untyped_defs = true

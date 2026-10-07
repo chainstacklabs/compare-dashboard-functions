@@ -5,7 +5,7 @@ import contextlib
 import logging
 import time
 from abc import abstractmethod
-from typing import Any, ClassVar, Optional, Union
+from typing import Any, ClassVar
 
 import aiohttp
 import websockets
@@ -33,14 +33,14 @@ class WebSocketMetric(BaseMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        ws_endpoint: Optional[str] = None,
-        http_endpoint: Optional[str] = None,
+        ws_endpoint: str | None = None,
+        http_endpoint: str | None = None,
     ) -> None:
         """Initialise WebSocket metric and set up subscription ID tracking."""
         super().__init__(
             handler, metric_name, labels, config, ws_endpoint, http_endpoint
         )
-        self.subscription_id: Optional[int] = None
+        self.subscription_id: int | None = None
 
     @abstractmethod
     async def subscribe(self, websocket: websockets.WebSocketClientProtocol) -> None:
@@ -53,7 +53,7 @@ class WebSocketMetric(BaseMetric):
     @abstractmethod
     async def listen_for_data(
         self, websocket: websockets.WebSocketClientProtocol
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Receives WebSocket data."""
 
     async def connect(self) -> websockets.WebSocketClientProtocol:
@@ -124,7 +124,7 @@ class HttpMetric(BaseMetric):
     """HTTP metric for API data collection."""
 
     @abstractmethod
-    async def fetch_data(self) -> Optional[float]:
+    async def fetch_data(self) -> float | None:
         """Fetches HTTP endpoint data."""
 
     def get_endpoint(self) -> str:
@@ -174,7 +174,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        method_params: Optional[Union[dict[str, Any], list[Any]]] = None,
+        method_params: dict[str, Any] | list[Any] | None = None,
         **kwargs: Any,
     ) -> None:
         """Initialise metric, validate state, and build the base JSON-RPC request."""
@@ -189,15 +189,15 @@ class HttpCallLatencyMetricBase(HttpMetric):
             config=config,
         )
 
-        self.method_params: Union[dict[str, Any], list[Any]] = (
+        self.method_params: dict[str, Any] | list[Any] = (
             self.get_params_from_state(state_data)
             if method_params is None
             else method_params
         )
         self.labels.update_label(MetricLabelKey.API_METHOD, self.method)
         self._base_request = self._build_base_request()
-        self._captured_block_number: Optional[int] = None
-        self._captured_balance: Optional[int] = None
+        self._captured_block_number: int | None = None
+        self._captured_balance: int | None = None
 
     def mark_failure(self) -> None:
         """Mark metric as failed and clear any captured response fields."""
@@ -224,7 +224,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
     @staticmethod
     def get_params_from_state(
         state_data: dict[str, Any],
-    ) -> Union[dict[str, Any], list[Any]]:
+    ) -> dict[str, Any] | list[Any]:
         """Get RPC method parameters from state data."""
         return {}
 

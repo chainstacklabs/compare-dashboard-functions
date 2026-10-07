@@ -12,7 +12,7 @@ and ``common/metrics_handler.py`` already use, but exposes two queries that
 
 import json
 import os
-from typing import Any, Optional
+from typing import Any
 
 CHAINSTACK_PROVIDER_NAME = "Chainstack"
 
@@ -63,7 +63,7 @@ def all_provider_entries_for(chain: str) -> list[tuple[str, str]]:
     return out
 
 
-def chainstack_endpoint_for(chain: str) -> Optional[str]:
+def chainstack_endpoint_for(chain: str) -> str | None:
     """Return the Chainstack HTTP endpoint for the chain, or None."""
     config = _load_endpoints_config()
     target = chain.lower()

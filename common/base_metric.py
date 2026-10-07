@@ -4,7 +4,7 @@ import logging
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, ClassVar, Optional, Union
+from typing import Any, ClassVar
 
 import aiohttp
 import websockets
@@ -20,8 +20,8 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 class MetricValue:
     """Container for a single metric value and its specific labels."""
 
-    value: Union[int, float]
-    labels: Optional[dict[str, str]] = None
+    value: int | float
+    labels: dict[str, str] | None = None
 
 
 class BaseMetric(ABC):
@@ -49,8 +49,8 @@ class BaseMetric(ABC):
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
-        ws_endpoint: Optional[str] = None,
-        http_endpoint: Optional[str] = None,
+        ws_endpoint: str | None = None,
+        http_endpoint: str | None = None,
     ) -> None:
         """Initialise metric with handler, name, labels, config, and endpoints."""
         self.metric_id = str(uuid.uuid4())
@@ -67,7 +67,7 @@ class BaseMetric(ABC):
         """Collects metric data."""
 
     @abstractmethod
-    def process_data(self, data: Any) -> Union[int, float]:
+    def process_data(self, data: Any) -> int | float:
         """Processes raw data into metric value."""
 
     def get_influx_format(self) -> list[str]:
@@ -117,9 +117,9 @@ class BaseMetric(ABC):
 
     def update_metric_value(
         self,
-        value: Union[int, float],
+        value: int | float,
         value_type: str = "response_time",
-        labels: Optional[dict[str, str]] = None,
+        labels: dict[str, str] | None = None,
     ) -> None:
         """Updates metric value, preserving existing labels if present.
 

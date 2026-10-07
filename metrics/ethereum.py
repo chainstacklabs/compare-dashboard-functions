@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Any, Optional
+from typing import Any
 
 import websockets
 
@@ -261,7 +261,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
     async def listen_for_data(
         self, websocket: websockets.WebSocketClientProtocol
-    ) -> Optional[dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """Listen for a single data message from the WebSocket.
 
         Args:

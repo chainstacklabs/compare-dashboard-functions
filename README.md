@@ -21,7 +21,7 @@ The Grafana dashboards used by this project are open source and available in the
 
 ## Overview
 
-This system collects latency metrics from RPC endpoints using scheduled cron jobs. Functions run in multiple regions (Frankfurt, San Francisco, Singapore, Tokyo) to measure response times from different geographic locations.
+This system collects latency metrics from RPC endpoints using scheduled cron jobs. Functions run in multiple regions (Frankfurt, San Francisco, Portland, Singapore, Tokyo) to measure response times from different geographic locations.
 
 **Metric types collected:**
 - HTTP RPC method latency (eth_blockNumber, eth_call, eth_getLogs, etc.)
@@ -326,6 +326,11 @@ vercel link --project chainstack-rpc-dashboard-us-west
 cp vercel.sfo1.json vercel.json
 vercel --prod
 
+# US West (Portland - pdx1)
+vercel link --project chainstack-rpc-dashboard-us-west-pdx1
+cp vercel.pdx1.json vercel.json
+vercel --prod
+
 # Singapore (sin1)
 vercel link --project chainstack-rpc-dashboard-singapore
 cp vercel.sin1.json vercel.json
@@ -362,3 +367,5 @@ To add or remove a blockchain from a region:
 - The original `vercel.json` serves as a reference template
 - State Update and Solana Write only run in fra1 to avoid data conflicts
 - Each region's config file (`vercel.fra1.json`, etc.) defines only the functions needed in that region
+- US West is probed from two projects: Ethereum from pdx1, the other chains from sfo1. Dashboards and the comparison page treat both as one US West region
+- `vercel.pdx1.json` pins its region with `regions`; the other projects take theirs from the project's function region setting

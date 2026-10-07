@@ -1,11 +1,16 @@
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pathspec>=0.12"]
+# ///
 """Run the Vercel build locally and import every function from its bundle.
 
 Catches dependency and packaging problems before a deploy, without touching the
-checkout: the working tree (tracked and untracked files, minus anything
-gitignored, so no ``.env.local`` or ``endpoints.json``) is copied to a temporary
-directory, ``vercel build`` runs there, and each entry point is imported from the
-bundle with only the bundled packages on the path. Nothing is deployed, no
-environment variables are pulled, and no RPC or Grafana calls are made.
+checkout. The files a ``vercel deploy`` would upload (everything on disk, minus
+Vercel's default ignores and ``.vercelignore``) are copied to a temporary
+directory; the check fails if that set holds anything besides function code and
+deploy config. ``vercel build`` then runs there, and each entry point is imported
+from the bundle with only the bundled packages on the path. Nothing is deployed,
+no environment variables are pulled, and no RPC or Grafana calls are made.
 
 Usage:
     uv run scripts/vercel_build_check.py [--config vercel.fra1.json] [--keep]
@@ -21,8 +26,37 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
+import pathspec
+
 REPO = Path(__file__).resolve().parents[1]
 BUNDLE_LIMIT_MB = 500
+
+# Always skipped by the Vercel CLI, whatever .vercelignore says.
+VERCEL_DEFAULT_IGNORES = [
+    ".git",
+    ".gitmodules",
+    ".hg",
+    ".svn",
+    "CVS",
+    ".cache",
+    ".vercel",
+    ".now",
+    ".next",
+    "node_modules",
+    "__pycache__",
+    ".venv",
+    "venv",
+    ".DS_Store",
+    ".env.local",
+    ".env.*.local",
+    ".*.swp",
+    ".npmignore",
+    ".dockerignore",
+    ".gitignore",
+    "npm-debug.log",
+]
+CODE_DIRS = ("api/", "common/", "metrics/", "config/")
+DEPLOY_FILES = ("pyproject.toml", "uv.lock")
 
 IMPORT_PROBE = """
 import importlib, sys
@@ -36,23 +70,39 @@ print(f"{len(mods)} entry points and the Vercel handler import on {version}")
 
 
 def run(cmd: list[str], cwd: Path, env: dict[str, str] | None = None) -> str:
-    """Run a command, exit with its output if it fails, return stdout."""
+    """Run a command, exit with its output if it fails, return stdout+stderr."""
     result = subprocess.run(cmd, cwd=cwd, env=env, capture_output=True, text=True)
     if result.returncode != 0:
         sys.exit(f"FAILED: {' '.join(cmd)}\n{result.stdout}\n{result.stderr}")
-    return result.stdout
+    return result.stdout + result.stderr
 
 
-def copy_working_tree(dest: Path) -> None:
-    """Copy tracked and untracked, non-ignored files into ``dest``."""
-    listed = run(
-        ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], REPO
+def upload_files() -> list[str]:
+    """Return the repo-relative files ``vercel deploy`` would upload."""
+    vercelignore = REPO / ".vercelignore"
+    rules = vercelignore.read_text().splitlines() if vercelignore.exists() else []
+    # Two separate filters: a negation in .vercelignore cannot re-include a
+    # default ignore (e.g. __pycache__ under an allowed directory).
+    defaults = pathspec.GitIgnoreSpec.from_lines(VERCEL_DEFAULT_IGNORES)
+    project = pathspec.GitIgnoreSpec.from_lines(rules)
+    on_disk = (str(p.relative_to(REPO)) for p in REPO.rglob("*") if p.is_file())
+    return sorted(
+        f for f in on_disk if not defaults.match_file(f) and not project.match_file(f)
     )
-    for rel in filter(None, listed.split("\0")):
-        src = REPO / rel
-        if src.is_file():
-            (dest / rel).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(src, dest / rel)
+
+
+def is_deployable(rel: str) -> bool:
+    """Return True for function code and the files the deploy needs."""
+    if rel.startswith(CODE_DIRS):
+        return rel.endswith(".py")
+    return rel in DEPLOY_FILES or (rel.startswith("vercel") and rel.endswith(".json"))
+
+
+def copy_files(files: list[str], dest: Path) -> None:
+    """Copy repo-relative ``files`` into ``dest``."""
+    for rel in files:
+        (dest / rel).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(REPO / rel, dest / rel)
 
 
 def link_project(dest: Path) -> None:
@@ -100,15 +150,32 @@ def main() -> None:
     parser.add_argument("--keep", action="store_true", help="keep the temp dir")
     args = parser.parse_args()
 
+    files = upload_files()
+    stray = [f for f in files if not is_deployable(f)]
+    print(f"A deploy would upload {len(files)} files.")
+    if stray:
+        sys.exit(
+            "Files that should not be deployed (fix .vercelignore):\n  "
+            + "\n  ".join(stray)
+        )
+
     tmp = Path(tempfile.mkdtemp(prefix="vercel-build-check-"))
     try:
-        copy_working_tree(tmp)
+        copy_files(files, tmp)
         link_project(tmp)
         build_cmd = ["vercel", "build", "--non-interactive"]
         if args.config:
             build_cmd += ["--local-config", args.config]
         print(f"Building in {tmp} ...")
-        run(build_cmd, tmp)
+        log = run(build_cmd, tmp)
+        sources = sorted(
+            {
+                ln.split("from ", 1)[1].rstrip(". ")
+                for ln in log.splitlines()
+                if "Installing required dependencies from" in ln
+            }
+        )
+        print(f"Dependencies installed from: {', '.join(sources) or 'unknown'}")
 
         funcs = sorted((tmp / ".vercel/output/functions").rglob("*.func"))
         if not funcs:

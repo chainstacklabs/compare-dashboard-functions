@@ -5,6 +5,8 @@ import json
 import logging
 import os
 import time
+from collections.abc import Sequence
+from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler
 from typing import Any
 
@@ -12,33 +14,51 @@ import aiohttp
 
 from common.balance_hash import hash_balance_to_float
 from common.base_metric import BaseMetric
-from common.factory import MetricFactory
+from common.factory import MetricFactory, MetricSpec
 from common.metric_config import MetricConfig
 from common.state.blockchain_state import BlockchainState
 from config.defaults import MetricsServiceConfig
 
 
+@dataclass(frozen=True)
+class GrafanaConfig:
+    """Grafana push settings and per-metric limits, read once at startup."""
+
+    current_region: str | None
+    url: str | None
+    user: str | None
+    api_key: str | None
+    push_retries: int
+    push_retry_delay: int
+    push_timeout: int
+    metric_request_timeout: int
+    metric_max_latency: int
+
+    @classmethod
+    def from_env(cls) -> "GrafanaConfig":
+        """Build from environment variables and ``MetricsServiceConfig``."""
+        return cls(
+            current_region=os.getenv("VERCEL_REGION"),  # System env var
+            url=os.environ.get("GRAFANA_URL"),
+            user=os.environ.get("GRAFANA_USER"),
+            api_key=os.environ.get("GRAFANA_API_KEY"),
+            push_retries=MetricsServiceConfig.GRAFANA_PUSH_MAX_RETRIES,
+            push_retry_delay=MetricsServiceConfig.GRAFANA_PUSH_RETRY_DELAY,
+            push_timeout=MetricsServiceConfig.GRAFANA_PUSH_TIMEOUT,
+            metric_request_timeout=MetricsServiceConfig.METRIC_REQUEST_TIMEOUT,
+            metric_max_latency=MetricsServiceConfig.METRIC_MAX_LATENCY,
+        )
+
+
 class MetricsHandler:
     """Manages collection and pushing of blockchain metrics."""
 
-    def __init__(self, blockchain: str, metrics: list[tuple[type, str]]) -> None:
+    def __init__(self, blockchain: str, metrics: Sequence[MetricSpec]) -> None:
         """Initialise handler with blockchain name and metric class list."""
         self._instances: list[BaseMetric] = []
         self.blockchain: str = blockchain
-        self.metrics: list[tuple[type, str]] = metrics
-        self.grafana_config = {
-            "current_region": os.getenv(
-                "VERCEL_REGION"
-            ),  # System env var, standard name
-            "url": os.environ.get("GRAFANA_URL"),
-            "user": os.environ.get("GRAFANA_USER"),
-            "api_key": os.environ.get("GRAFANA_API_KEY"),
-            "push_retries": MetricsServiceConfig.GRAFANA_PUSH_MAX_RETRIES,
-            "push_retry_delay": MetricsServiceConfig.GRAFANA_PUSH_RETRY_DELAY,
-            "push_timeout": MetricsServiceConfig.GRAFANA_PUSH_TIMEOUT,
-            "metric_request_timeout": MetricsServiceConfig.METRIC_REQUEST_TIMEOUT,
-            "metric_max_latency": MetricsServiceConfig.METRIC_MAX_LATENCY,
-        }
+        self.metrics: Sequence[MetricSpec] = metrics
+        self.grafana_config = GrafanaConfig.from_env()
 
     def _emit_block_numbers(self) -> None:
         """Emit raw block numbers for each instance that captured one.
@@ -183,8 +203,8 @@ class MetricsHandler:
     ) -> None:
         """Create and run all metric instances for a single provider."""
         metric_config = MetricConfig(
-            timeout=self.grafana_config["metric_request_timeout"],
-            max_latency=self.grafana_config["metric_max_latency"],
+            timeout=self.grafana_config.metric_request_timeout,
+            max_latency=self.grafana_config.metric_max_latency,
             endpoints=None,  # Will be set in factory
             extra_params={"tx_data": provider.get("data")},
         )
@@ -194,11 +214,11 @@ class MetricsHandler:
             metrics_handler=self,
             config=metric_config,
             provider=provider["name"],
-            source_region=self.grafana_config["current_region"],
+            source_region=self.grafana_config.current_region,
             target_region=config.get("region", "default"),
-            ws_endpoint=provider.get("websocket_endpoint"),  # type: ignore
-            http_endpoint=provider.get("http_endpoint"),  # type: ignore
-            tx_endpoint=provider.get("tx_endpoint"),  # type: ignore
+            ws_endpoint=provider.get("websocket_endpoint"),
+            http_endpoint=provider.get("http_endpoint"),
+            tx_endpoint=provider.get("tx_endpoint"),
             state_data=state_data,
         )
 
@@ -206,33 +226,27 @@ class MetricsHandler:
 
     async def push_to_grafana(self, metrics_text: str) -> None:
         """Push metrics text to Grafana via HTTP with retry logic."""
-        if not all(
-            [
-                self.grafana_config["url"],
-                self.grafana_config["user"],
-                self.grafana_config["api_key"],
-            ]
-        ):
+        cfg = self.grafana_config
+        url, user, api_key = cfg.url, cfg.user, cfg.api_key
+        if not (url and user and api_key):
             return
 
-        for attempt in range(1, self.grafana_config["push_retries"] + 1):
+        for attempt in range(1, cfg.push_retries + 1):
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
-                        self.grafana_config["url"],
+                        url,
                         headers={"Content-Type": "text/plain"},
                         data=metrics_text,
-                        auth=aiohttp.BasicAuth(
-                            self.grafana_config["user"], self.grafana_config["api_key"]
-                        ),
-                        timeout=self.grafana_config["push_timeout"],
+                        auth=aiohttp.BasicAuth(user, api_key),
+                        timeout=aiohttp.ClientTimeout(total=cfg.push_timeout),
                     ) as response:
                         if response.status in (200, 204):
                             return
 
             except Exception:
-                if attempt < self.grafana_config["push_retries"]:
-                    await asyncio.sleep(self.grafana_config["push_retry_delay"])
+                if attempt < cfg.push_retries:
+                    await asyncio.sleep(cfg.push_retry_delay)
 
     async def handle(self) -> tuple[str, str]:
         """Main handler for metric collection and pushing."""

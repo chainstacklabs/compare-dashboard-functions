@@ -1,11 +1,18 @@
 """Factory for creating blockchain-specific metric instances."""
 
 import copy
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 from common.base_metric import BaseMetric
 from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
+
+if TYPE_CHECKING:
+    from common.metrics_handler import MetricsHandler
+
+MetricSpec = tuple[type[BaseMetric], str]
+"""A metric class and the metric name it reports under."""
 
 
 @dataclass
@@ -27,9 +34,7 @@ class MetricFactory:
     _registry: ClassVar[dict[str, list[MetricRegistration]]] = {}
 
     @classmethod
-    def register(
-        cls, blockchain_metrics: dict[str, list[tuple[type[BaseMetric], str]]]
-    ) -> None:
+    def register(cls, blockchain_metrics: dict[str, Sequence[MetricSpec]]) -> None:
         """Registers metric classes for blockchains."""
         for blockchain_name, metrics in blockchain_metrics.items():
             if blockchain_name not in cls._registry:
@@ -49,9 +54,9 @@ class MetricFactory:
     def create_metrics(
         cls,
         blockchain_name: str,
-        metrics_handler: "MetricsHandler",  # type: ignore  # noqa: F821
+        metrics_handler: "MetricsHandler",
         config: MetricConfig,
-        **kwargs: dict[str, Any],
+        **kwargs: Any,
     ) -> list[BaseMetric]:
         """Creates metric instances for a specific blockchain."""
         if blockchain_name not in cls._registry:
@@ -113,7 +118,7 @@ class MetricFactory:
         blockchain_name: str,
         metric_class: type[BaseMetric],
         metric_name: str,
-        metrics_handler: "MetricsHandler",  # noqa: F821 # type: ignore
+        metrics_handler: "MetricsHandler",
         config: MetricConfig,
         kwargs: dict[str, Any],
         source_region: str,
@@ -163,7 +168,7 @@ class MetricFactory:
         blockchain_name: str,
         metric_class: type[BaseMetric],
         metric_name: str,
-        metrics_handler: "MetricsHandler",  # noqa: F821 # type: ignore
+        metrics_handler: "MetricsHandler",
         config: MetricConfig,
         kwargs: dict[str, Any],
         source_region: str,

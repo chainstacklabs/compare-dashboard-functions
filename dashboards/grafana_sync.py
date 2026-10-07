@@ -1,10 +1,3 @@
-# /// script
-# requires-python = ">=3.11"
-# dependencies = [
-#   "requests",
-#   "python-dotenv",
-# ]
-# ///
 """CLI tool to pull, push, and diff Grafana dashboards via the Grafana HTTP API."""
 
 import hashlib

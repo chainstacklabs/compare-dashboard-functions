@@ -66,7 +66,7 @@ class BlockchainState:
     @staticmethod
     async def get_data(blockchain: str) -> dict[str, Any]:
         """Get blockchain state data with retries."""
-        last_exception = None  # type: ignore
+        last_exception: str | None = None
 
         for attempt in range(1, BlockchainState._RETRIES + 1):
             try:
@@ -80,7 +80,7 @@ class BlockchainState:
                     chain_state: dict[str, Any] = state_data.get(blockchain.lower(), {})
                     return chain_state
             except Exception as e:
-                last_exception: str = str(e) if str(e) else "Unknown error occurred"
+                last_exception = str(e) if str(e) else "Unknown error occurred"
                 logging.warning(
                     f"Attempt {attempt}: State fetch failed: {last_exception}"
                 )

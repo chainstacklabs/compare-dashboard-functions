@@ -136,13 +136,10 @@ class StateUpdateManager:
             fetch_single(blockchain, endpoint)
             for blockchain, endpoint in providers.items()
         ]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        return {
-            blockchain: data
-            for blockchain, data in results  # type: ignore
-            if not isinstance(blockchain, Exception)
-        }
+        # fetch_single handles its own errors; anything that still escapes
+        # fails the whole update so the previous state blob stays in place.
+        results = await asyncio.gather(*tasks)
+        return dict(results)
 
     async def update(self) -> str:
         """Collect fresh blockchain state and persist it to blob storage."""
@@ -155,7 +152,7 @@ class StateUpdateManager:
             chainstack_endpoints: dict[
                 str, str
             ] = await self._get_chainstack_endpoints()
-            blockchain_data = await self._collect_blockchain_data(
+            blockchain_data: dict[str, Any] = await self._collect_blockchain_data(
                 chainstack_endpoints, previous_data
             )
 
@@ -163,7 +160,7 @@ class StateUpdateManager:
             if not blockchain_data:
                 if previous_data:
                     self.logger.warning("Using complete previous state as fallback")
-                    blockchain_data: dict[str, Any] = previous_data
+                    blockchain_data = previous_data
                 else:
                     return "No blockchain data collected and no previous data available"
 

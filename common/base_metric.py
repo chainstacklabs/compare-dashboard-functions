@@ -4,7 +4,7 @@ import logging
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar
 
 import aiohttp
 import websockets
@@ -12,6 +12,9 @@ import websockets.exceptions
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from config.defaults import MetricsServiceConfig
+
+if TYPE_CHECKING:
+    from common.metrics_handler import MetricsHandler
 
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
@@ -45,7 +48,7 @@ class BaseMetric(ABC):
 
     def __init__(
         self,
-        handler: "MetricsHandler",  # type: ignore  # noqa: F821
+        handler: "MetricsHandler",
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,

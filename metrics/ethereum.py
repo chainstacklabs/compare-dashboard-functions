@@ -4,7 +4,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime, timezone
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import websockets
 
@@ -15,6 +15,9 @@ from common.metric_types import (
     HttpCallLatencyMetricBase,
     WebSocketMetric,
 )
+
+if TYPE_CHECKING:
+    from common.metrics_handler import MetricsHandler
 
 WS_DEFAULT_TIMEOUT = 20
 
@@ -147,7 +150,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
 
     def __init__(
         self,
-        handler: "MetricsHandler",  # type: ignore  # noqa: F821
+        handler: "MetricsHandler",
         metric_name: str,
         labels: MetricLabels,
         config: MetricConfig,
@@ -163,6 +166,8 @@ class WSBlockLatencyMetric(WebSocketMetric):
             **kwargs: Additional arguments including ws_endpoint
         """
         ws_endpoint = kwargs.pop("ws_endpoint", None)
+        if ws_endpoint is not None and not isinstance(ws_endpoint, str):
+            raise TypeError(f"ws_endpoint must be str, got {type(ws_endpoint)}")
         super().__init__(
             handler=handler,
             metric_name=metric_name,

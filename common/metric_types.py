@@ -271,6 +271,8 @@ class HttpCallLatencyMetricBase(HttpMetric):
     async def fetch_data(self) -> float:
         """Measure single request latency with detailed timing."""
         endpoint: str | None = self.config.endpoints.get_endpoint()
+        if endpoint is None:
+            raise ValueError("No HTTP endpoint configured for this metric")
 
         # Add trace config for detailed timing
         trace_config = aiohttp.TraceConfig()

@@ -205,7 +205,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  avg by (provider) (\r\n    avg by (provider, source_region) (\r\n      quantile_over_time(0.95, \r\n        (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method!=\"eth_subscribe\"} >= 0)[$__range:3m]\r\n      )\r\n    )\r\n    /\r\n    (\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:3m]))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:3m]))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:3m]))\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  avg by (provider) (\r\n    avg by (provider, source_region) (\r\n      quantile_over_time(0.95, \r\n        (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method!=\"eth_subscribe\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n      )\r\n    )\r\n    /\r\n    (\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -298,13 +298,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -378,7 +378,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method!=\"eth_subscribe\"} > 0)[$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method!=\"eth_subscribe\"} > 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -518,13 +518,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -579,7 +579,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range])) by (provider, source_region)",
+          "expr": "(\r\n  sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region))\r\n)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -683,13 +683,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -763,7 +763,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0)[$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -912,7 +912,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -961,32 +961,32 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth sfo1": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack sfo1": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth sfo1": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC sfo1": 12,
-              "dRPC sin1": 11
+              "dRPC sin1": 11,
+              "dRPC us-west": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1087,7 +1087,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getTransactionReceipt|eth_getLogs)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1136,32 +1136,32 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth sfo1": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack sfo1": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth sfo1": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC sfo1": 12,
-              "dRPC sin1": 11
+              "dRPC sin1": 11,
+              "dRPC us-west": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1251,7 +1251,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", response_status=\"success\", api_method=~\"(.*debug.*|eth_subscribe)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1300,32 +1300,32 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth sfo1": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack sfo1": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth sfo1": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC sfo1": 12,
-              "dRPC sin1": 11
+              "dRPC sin1": 11,
+              "dRPC us-west": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -2280,30 +2280,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -2391,13 +2399,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2453,7 +2461,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2617,30 +2625,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -2728,13 +2744,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2790,7 +2806,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2950,30 +2966,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -3061,13 +3085,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3123,7 +3147,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3283,30 +3307,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -3394,13 +3426,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3456,7 +3488,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3616,30 +3648,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -3727,13 +3767,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3789,7 +3829,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3951,30 +3991,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -4062,13 +4110,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4124,7 +4172,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4284,30 +4332,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -4395,13 +4451,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4457,7 +4513,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4617,31 +4673,39 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
+                  "Alchemy-Growth - pdx1": 13,
                   "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
                   "Chainstack - fra1": 4,
+                  "Chainstack - pdx1": 14,
                   "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
                   "Quicknode-Growth - fra1": 7,
+                  "Quicknode-Growth - pdx1": 15,
                   "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
                   "Time": 0,
                   "dRPC - fra1": 10,
+                  "dRPC - pdx1": 16,
                   "dRPC - sfo1": 12,
                   "dRPC - sin1": 11
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
+                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
+                  "Chainstack - pdx1": "Chainstack-Growth - US West",
                   "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
+                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
                   "Time": "",
                   "dRPC - fra1": "dRPC-Growth - EU",
+                  "dRPC - pdx1": "dRPC-Growth - US West",
                   "dRPC - sfo1": "dRPC-Growth - US West",
                   "dRPC - sin1": "dRPC-Growth - SG"
                 }
@@ -4729,13 +4793,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4791,7 +4855,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4881,6 +4945,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Ethereum",
   "uid": "fe3mtxna6483ke-global",
-  "version": 131,
+  "version": 132,
   "weekStart": "monday"
 }

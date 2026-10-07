@@ -101,7 +101,7 @@ class StateUpdateManager:
 
     async def _collect_blockchain_data(
         self, providers: dict[str, str], previous_data: dict[str, Any]
-    ) -> dict[str, dict]:
+    ) -> dict[str, dict[str, Any]]:
         async def fetch_single(
             blockchain: str, endpoint: str
         ) -> tuple[str, dict[str, str]]:

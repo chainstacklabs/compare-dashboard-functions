@@ -3,6 +3,7 @@
 import json
 import time
 from dataclasses import dataclass
+from typing import Any
 
 import aiohttp
 
@@ -39,8 +40,8 @@ class BlobStorageHandler:
         }
 
     async def _make_request(
-        self, method: str, url: str, data: dict | None = None
-    ) -> dict:
+        self, method: str, url: str, data: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         async with aiohttp.ClientSession() as session:
             async with session.request(
                 method,

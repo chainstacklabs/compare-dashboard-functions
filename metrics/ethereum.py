@@ -28,7 +28,7 @@ class HTTPEthCallLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_call"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters for eth_call with fixed USDC token query."""
         return [
             {
@@ -52,12 +52,12 @@ class HTTPTxReceiptLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getTransactionReceipt"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required transaction hash exists in state data."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters using transaction hash from state."""
         return [state_data["tx"]]
 
@@ -80,7 +80,7 @@ class HTTPDebugTraceBlockByNumberLatencyMetric(HttpCallLatencyMetricBase):
         return "debug_traceBlockByNumber"
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters for tracing latest block."""
         return ["latest", {"tracer": "callTracer"}]
 
@@ -94,12 +94,12 @@ class HTTPDebugTraceTxLatencyMetric(HttpCallLatencyMetricBase):
         return "debug_traceTransaction"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required transaction hash exists in state data."""
         return bool(state_data and state_data.get("tx"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Returns parameters using transaction hash from state."""
         return [state_data["tx"], {"tracer": "callTracer"}]
 
@@ -113,12 +113,12 @@ class HTTPGetLogsLatencyMetric(HttpCallLatencyMetricBase):
         return "eth_getLogs"
 
     @staticmethod
-    def validate_state(state_data: dict) -> bool:
+    def validate_state(state_data: dict[str, Any]) -> bool:
         """Validates that required block number exists in state data."""
         return bool(state_data and state_data.get("old_block"))
 
     @staticmethod
-    def get_params_from_state(state_data: dict) -> list:
+    def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
         """Get parameters for USDC transfer logs from recent block range."""
         from_block_hex = state_data["old_block"]
         from_block_int = int(from_block_hex, 16)

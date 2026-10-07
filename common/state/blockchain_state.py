@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+from typing import Any
 
 import aiohttp
 
@@ -43,7 +44,9 @@ class BlockchainState:
             raise ValueError("Blockchain data blob not found")
 
     @staticmethod
-    async def _fetch_state_data(session: aiohttp.ClientSession, blob_url: str) -> dict:
+    async def _fetch_state_data(
+        session: aiohttp.ClientSession, blob_url: str
+    ) -> dict[str, Any]:
         """Fetch state data from blob storage."""
         headers: dict[str, str] = BlockchainState._get_headers()
 
@@ -60,7 +63,7 @@ class BlockchainState:
             return data
 
     @staticmethod
-    async def get_data(blockchain: str) -> dict:
+    async def get_data(blockchain: str) -> dict[str, Any]:
         """Get blockchain state data with retries."""
         last_exception = None  # type: ignore
 

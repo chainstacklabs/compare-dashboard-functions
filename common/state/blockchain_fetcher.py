@@ -42,7 +42,7 @@ class BlockchainDataFetcher:
         self._logger: logging.Logger = logging.getLogger(__name__)
 
     async def _make_rpc_request(
-        self, method: str, params: list | dict | None = None
+        self, method: str, params: list[Any] | dict[str, Any] | None = None
     ) -> Any:
         """Makes a JSON-RPC request with retries."""
         request = {"jsonrpc": "2.0", "method": method, "params": params or [], "id": 1}
@@ -80,7 +80,7 @@ class BlockchainDataFetcher:
 
     async def _get_block_in_range(
         self, slot_start: int, slot_end: int
-    ) -> tuple[int | None, dict | None]:
+    ) -> tuple[int | None, dict[str, Any] | None]:
         """Search for available block in given slot range."""
         current_slot = slot_end
         while current_slot >= slot_start:

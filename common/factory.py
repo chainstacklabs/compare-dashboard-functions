@@ -2,7 +2,7 @@
 
 import copy
 from dataclasses import dataclass
-from typing import ClassVar
+from typing import Any, ClassVar
 
 from common.base_metric import BaseMetric
 from common.metric_config import EndpointConfig, MetricConfig, MetricLabels
@@ -51,7 +51,7 @@ class MetricFactory:
         blockchain_name: str,
         metrics_handler: "MetricsHandler",  # type: ignore  # noqa: F821
         config: MetricConfig,
-        **kwargs: dict,
+        **kwargs: dict[str, Any],
     ) -> list[BaseMetric]:
         """Creates metric instances for a specific blockchain."""
         if blockchain_name not in cls._registry:
@@ -101,7 +101,7 @@ class MetricFactory:
         return metrics
 
     @staticmethod
-    def _setup_endpoint_config(config: MetricConfig, kwargs: dict) -> None:
+    def _setup_endpoint_config(config: MetricConfig, kwargs: dict[str, Any]) -> None:
         """Sets up endpoint configuration from kwargs."""
         config.endpoints = EndpointConfig(
             main_endpoint=kwargs.get("http_endpoint"),
@@ -115,7 +115,7 @@ class MetricFactory:
         metric_name: str,
         metrics_handler: "MetricsHandler",  # noqa: F821 # type: ignore
         config: MetricConfig,
-        kwargs: dict,
+        kwargs: dict[str, Any],
         source_region: str,
         target_region: str,
         provider: str,
@@ -165,7 +165,7 @@ class MetricFactory:
         metric_name: str,
         metrics_handler: "MetricsHandler",  # noqa: F821 # type: ignore
         config: MetricConfig,
-        kwargs: dict,
+        kwargs: dict[str, Any],
         source_region: str,
         target_region: str,
         provider: str,

@@ -1,0 +1,20 @@
+{
+  "git": {
+    "deploymentEnabled": false
+  },
+  "regions": [
+    "pdx1"
+  ],
+  "functions": {
+    "api/read/ethereum.py": {
+      "memory": 400,
+      "maxDuration": 59
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/read/ethereum",
+      "schedule": "*/3 * * * *"
+    }
+  ]
+}

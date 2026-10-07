@@ -15,6 +15,10 @@ uv run mypy .
 uv run python tests/test_api_read.py    # Read metrics (latency)
 uv run python tests/test_api_write.py   # Write metrics (Solana landing rate)
 uv run python tests/test_update_state.py  # State update via blob storage
+
+# Vercel build check — run before dependency or vercel*.json changes. Builds a temp copy,
+# imports every function from the bundle; no deploy, no env pull, no RPC calls.
+uv run scripts/vercel_build_check.py [--config vercel.<region>.json]
 ```
 
 ## Environment Setup

@@ -83,6 +83,9 @@ tests/         # Local test scripts (not unit tests) — load endpoints.json int
 - `mypy` runs in strict mode (`strict = true`) — all new code needs full type annotations.
 - Max cyclomatic complexity is 10 (Ruff C rule) — keep functions small.
 - Python target is 3.9; avoid 3.10+ syntax (match statements, `X | Y` union types in runtime positions).
+- `SUPPORTED_BLOCKCHAINS` in `api/support/update_state.py` is a completeness check, not a filter. If any listed chain has no Chainstack entry in a region's `ENDPOINTS` env var, `update_state` raises `MissingEndpointsError` and returns 500, so no chain in that region gets a state refresh. When adding a chain, add its endpoints to every region's `ENDPOINTS` before deploying the code. A correct local `endpoints.json` proves nothing about production.
+- A new chain's read cron emits nothing until `update_state` has written its state once (up to 15 minutes after deploy).
+- Failed samples are written as `response_latency_seconds = 0` with `response_status="failed"` (`mark_failure()`). Success-rate queries in `dashboards/` must keep them in the denominator: filtering with `> 0` or `response_status="success"` on both sides turns every success rate, and the score's SR³ term, into a constant 1.0.
 
 ## Code Style
 

@@ -14,13 +14,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "mypy>=2.4.0",
     "python-dotenv>=1.0.0",
+    "ruff>=0.16.10",
 ]
-
-[tool.black]
-line-length = 88
-target-version = ["py39"]
-include = '\.pyi?$'
 
 [tool.ruff]
 line-length = 88

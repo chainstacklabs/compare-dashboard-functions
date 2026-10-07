@@ -2256,7 +2256,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_call\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2280,40 +2280,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2601,7 +2593,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getBalance\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2625,40 +2617,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2942,7 +2926,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getLogs\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2966,40 +2950,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3283,7 +3259,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3307,40 +3283,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3624,7 +3592,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceTransaction\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3648,40 +3616,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3966,7 +3926,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "instant": false,
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
@@ -3991,40 +3951,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4308,7 +4260,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"debug_traceBlockByNumber\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -4332,40 +4284,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4649,7 +4593,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Ethereum\", api_method=\"eth_subscribe\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -4673,41 +4617,33 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - pdx1": 13,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - pdx1": 14,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - pdx1": 15,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - pdx1": 16,
-                  "dRPC - sfo1": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - pdx1": "Alchemy-Growth - US West",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - pdx1": "Chainstack-Growth - US West",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - pdx1": "Quicknode-Growth - US West",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Time": "",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - pdx1": "dRPC-Growth - US West",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4945,6 +4881,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Ethereum",
   "uid": "fe3mtxna6483ke-global",
-  "version": 132,
+  "version": 133,
   "weekStart": "monday"
 }

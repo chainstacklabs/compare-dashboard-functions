@@ -225,28 +225,53 @@ class MetricsHandler:
         await asyncio.gather(*(self._collect_one(m, gate, deadline) for m in metrics))
 
     async def push_to_grafana(self, metrics_text: str) -> None:
-        """Push metrics text to Grafana via HTTP with retry logic."""
+        """Push metrics text to Grafana via HTTP with retry logic.
+
+        Raises:
+            RuntimeError: If Grafana settings are missing in production, or
+                every attempt failed. The handler turns this into a 500 so a
+                lost push shows up as a failed invocation.
+        """
         cfg = self.grafana_config
         url, user, api_key = cfg.url, cfg.user, cfg.api_key
         if not (url and user and api_key):
+            if os.getenv("VERCEL_ENV") == "production":
+                raise RuntimeError("Grafana push settings are not set")
+            logging.warning("Grafana push settings are not set, skipping push")
             return
 
+        last_error = ""
         for attempt in range(1, cfg.push_retries + 1):
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         url,
-                        headers={"Content-Type": "text/plain"},
+                        headers={
+                            "Content-Type": "text/plain",
+                            # latin1 matches the encoding aiohttp.BasicAuth used.
+                            "Authorization": aiohttp.encode_basic_auth(
+                                user, api_key, encoding="latin1"
+                            ),
+                        },
                         data=metrics_text,
-                        auth=aiohttp.BasicAuth(user, api_key),
                         timeout=aiohttp.ClientTimeout(total=cfg.push_timeout),
                     ) as response:
                         if response.status in (200, 204):
                             return
+                        body = (await response.text())[:200]
+                        last_error = f"HTTP {response.status}: {body}"
+            except Exception as e:
+                last_error = f"{type(e).__name__}: {e}"
+            logging.warning(
+                f"Grafana push attempt {attempt}/{cfg.push_retries} failed: "
+                f"{last_error}"
+            )
+            if attempt < cfg.push_retries:
+                await asyncio.sleep(cfg.push_retry_delay)
 
-            except Exception:
-                if attempt < cfg.push_retries:
-                    await asyncio.sleep(cfg.push_retry_delay)
+        raise RuntimeError(
+            f"Grafana push failed after {cfg.push_retries} attempts: {last_error}"
+        )
 
     async def handle(self) -> tuple[str, str]:
         """Main handler for metric collection and pushing."""

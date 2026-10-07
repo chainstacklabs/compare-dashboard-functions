@@ -71,7 +71,7 @@ tests/         # Local test scripts (not unit tests) — load endpoints.json int
 
 **Solana landing rate:** `MetricFactory` creates two instances per endpoint when `tx_endpoint` is provided — one with the base provider name, one with `{provider}_tx`.
 
-**Error handling:** HTTP 401/403/404/429 errors are silently ignored (plan restrictions / rate limits). Other errors zero the metric and log with `mark_failure()`.
+**Error handling:** HTTP 401/403/404/429 errors are silently ignored (plan restrictions / rate limits). Other errors zero the metric and log with `mark_failure()`. That applies to RPC providers only. The Grafana push retries any failure, logs each attempt, and raises after the last one, so a lost push returns 500 from the cron instead of a silent 200; missing Grafana settings raise in production and skip with a warning elsewhere.
 
 **Metrics output:** Influx line protocol — `metric_name,tag1=v1,tag2=v2 value=X`
 

@@ -316,36 +316,50 @@ async def _push_to_grafana(metrics_text: str) -> None:
     user = os.environ.get("GRAFANA_USER")
     api_key = os.environ.get("GRAFANA_API_KEY")
     if not url or not user or not api_key:
+        if os.getenv("VERCEL_ENV") == "production":
+            raise RuntimeError("verify_state: Grafana push settings are not set")
         logging.warning("verify_state: Grafana env not set, skipping push")
         return
 
     timeout = aiohttp.ClientTimeout(total=MetricsServiceConfig.GRAFANA_PUSH_TIMEOUT)
-    for attempt in range(1, MetricsServiceConfig.GRAFANA_PUSH_MAX_RETRIES + 1):
+    retries = MetricsServiceConfig.GRAFANA_PUSH_MAX_RETRIES
+    last_error = ""
+    for attempt in range(1, retries + 1):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     url,
-                    headers={"Content-Type": "text/plain"},
+                    headers={
+                        "Content-Type": "text/plain",
+                        # latin1 matches the encoding aiohttp.BasicAuth used.
+                        "Authorization": aiohttp.encode_basic_auth(
+                            user, api_key, encoding="latin1"
+                        ),
+                    },
                     data=metrics_text,
-                    auth=aiohttp.BasicAuth(user, api_key),
                     timeout=timeout,
                 ) as response:
                     if response.status in (200, 204):
                         return
-                    if response.status in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
-                        # Silent per project convention (CLAUDE.md): plan
-                        # restrictions and rate limits are not retried or logged.
-                        return
+                    # Unlike RPC providers, a 401/403/429 from Grafana means our
+                    # own push is rejected, so it is retried and reported.
+                    body = (await response.text())[:200]
+                    last_error = f"HTTP {response.status}: {body}"
                     logging.warning(
                         f"verify_state: Grafana push got {response.status} "
                         f"on attempt {attempt}"
                     )
-        except Exception:
+        except Exception as e:
+            last_error = f"{type(e).__name__}: {e}"
             logging.exception(
                 f"verify_state: Grafana push exception on attempt {attempt}"
             )
-        if attempt < MetricsServiceConfig.GRAFANA_PUSH_MAX_RETRIES:
+        if attempt < retries:
             await asyncio.sleep(MetricsServiceConfig.GRAFANA_PUSH_RETRY_DELAY)
+
+    raise RuntimeError(
+        f"verify_state: Grafana push failed after {retries} attempts: {last_error}"
+    )
 
 
 class handler(BaseHTTPRequestHandler):

@@ -1,21 +1,20 @@
 # Tests for grafana_sync.py
+import importlib
 import json
-import sys
+from pathlib import Path
+from types import ModuleType
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 
 # Helper to import without running main()
-def import_module():
-    if "grafana_sync" in sys.modules:
-        return sys.modules["grafana_sync"]
-    import grafana_sync
-
-    return grafana_sync
+def import_module() -> ModuleType:
+    return importlib.import_module("grafana_sync")
 
 
-def test_load_config_returns_all_vars(monkeypatch):
+def test_load_config_returns_all_vars(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "token123")
     monkeypatch.setenv("GRAFANA_FOLDER", "MyFolder")
@@ -26,7 +25,7 @@ def test_load_config_returns_all_vars(monkeypatch):
     assert cfg["folder"] == "MyFolder"
 
 
-def test_load_config_exits_on_missing_var(monkeypatch):
+def test_load_config_exits_on_missing_var(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("GRAFANA_URL", raising=False)
     monkeypatch.delenv("GRAFANA_TOKEN", raising=False)
     monkeypatch.delenv("GRAFANA_FOLDER", raising=False)
@@ -35,7 +34,7 @@ def test_load_config_exits_on_missing_var(monkeypatch):
         m.load_config()
 
 
-def test_api_get_returns_json(monkeypatch):
+def test_api_get_returns_json(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
     monkeypatch.setenv("GRAFANA_FOLDER", "F")
@@ -48,7 +47,9 @@ def test_api_get_returns_json(monkeypatch):
     assert result == {"key": "value"}
 
 
-def test_api_get_prints_error_on_non_200(monkeypatch, capsys):
+def test_api_get_prints_error_on_non_200(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
     monkeypatch.setenv("GRAFANA_FOLDER", "F")
@@ -63,7 +64,7 @@ def test_api_get_prints_error_on_non_200(monkeypatch, capsys):
     assert "401" in captured.out
 
 
-def test_resolve_folder_uid_finds_match(monkeypatch):
+def test_resolve_folder_uid_finds_match(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
     monkeypatch.setenv("GRAFANA_FOLDER", "MyFolder")
@@ -77,7 +78,7 @@ def test_resolve_folder_uid_finds_match(monkeypatch):
     assert uid == "xyz"
 
 
-def test_resolve_folder_uid_exits_if_not_found(monkeypatch):
+def test_resolve_folder_uid_exits_if_not_found(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
     monkeypatch.setenv("GRAFANA_FOLDER", "Missing")
@@ -96,13 +97,17 @@ def test_resolve_folder_uid_exits_if_not_found(monkeypatch):
 STATE_FILE = ".grafana_state.json"
 
 
-def test_load_state_returns_empty_if_missing(tmp_path, monkeypatch):
+def test_load_state_returns_empty_if_missing(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     m = import_module()
     assert m.load_state() == {}
 
 
-def test_load_state_reads_existing_file(tmp_path, monkeypatch):
+def test_load_state_reads_existing_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     data = {"uid1": {"title": "X", "checksum": "abc"}}
     (tmp_path / STATE_FILE).write_text(json.dumps(data))
@@ -110,7 +115,9 @@ def test_load_state_reads_existing_file(tmp_path, monkeypatch):
     assert m.load_state() == data
 
 
-def test_save_state_writes_file(tmp_path, monkeypatch):
+def test_save_state_writes_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     m = import_module()
     data = {"uid1": {"title": "X"}}
@@ -119,30 +126,32 @@ def test_save_state_writes_file(tmp_path, monkeypatch):
     assert written == data
 
 
-def test_compute_checksum_is_deterministic():
+def test_compute_checksum_is_deterministic() -> None:
     m = import_module()
     data = {"key": "value", "nested": {"a": 1}}
     assert m.compute_checksum(data) == m.compute_checksum(data)
     assert m.compute_checksum(data) != m.compute_checksum({"key": "other"})
 
 
-def test_make_slug_basic():
+def test_make_slug_basic() -> None:
     m = import_module()
     assert m.make_slug("My Dashboard", "abc123", set()) == "my-dashboard"
 
 
-def test_make_slug_strips_special_chars():
+def test_make_slug_strips_special_chars() -> None:
     m = import_module()
     assert m.make_slug("CPU Usage (%)!", "abc123", set()) == "cpu-usage"
 
 
-def test_make_slug_deduplicates_with_uid():
+def test_make_slug_deduplicates_with_uid() -> None:
     m = import_module()
     existing = {"my-dashboard"}
     assert m.make_slug("My Dashboard", "abc123", existing) == "my-dashboard-abc123"
 
 
-def test_cmd_pull_writes_files_and_state(tmp_path, monkeypatch, capsys):
+def test_cmd_pull_writes_files_and_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
@@ -156,7 +165,7 @@ def test_cmd_pull_writes_files_and_state(tmp_path, monkeypatch, capsys):
         "meta": {"updated": "2026-01-01T00:00:00Z", "folderUid": "xyz"},
     }
 
-    def fake_api_get(cfg, path):
+    def fake_api_get(cfg: Any, path: str) -> Any:
         if "/api/search" in path and "type=dash-db&limit=200" in path:
             return [
                 {
@@ -185,7 +194,9 @@ def test_cmd_pull_writes_files_and_state(tmp_path, monkeypatch, capsys):
     assert state["abc"]["folder_uid"] == "xyz"
 
 
-def test_compute_diff_unchanged(tmp_path, monkeypatch):
+def test_compute_diff_unchanged(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     m = import_module()
     dashboard = {"uid": "abc", "title": "X"}
@@ -205,7 +216,9 @@ def test_compute_diff_unchanged(tmp_path, monkeypatch):
     assert conflicts == []
 
 
-def test_compute_diff_detects_local_change_no_conflict(tmp_path, monkeypatch):
+def test_compute_diff_detects_local_change_no_conflict(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     m = import_module()
     original = {"uid": "abc", "title": "X"}
@@ -227,7 +240,9 @@ def test_compute_diff_detects_local_change_no_conflict(tmp_path, monkeypatch):
     assert conflicts == []
 
 
-def test_compute_diff_detects_conflict(tmp_path, monkeypatch):
+def test_compute_diff_detects_conflict(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     m = import_module()
     original = {"uid": "abc", "title": "X"}
@@ -248,7 +263,9 @@ def test_compute_diff_detects_conflict(tmp_path, monkeypatch):
     assert len(conflicts) == 1
 
 
-def test_compute_diff_warns_file_not_in_state(tmp_path, monkeypatch, capsys):
+def test_compute_diff_warns_file_not_in_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.chdir(tmp_path)
     m = import_module()
     (tmp_path / "dashboards").mkdir()
@@ -259,7 +276,9 @@ def test_compute_diff_warns_file_not_in_state(tmp_path, monkeypatch, capsys):
     assert "unknown" in captured.out
 
 
-def test_cmd_push_uploads_changed_skips_conflicts(tmp_path, monkeypatch, capsys):
+def test_cmd_push_uploads_changed_skips_conflicts(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
@@ -293,7 +312,7 @@ def test_cmd_push_uploads_changed_skips_conflicts(tmp_path, monkeypatch, capsys)
 
     abc_call_count = {"n": 0}
 
-    def fake_api_get(_cfg, path):
+    def fake_api_get(_cfg: Any, path: str) -> Any:
         if "abc" in path:
             abc_call_count["n"] += 1
             # Second call is the re-fetch after push — return new timestamp
@@ -312,7 +331,7 @@ def test_cmd_push_uploads_changed_skips_conflicts(tmp_path, monkeypatch, capsys)
 
     posted = []
 
-    def fake_api_post(_cfg, _path, payload):
+    def fake_api_post(_cfg: Any, _path: str, payload: Any) -> dict[str, str]:
         posted.append(payload)
         return {"status": "success"}
 
@@ -331,7 +350,9 @@ def test_cmd_push_uploads_changed_skips_conflicts(tmp_path, monkeypatch, capsys)
     assert updated_state["abc"]["remote_updated"] == "2026-01-01T12:00:00Z"
 
 
-def test_cmd_push_exits_if_no_state_file(tmp_path, monkeypatch):
+def test_cmd_push_exits_if_no_state_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
@@ -341,7 +362,9 @@ def test_cmd_push_exits_if_no_state_file(tmp_path, monkeypatch):
         m.cmd_push(m.load_config())
 
 
-def test_cmd_status_prints_diff_without_modifying(tmp_path, monkeypatch, capsys):
+def test_cmd_status_prints_diff_without_modifying(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("GRAFANA_URL", "https://test.grafana.net")
     monkeypatch.setenv("GRAFANA_TOKEN", "tok")
@@ -363,7 +386,7 @@ def test_cmd_status_prints_diff_without_modifying(tmp_path, monkeypatch, capsys)
     }
     m.save_state(state)
 
-    def fake_api_get(cfg, path):
+    def fake_api_get(cfg: Any, path: str) -> Any:
         return {"dashboard": original, "meta": {"updated": "2026-01-01T00:00:00Z"}}
 
     with patch.object(m, "api_get", side_effect=fake_api_get):

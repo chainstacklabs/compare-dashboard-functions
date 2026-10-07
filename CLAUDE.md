@@ -6,10 +6,10 @@ Python-based Vercel Functions that measure RPC node response times across multip
 
 ```bash
 # Code quality (run before completing any task)
-uvx black .
-uvx ruff check .
-uvx ruff check . --fix
-uvx mypy .
+uv run ruff format .
+uv run ruff check .
+uv run ruff check . --fix
+uv run mypy .
 
 # Local testing
 uv run python tests/test_api_read.py    # Read metrics (latency)
@@ -82,7 +82,8 @@ tests/         # Local test scripts (not unit tests) — load endpoints.json int
 - Each chain has its own `vercel.<region>.json` for multi-region deployments — changes to function config in `vercel.json` usually need to be mirrored there.
 - `mypy` runs in strict mode (`strict = true`) — all new code needs full type annotations.
 - Max cyclomatic complexity is 10 (Ruff C rule) — keep functions small.
-- Runtime requires Python 3.10+ (`requires-python`, set by dependency floors), but black/ruff/mypy still target 3.9; avoid 3.10+ syntax (match statements, `X | Y` union types in runtime positions) until those targets move.
+- Python 3.10+ (`requires-python`); ruff and mypy target 3.10.
+- ruff and mypy are locked in the `dev` dependency group (`uv.lock`); run them with `uv run`, not `uvx`, so everyone gets the same versions and mypy sees the installed packages' types. Upgrade with `uv lock --upgrade-package ruff`.
 - `SUPPORTED_BLOCKCHAINS` in `api/support/update_state.py` is a completeness check, not a filter. If any listed chain has no Chainstack entry in a region's `ENDPOINTS` env var, `update_state` raises `MissingEndpointsError` and returns 500, so no chain in that region gets a state refresh. When adding a chain, add its endpoints to every region's `ENDPOINTS` before deploying the code. A correct local `endpoints.json` proves nothing about production.
 - A new chain's read cron emits nothing until `update_state` has written its state once (up to 15 minutes after deploy).
 - Failed samples are written as `response_latency_seconds = 0` with `response_status="failed"` (`mark_failure()`). Success-rate queries in `dashboards/` must keep them in the denominator: filtering with `> 0` or `response_status="success"` on both sides turns every success rate, and the score's SR³ term, into a constant 1.0.

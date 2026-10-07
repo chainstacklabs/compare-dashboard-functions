@@ -101,7 +101,7 @@ uv run python tests/test_update_state.py
 uv run python tests/test_api_write.py
 ```
 
-Checks: `uvx black .`, `uvx ruff check .`, `uvx mypy .` (strict). Requires Python 3.10+; the code is kept 3.9-compatible.
+Checks: `uv run ruff format .`, `uv run ruff check .`, `uv run mypy .` (strict). Requires Python 3.10+.
 
 ### Adding a chain
 

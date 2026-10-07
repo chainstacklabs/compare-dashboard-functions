@@ -229,8 +229,7 @@ async def _verify_chain(
         # Use type(e).__name__ + repr so silent failures like
         # asyncio.TimeoutError (which has an empty str()) are visible.
         logging.warning(
-            f"verify_state: proof fetch failed for {chain}: "
-            f"{type(e).__name__}: {e!r}"
+            f"verify_state: proof fetch failed for {chain}: {type(e).__name__}: {e!r}"
         )
         return [_format_verifier_status_line(chain, STATUS_PROOF_UNAVAILABLE, ts_ns)]
 

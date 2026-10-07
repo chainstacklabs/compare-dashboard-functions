@@ -276,7 +276,7 @@ class WSBlockLatencyMetric(WebSocketMetric):
         response: str = await self.recv_with_timeout(websocket, WS_DEFAULT_TIMEOUT)
         response_data = json.loads(response)
         if "params" in response_data:
-            block = response_data["params"]["result"]
+            block: dict[str, Any] = response_data["params"]["result"]
             return block
         return None
 

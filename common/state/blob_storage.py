@@ -52,13 +52,15 @@ class BlobStorageHandler:
                 if resp.status not in (200, 201):
                     text = await resp.text()
                     raise Exception(f"Blob operation failed: {resp.status} - {text}")
-                return await resp.json()
+                body: dict[str, Any] = await resp.json()
+                return body
 
     async def list_files(self) -> list[dict[str, str]]:
         """Return all blobs in the configured folder."""
         list_url: str = f"{self.config.base_url}?prefix={self.config.folder}/"
         response = await self._make_request("GET", list_url)
-        return response.get("blobs", [])
+        blobs: list[dict[str, str]] = response.get("blobs", [])
+        return blobs
 
     async def delete_blobs(self, urls: list[str]) -> None:
         """Delete blobs at the given URLs."""

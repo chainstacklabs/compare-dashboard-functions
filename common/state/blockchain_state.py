@@ -40,7 +40,8 @@ class BlockchainState:
             blobs = data.get("blobs", [])
             for blob in blobs:
                 if blob["pathname"].endswith(BlobStorageConfig.BLOB_FILENAME):
-                    return blob["url"]
+                    url: str = blob["url"]
+                    return url
             raise ValueError("Blockchain data blob not found")
 
     @staticmethod
@@ -53,7 +54,7 @@ class BlockchainState:
         async with session.get(blob_url, headers=headers) as response:
             if response.status != 200:
                 raise ValueError(f"Failed to fetch state: {response.status}")
-            data = await response.json()
+            data: dict[str, Any] = await response.json()
 
             # Ensure backward compatibility for old state data
             for chain in data:
@@ -76,7 +77,8 @@ class BlockchainState:
                     state_data = await BlockchainState._fetch_state_data(
                         session, blob_url
                     )
-                    return state_data.get(blockchain.lower(), {})
+                    chain_state: dict[str, Any] = state_data.get(blockchain.lower(), {})
+                    return chain_state
             except Exception as e:
                 last_exception: str = str(e) if str(e) else "Unknown error occurred"
                 logging.warning(

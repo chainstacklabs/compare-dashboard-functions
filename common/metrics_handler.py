@@ -236,9 +236,14 @@ class MetricsHandler:
                 async with aiohttp.ClientSession() as session:
                     async with session.post(
                         url,
-                        headers={"Content-Type": "text/plain"},
+                        headers={
+                            "Content-Type": "text/plain",
+                            # latin1 matches the encoding aiohttp.BasicAuth used.
+                            "Authorization": aiohttp.encode_basic_auth(
+                                user, api_key, encoding="latin1"
+                            ),
+                        },
                         data=metrics_text,
-                        auth=aiohttp.BasicAuth(user, api_key),
                         timeout=aiohttp.ClientTimeout(total=cfg.push_timeout),
                     ) as response:
                         if response.status in (200, 204):

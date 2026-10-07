@@ -325,9 +325,14 @@ async def _push_to_grafana(metrics_text: str) -> None:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     url,
-                    headers={"Content-Type": "text/plain"},
+                    headers={
+                        "Content-Type": "text/plain",
+                        # latin1 matches the encoding aiohttp.BasicAuth used.
+                        "Authorization": aiohttp.encode_basic_auth(
+                            user, api_key, encoding="latin1"
+                        ),
+                    },
                     data=metrics_text,
-                    auth=aiohttp.BasicAuth(user, api_key),
                     timeout=timeout,
                 ) as response:
                     if response.status in (200, 204):

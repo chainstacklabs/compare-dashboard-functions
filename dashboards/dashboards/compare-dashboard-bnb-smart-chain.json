@@ -297,13 +297,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "us-west": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -517,13 +517,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "us-west": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -984,32 +984,32 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth us-west": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack us-west": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth us-west": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC us-west": 12,
-              "dRPC sin1": 11
+              "dRPC sin1": 11,
+              "dRPC us-west": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack us-west": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC us-west": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1158,32 +1158,32 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth us-west": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack us-west": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth us-west": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC us-west": 12,
-              "dRPC sin1": 11
+              "dRPC sin1": 11,
+              "dRPC us-west": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack us-west": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC us-west": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1322,32 +1322,32 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth us-west": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack us-west": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth us-west": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 10,
-              "dRPC us-west": 12,
-              "dRPC sin1": 11
+              "dRPC sin1": 11,
+              "dRPC us-west": 12
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack us-west": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC us-west": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -2298,32 +2298,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2409,13 +2409,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2631,32 +2631,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2742,13 +2742,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2964,32 +2964,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3075,13 +3075,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3297,32 +3297,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3408,13 +3408,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3630,32 +3630,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3741,13 +3741,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3965,32 +3965,32 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4076,13 +4076,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4298,29 +4298,29 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4406,13 +4406,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4628,33 +4628,33 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - us-west": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - us-west": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - us-west": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 10,
-                  "dRPC - us-west": 12,
-                  "dRPC - sin1": 11
+                  "dRPC - sin1": 11,
+                  "dRPC - us-west": 12
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "Time": "",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - us-west": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4740,13 +4740,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "us-west": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4892,6 +4892,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: BNB Smart Chain",
   "uid": "bnbsc-global-1",
-  "version": 64,
+  "version": 65,
   "weekStart": "monday"
 }

@@ -66,10 +66,16 @@ class HTTPGetTxLatencyMetric(HttpCallLatencyMetricBase):
 
     @staticmethod
     def get_params_from_state(state_data: dict[str, Any]) -> list[Any]:
-        """Get parameters using transaction signature from state."""
+        """Get parameters using transaction signature from state.
+
+        The signature is the first transaction of a recent block, which can be a
+        version 1 transaction. With ``maxSupportedTransactionVersion`` below 1,
+        providers answer those with error -32015 (or an empty result), so the
+        probe would fail regardless of the provider's health.
+        """
         return [
             state_data["tx"],
-            {"encoding": "jsonParsed", "maxSupportedTransactionVersion": 0},
+            {"encoding": "jsonParsed", "maxSupportedTransactionVersion": 1},
         ]
 
 

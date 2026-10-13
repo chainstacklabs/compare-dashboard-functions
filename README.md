@@ -134,7 +134,7 @@ git checkout vercel.json
 After a deploy, check **Settings** > **Crons** in each project lists only the expected crons.
 
 - `update_state`, `verify_state`, and Solana landing run only in fra1.
-- US West runs from pdx1 (project `chainstack-rpc-dashboard-us-west-pdx1`). Until October 2026 it ran from sfo1; that project, `chainstack-rpc-dashboard-us-west`, is kept with its crons disabled, and its last config is `git show 5e3ed02:vercel.sfo1.json`. Dashboards and the comparison page treat sfo1 and pdx1 as one US West region, so switching back needs only a deploy.
+- US West runs from pdx1 (project `chainstack-rpc-dashboard-us-west-pdx1`). Until October 2026 it ran from sfo1; that project is deleted, and its last config is `git show 5e3ed02:vercel.sfo1.json`. Dashboards and the comparison page treat sfo1 and pdx1 as one US West region, so moving back to sfo1 needs a new Vercel project with the same environment variables and that config, but no dashboard or client change.
 - `vercel.pdx1.json` pins its region with `regions`; the other projects take the function region from project settings.
 
 ## License

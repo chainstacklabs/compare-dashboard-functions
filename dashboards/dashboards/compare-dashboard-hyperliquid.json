@@ -205,7 +205,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  avg by (provider) (\r\n    avg by (provider, source_region) (\r\n      quantile_over_time(0.95, \r\n        (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]\r\n      )\r\n    )\r\n    /\r\n    (\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} >= 0)[$__range:3m]))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} >= 0)[$__range:3m]))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} >= 0)[$__range:3m]))\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  avg by (provider) (\r\n    avg by (provider, source_region) (\r\n      quantile_over_time(0.95, \r\n        (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n      )\r\n    )\r\n    /\r\n    (\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -324,7 +324,7 @@
                         "index": 2,
                         "text": "JP"
                       },
-                      "sfo1": {
+                      "us-west": {
                         "index": 3,
                         "text": "US West"
                       }
@@ -400,7 +400,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", source_region=~\"fra1|sfo1|hnd1\"} > 0)[$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", source_region=~\"fra1|sfo1|pdx1|hnd1\"} > 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -559,7 +559,7 @@
                         "index": 1,
                         "text": "JP"
                       },
-                      "sfo1": {
+                      "us-west": {
                         "index": 2,
                         "text": "US West"
                       }
@@ -616,7 +616,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\"}[$__range])) by (provider, source_region)",
+          "expr": "(\r\n  sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region))\r\n)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -824,7 +824,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_call\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_call\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -843,7 +843,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getBalance\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -862,7 +862,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getLogs\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -881,7 +881,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -900,7 +900,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"eth_blockNumber\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -919,7 +919,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"clearinghouseState\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"clearinghouseState\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -938,7 +938,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "quantile_over_time(0.95, (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"openOrders\", response_status=\"success\"} >= 0)[$__range:3m])",
+          "expr": "quantile_over_time(0.95, (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=\"openOrders\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m])",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -1192,7 +1192,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (\r\n      response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance|eth_getTransactionReceipt)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )\r\n    [$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(\r\n      response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_call|eth_getBalance|eth_getTransactionReceipt)\", source_region=~\"fra1|sfo1|pdx1|hnd1\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))\r\n    [$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1242,38 +1242,38 @@
             "indexByName": {
               "Alchemy-Growth fra1": 1,
               "Alchemy-Growth hnd1": 2,
-              "Alchemy-Growth sfo1": 3,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
               "Chainstack hnd1": 5,
-              "Chainstack sfo1": 6,
+              "Chainstack us-west": 6,
               "HypeRPC-Free fra1": 7,
               "HypeRPC-Free hnd1": 8,
-              "HypeRPC-Free sfo1": 9,
+              "HypeRPC-Free us-west": 9,
               "Quicknode-Growth fra1": 10,
               "Quicknode-Growth hnd1": 11,
-              "Quicknode-Growth sfo1": 12,
+              "Quicknode-Growth us-west": 12,
               "api_method": 0
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
               "Alchemy-Growth hnd1": "Alchemy-Growth - JP",
               "Alchemy-Growth kix1": "Alchemy-Growth - JP",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
               "Chainstack hnd1": "Chainstack-Growth - JP",
               "Chainstack kix1": "Chainstack-Growth - JP",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "HypeRPC-Free fra1": "HypeRPC-Free - EU",
               "HypeRPC-Free hnd1": "HypeRPC-Free - JP",
-              "HypeRPC-Free sfo1": "HypeRPC-Free - US West",
+              "HypeRPC-Free us-west": "HypeRPC-Free - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
               "Quicknode-Growth hnd1": "Quicknode-Growth - JP",
               "Quicknode-Growth kix1": "Quicknode-Growth - JP",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
               "dRPC hnd1": "dRPC-Growth - JP",
               "dRPC kix1": "dRPC-Growth - JP",
-              "dRPC sfo1": "dRPC-Growth - US West"
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1373,7 +1373,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=~\"(clearinghouseState|openOrders)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", api_method=~\"(clearinghouseState|openOrders)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1423,38 +1423,38 @@
             "indexByName": {
               "Alchemy-Growth fra1": 1,
               "Alchemy-Growth hnd1": 2,
-              "Alchemy-Growth sfo1": 3,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
               "Chainstack hnd1": 5,
-              "Chainstack sfo1": 6,
+              "Chainstack us-west": 6,
               "HypeRPC-Free fra1": 7,
               "HypeRPC-Free hnd1": 8,
-              "HypeRPC-Free sfo1": 9,
+              "HypeRPC-Free us-west": 9,
               "Quicknode-Growth fra1": 10,
               "Quicknode-Growth hnd1": 11,
-              "Quicknode-Growth sfo1": 12,
+              "Quicknode-Growth us-west": 12,
               "api_method": 0
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
               "Alchemy-Growth hnd1": "Alchemy-Growth - JP",
               "Alchemy-Growth kix1": "Alchemy-Growth - JP",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
               "Chainstack hnd1": "Chainstack-Growth - JP",
               "Chainstack kix1": "Chainstack-Growth - JP",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "HypeRPC-Free fra1": "HypeRPC-Free - EU",
               "HypeRPC-Free hnd1": "HypeRPC-Free - JP",
-              "HypeRPC-Free sfo1": "HypeRPC-Free - US West",
+              "HypeRPC-Free us-west": "HypeRPC-Free - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
               "Quicknode-Growth hnd1": "Quicknode-Growth - JP",
               "Quicknode-Growth kix1": "Quicknode-Growth - JP",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
               "dRPC hnd1": "dRPC-Growth - JP",
               "dRPC kix1": "dRPC-Growth - JP",
-              "dRPC sfo1": "dRPC-Growth - US West"
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1543,7 +1543,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getLogs|clearinghouseState|openOrders)\", source_region=~\"fra1|sfo1|hnd1\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\", api_method=~\"(eth_blockNumber|eth_getLogs|clearinghouseState|openOrders)\", source_region=~\"fra1|sfo1|pdx1|hnd1\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1593,38 +1593,38 @@
             "indexByName": {
               "Alchemy-Growth fra1": 1,
               "Alchemy-Growth hnd1": 2,
-              "Alchemy-Growth sfo1": 3,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
               "Chainstack hnd1": 5,
-              "Chainstack sfo1": 6,
+              "Chainstack us-west": 6,
               "HypeRPC-Free fra1": 7,
               "HypeRPC-Free hnd1": 8,
-              "HypeRPC-Free sfo1": 9,
+              "HypeRPC-Free us-west": 9,
               "Quicknode-Growth fra1": 10,
               "Quicknode-Growth hnd1": 11,
-              "Quicknode-Growth sfo1": 12,
+              "Quicknode-Growth us-west": 12,
               "api_method": 0
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
               "Alchemy-Growth hnd1": "Alchemy-Growth - JP",
               "Alchemy-Growth kix1": "Alchemy-Growth - JP",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
               "Chainstack hnd1": "Chainstack-Growth - JP",
               "Chainstack kix1": "Chainstack-Growth - JP",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "HypeRPC-Free fra1": "HypeRPC-Free - EU",
               "HypeRPC-Free hnd1": "HypeRPC-Free - JP",
-              "HypeRPC-Free sfo1": "HypeRPC-Free - US West",
+              "HypeRPC-Free us-west": "HypeRPC-Free - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
               "Quicknode-Growth hnd1": "Quicknode-Growth - JP",
               "Quicknode-Growth kix1": "Quicknode-Growth - JP",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
               "dRPC hnd1": "dRPC-Growth - JP",
               "dRPC kix1": "dRPC-Growth - JP",
-              "dRPC sfo1": "dRPC-Growth - US West"
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -2210,13 +2210,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
+                          "hnd1": {
+                            "index": 1,
+                            "text": "JP"
+                          },
+                          "us-west": {
                             "index": 2,
                             "text": "US West"
-                          },
-                          "sin1": {
-                            "index": 1,
-                            "text": "SG"
                           }
                         },
                         "type": "value"
@@ -2310,7 +2310,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (\n  max_over_time(\n    (\n      (\n        group by (provider, source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n        )\n        *\n        on(source_region, block_number, value) group_left()\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n        )\n      )\n      ==\n      bool on(source_region, block_number) group_left()\n      max by (source_region, block_number) (\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n        )\n      )\n    )[$__range:1m]\n  ) > bool 0\n)\n/\nsum by (provider, source_region) (\n  max_over_time(\n    (\n      group by (provider, source_region, block_number, value) (\n        response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n      )\n    )[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider, source_region) (\n  label_replace(label_replace(max_over_time(\n    (\n      (\n        group by (provider, source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n        )\n        *\n        on(source_region, block_number, value) group_left()\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n        )\n      )\n      ==\n      bool on(source_region, block_number) group_left()\n      max by (source_region, block_number) (\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n        )\n      )\n    )[$__range:1m]\n  ), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\") > bool 0\n)\n/\nsum by (provider, source_region) (\n  label_replace(label_replace(max_over_time(\n    (\n      group by (provider, source_region, block_number, value) (\n        response_latency_seconds{metric_type=\"balance_observed\", blockchain=\"Hyperliquid\"}\n      )\n    )[$__range:1m]\n  ), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",
@@ -2449,7 +2449,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_call\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_call\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2474,38 +2474,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2595,7 +2595,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -2653,7 +2653,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_call\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_call\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_call\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_call\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2789,7 +2789,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getBalance\",provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getBalance\",provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2814,38 +2814,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2935,7 +2935,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -2993,7 +2993,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getBalance\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getBalance\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getBalance\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3129,7 +3129,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getLogs\",provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getLogs\",provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3154,38 +3154,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3275,7 +3275,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -3333,7 +3333,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getLogs\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getLogs\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getLogs\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3469,7 +3469,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getTransactionReceipt\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"} >= 0)",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getTransactionReceipt\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3494,38 +3494,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3615,7 +3615,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -3673,7 +3673,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getTransactionReceipt\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getTransactionReceipt\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_getTransactionReceipt\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3810,7 +3810,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_blockNumber\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"} >= 0)",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_blockNumber\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "instant": false,
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
@@ -3836,38 +3836,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3957,7 +3957,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -4015,7 +4015,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_blockNumber\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_blockNumber\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"eth_blockNumber\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4152,7 +4152,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"clearinghouseState\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"clearinghouseState\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "instant": false,
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
@@ -4178,38 +4178,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4299,7 +4299,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -4357,7 +4357,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"clearinghouseState\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"clearinghouseState\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"clearinghouseState\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"clearinghouseState\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4494,7 +4494,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"openOrders\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"openOrders\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\",response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "instant": false,
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
@@ -4520,38 +4520,38 @@
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
                   "Alchemy-Growth - hnd1": 2,
-                  "Alchemy-Growth - sfo1": 3,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
                   "Chainstack - hnd1": 5,
-                  "Chainstack - sfo1": 6,
+                  "Chainstack - us-west": 6,
                   "HypeRPC-Free - fra1": 7,
                   "HypeRPC-Free - hnd1": 8,
-                  "HypeRPC-Free - sfo1": 9,
+                  "HypeRPC-Free - us-west": 9,
                   "Quicknode-Growth - fra1": 10,
                   "Quicknode-Growth - hnd1": 11,
-                  "Quicknode-Growth - sfo1": 12,
+                  "Quicknode-Growth - us-west": 12,
                   "Time": 0
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
                   "Alchemy-Growth - hnd1": "Alchemy-Growth - JP",
                   "Alchemy-Growth - kix1": "Alchemy-Growth - JP (Osaka)",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
                   "Chainstack - hnd1": "Chainstack-Growth - JP",
                   "Chainstack - kix1": "Chainstack-Growth - JP (Osaka)",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "HypeRPC-Free - fra1": "HypeRPC-Free - EU",
                   "HypeRPC-Free - hnd1": "HypeRPC-Free - JP",
-                  "HypeRPC-Free - sfo1": "HypeRPC-Free - US West",
+                  "HypeRPC-Free - us-west": "HypeRPC-Free - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
                   "Quicknode-Growth - hnd1": "Quicknode-Growth - JP",
                   "Quicknode-Growth - kix1": "Quicknode-Growth - JP (Osaka)",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
                   "dRPC - hnd1": "dRPC-Growth - JP",
                   "dRPC - kix1": "dRPC-Growth - JP (Osaka)",
-                  "dRPC - sfo1": "dRPC-Growth - US West"
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4641,7 +4641,7 @@
                             "index": 1,
                             "text": "JP"
                           },
-                          "sfo1": {
+                          "us-west": {
                             "index": 2,
                             "text": "US"
                           }
@@ -4699,7 +4699,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"openOrders\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"openOrders\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"openOrders\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=\"openOrders\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4790,6 +4790,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Hyperliquid",
   "uid": "Hyperliquid-global-1",
-  "version": 90,
+  "version": 91,
   "weekStart": "monday"
 }

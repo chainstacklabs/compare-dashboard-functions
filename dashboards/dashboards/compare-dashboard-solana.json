@@ -205,7 +205,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(\r\n  avg by (provider) (\r\n    avg by (provider, source_region) (\r\n      quantile_over_time(0.95, \r\n        (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]\r\n      )\r\n    )\r\n    /\r\n    (\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]))\r\n        /\r\n        sum by (provider, source_region) (count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]))\r\n      )\r\n    )\r\n  )\r\n)",
+          "expr": "sort(\r\n  avg by (provider) (\r\n    avg by (provider, source_region) (\r\n      quantile_over_time(0.95, \r\n        (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n      )\r\n    )\r\n    /\r\n    (\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n      *\r\n      (\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n        /\r\n        sum by (provider, source_region) (label_replace(label_replace(count_over_time((response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"} >= 0)[$__range:3m]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\"))\r\n      )\r\n    )\r\n  )\r\n)",
           "format": "time_series",
           "instant": true,
           "legendFormat": "__auto",
@@ -298,13 +298,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -378,7 +378,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} > 0)[$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"} > 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -534,13 +534,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -595,7 +595,7 @@
           "disableTextWrap": false,
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(\r\n  sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"}[$__range])) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"}[$__range])) by (provider, source_region))\r\n)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"}[$__range])) by (provider, source_region)",
+          "expr": "(\r\n  sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method!=\"getAccountInfo\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n  or on(provider, source_region)\r\n  (0 * sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region))\r\n)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method!=\"getAccountInfo\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
           "format": "table",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
@@ -699,13 +699,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 2,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 1,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 2,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -779,7 +779,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\"} >= 0)[$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, api_method) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -920,13 +920,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 1,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 2,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 1,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -988,7 +988,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method=~\"(simulateTransaction|getBalance)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method=~\"(simulateTransaction|getBalance)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1037,38 +1037,38 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth sfo1": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack sfo1": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Helius-Developer fra1": 10,
-              "Helius-Developer sfo1": 12,
               "Helius-Developer sin1": 11,
+              "Helius-Developer us-west": 12,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth sfo1": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 13,
-              "dRPC sfo1": 15,
-              "dRPC sin1": 14
+              "dRPC sin1": 14,
+              "dRPC us-west": 15
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Helius-Developer fra1": "Helius-Developer - EU",
-              "Helius-Developer sfo1": "Helius-Developer - US West",
               "Helius-Developer sin1": "Helius-Developer - SG",
+              "Helius-Developer us-west": "Helius-Developer - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1133,13 +1133,13 @@
                         "index": 0,
                         "text": "EU"
                       },
-                      "sfo1": {
-                        "index": 1,
-                        "text": "US West"
-                      },
                       "sin1": {
                         "index": 2,
                         "text": "SG"
+                      },
+                      "us-west": {
+                        "index": 1,
+                        "text": "US West"
                       }
                     },
                     "type": "value"
@@ -1201,7 +1201,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getTransaction|getLatestBlockhash)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getTransaction|getLatestBlockhash)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1250,38 +1250,38 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth sfo1": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack sfo1": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Helius-Developer fra1": 10,
-              "Helius-Developer sfo1": 12,
               "Helius-Developer sin1": 11,
+              "Helius-Developer us-west": 12,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth sfo1": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 13,
-              "dRPC sfo1": 15,
-              "dRPC sin1": 14
+              "dRPC sin1": 14,
+              "dRPC us-west": 15
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Helius-Developer fra1": "Helius-Developer - EU",
-              "Helius-Developer sfo1": "Helius-Developer - US West",
               "Helius-Developer sin1": "Helius-Developer - SG",
+              "Helius-Developer us-west": "Helius-Developer - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -1371,7 +1371,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getBlock|getProgramAccounts)\"} \r\n      >= 0\r\n    )[$__range:3m]\r\n))",
+          "expr": "avg by (provider, api_method, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", response_status=\"success\", api_method=~\"(getBlock|getProgramAccounts)\"} \r\n      >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n))",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",
@@ -1420,38 +1420,38 @@
             "includeByName": {},
             "indexByName": {
               "Alchemy-Growth fra1": 1,
-              "Alchemy-Growth sfo1": 3,
               "Alchemy-Growth sin1": 2,
+              "Alchemy-Growth us-west": 3,
               "Chainstack fra1": 4,
-              "Chainstack sfo1": 6,
               "Chainstack sin1": 5,
+              "Chainstack us-west": 6,
               "Helius-Developer fra1": 10,
-              "Helius-Developer sfo1": 12,
               "Helius-Developer sin1": 11,
+              "Helius-Developer us-west": 12,
               "Quicknode-Growth fra1": 7,
-              "Quicknode-Growth sfo1": 9,
               "Quicknode-Growth sin1": 8,
+              "Quicknode-Growth us-west": 9,
               "api_method": 0,
               "dRPC fra1": 13,
-              "dRPC sfo1": 15,
-              "dRPC sin1": 14
+              "dRPC sin1": 14,
+              "dRPC us-west": 15
             },
             "renameByName": {
               "Alchemy-Growth fra1": "Alchemy-Growth - EU",
-              "Alchemy-Growth sfo1": "Alchemy-Growth - US West",
               "Alchemy-Growth sin1": "Alchemy-Growth - SG",
+              "Alchemy-Growth us-west": "Alchemy-Growth - US West",
               "Chainstack fra1": "Chainstack-Growth - EU",
-              "Chainstack sfo1": "Chainstack-Growth - US West",
               "Chainstack sin1": "Chainstack-Growth - SG",
+              "Chainstack us-west": "Chainstack-Growth - US West",
               "Helius-Developer fra1": "Helius-Developer - EU",
-              "Helius-Developer sfo1": "Helius-Developer - US West",
               "Helius-Developer sin1": "Helius-Developer - SG",
+              "Helius-Developer us-west": "Helius-Developer - US West",
               "Quicknode-Growth fra1": "Quicknode-Growth - EU",
-              "Quicknode-Growth sfo1": "Quicknode-Growth - US West",
               "Quicknode-Growth sin1": "Quicknode-Growth - SG",
+              "Quicknode-Growth us-west": "Quicknode-Growth - US West",
               "dRPC fra1": "dRPC-Growth - EU",
-              "dRPC sfo1": "dRPC-Growth - US West",
-              "dRPC sin1": "dRPC-Growth - SG"
+              "dRPC sin1": "dRPC-Growth - SG",
+              "dRPC us-west": "dRPC-Growth - US West"
             }
           }
         }
@@ -2037,13 +2037,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US West"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US West"
                           }
                         },
                         "type": "value"
@@ -2137,7 +2137,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (\n  max_over_time(\n    (\n      (\n        group by (provider, source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n        *\n        on(source_region, block_number, value) group_left()\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n      )\n      ==\n      bool on(source_region, block_number) group_left()\n      max by (source_region, block_number) (\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n      )\n    )[$__range:1m]\n  ) > bool 0\n)\n/\nsum by (provider, source_region) (\n  max_over_time(\n    (\n      group by (provider, source_region, block_number, value) (\n        response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n      )\n    )[$__range:1m]\n  )\n)",
+              "expr": "sum by (provider, source_region) (\n  label_replace(label_replace(max_over_time(\n    (\n      (\n        group by (provider, source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n        *\n        on(source_region, block_number, value) group_left()\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n      )\n      ==\n      bool on(source_region, block_number) group_left()\n      max by (source_region, block_number) (\n        count by (source_region, block_number, value) (\n          response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n        )\n      )\n    )[$__range:1m]\n  ), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\") > bool 0\n)\n/\nsum by (provider, source_region) (\n  label_replace(label_replace(max_over_time(\n    (\n      group by (provider, source_region, block_number, value) (\n        response_latency_seconds{metric_type=\"account_observed\", blockchain=\"Solana\"}\n      )\n    )[$__range:1m]\n  ), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")\n)",
               "format": "table",
               "instant": true,
               "legendFormat": "__auto",
@@ -2294,7 +2294,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"simulateTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"simulateTransaction\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2318,38 +2318,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Helius-Developer - fra1": 10,
-                  "Helius-Developer - sfo1": 12,
                   "Helius-Developer - sin1": 11,
+                  "Helius-Developer - us-west": 12,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 13,
-                  "dRPC - sfo1": 15,
-                  "dRPC - sin1": 14
+                  "dRPC - sin1": 14,
+                  "dRPC - us-west": 15
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Helius-Developer - fra1": "Helius-Developer - EU",
-                  "Helius-Developer - sfo1": "Helius-Developer - US West",
                   "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - us-west": "Helius-Developer - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2435,13 +2435,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2497,7 +2497,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"simulateTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"simulateTransaction\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"simulateTransaction\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"simulateTransaction\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -2651,7 +2651,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBalance\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBalance\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -2675,38 +2675,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Helius-Developer - fra1": 10,
-                  "Helius-Developer - sfo1": 12,
                   "Helius-Developer - sin1": 11,
+                  "Helius-Developer - us-west": 12,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 13,
-                  "dRPC - sfo1": 15,
-                  "dRPC - sin1": 14
+                  "dRPC - sin1": 14,
+                  "dRPC - us-west": 15
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Helius-Developer - fra1": "Helius-Developer - EU",
-                  "Helius-Developer - sfo1": "Helius-Developer - US West",
                   "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - us-west": "Helius-Developer - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -2792,13 +2792,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -2854,7 +2854,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBalance\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBalance\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBalance\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBalance\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3008,7 +3008,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getTransaction\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getTransaction\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3032,38 +3032,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Helius-Developer - fra1": 10,
-                  "Helius-Developer - sfo1": 12,
                   "Helius-Developer - sin1": 11,
+                  "Helius-Developer - us-west": 12,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 13,
-                  "dRPC - sfo1": 15,
-                  "dRPC - sin1": 14
+                  "dRPC - sin1": 14,
+                  "dRPC - us-west": 15
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Helius-Developer - fra1": "Helius-Developer - EU",
-                  "Helius-Developer - sfo1": "Helius-Developer - US West",
                   "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - us-west": "Helius-Developer - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3149,13 +3149,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3211,7 +3211,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getTransaction\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getTransaction\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getTransaction\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getTransaction\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3366,7 +3366,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"})",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"}, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "instant": false,
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
@@ -3391,38 +3391,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Helius-Developer - fra1": 10,
-                  "Helius-Developer - sfo1": 12,
                   "Helius-Developer - sin1": 11,
+                  "Helius-Developer - us-west": 12,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 13,
-                  "dRPC - sfo1": 15,
-                  "dRPC - sin1": 14
+                  "dRPC - sin1": 14,
+                  "dRPC - us-west": 15
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Helius-Developer - fra1": "Helius-Developer - EU",
-                  "Helius-Developer - sfo1": "Helius-Developer - US West",
                   "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - us-west": "Helius-Developer - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3508,13 +3508,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3570,7 +3570,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getLatestBlockhash\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -3724,7 +3724,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getProgramAccounts\", response_status=\"success\"} >= 0)",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getProgramAccounts\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -3748,38 +3748,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Helius-Developer - fra1": 10,
-                  "Helius-Developer - sfo1": 12,
                   "Helius-Developer - sin1": 11,
+                  "Helius-Developer - us-west": 12,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 13,
-                  "dRPC - sfo1": 15,
-                  "dRPC - sin1": 14
+                  "dRPC - sin1": 14,
+                  "dRPC - us-west": 15
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Helius-Developer - fra1": "Helius-Developer - EU",
-                  "Helius-Developer - sfo1": "Helius-Developer - US West",
                   "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - us-west": "Helius-Developer - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -3865,13 +3865,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -3927,7 +3927,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getProgramAccounts\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getProgramAccounts\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getProgramAccounts\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getProgramAccounts\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -4081,7 +4081,7 @@
                 "uid": "grafanacloud-prom"
               },
               "editorMode": "code",
-              "expr": "sum by (provider, source_region) (response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBlock\", response_status=\"success\"} >= 0)",
+              "expr": "sum by (provider, source_region) (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBlock\", response_status=\"success\"} >= 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))",
               "legendFormat": "{{provider}} - {{source_region}}",
               "range": true,
               "refId": "C"
@@ -4105,38 +4105,38 @@
                 "includeByName": {},
                 "indexByName": {
                   "Alchemy-Growth - fra1": 1,
-                  "Alchemy-Growth - sfo1": 3,
                   "Alchemy-Growth - sin1": 2,
+                  "Alchemy-Growth - us-west": 3,
                   "Chainstack - fra1": 4,
-                  "Chainstack - sfo1": 6,
                   "Chainstack - sin1": 5,
+                  "Chainstack - us-west": 6,
                   "Helius-Developer - fra1": 10,
-                  "Helius-Developer - sfo1": 12,
                   "Helius-Developer - sin1": 11,
+                  "Helius-Developer - us-west": 12,
                   "Quicknode-Growth - fra1": 7,
-                  "Quicknode-Growth - sfo1": 9,
                   "Quicknode-Growth - sin1": 8,
+                  "Quicknode-Growth - us-west": 9,
                   "Time": 0,
                   "dRPC - fra1": 13,
-                  "dRPC - sfo1": 15,
-                  "dRPC - sin1": 14
+                  "dRPC - sin1": 14,
+                  "dRPC - us-west": 15
                 },
                 "renameByName": {
                   "Alchemy-Growth - fra1": "Alchemy-Growth - EU",
-                  "Alchemy-Growth - sfo1": "Alchemy-Growth - US West",
                   "Alchemy-Growth - sin1": "Alchemy-Growth - SG",
+                  "Alchemy-Growth - us-west": "Alchemy-Growth - US West",
                   "Chainstack - fra1": "Chainstack-Growth - EU",
-                  "Chainstack - sfo1": "Chainstack-Growth - US West",
                   "Chainstack - sin1": "Chainstack-Growth - SG",
+                  "Chainstack - us-west": "Chainstack-Growth - US West",
                   "Helius-Developer - fra1": "Helius-Developer - EU",
-                  "Helius-Developer - sfo1": "Helius-Developer - US West",
                   "Helius-Developer - sin1": "Helius-Developer - SG",
+                  "Helius-Developer - us-west": "Helius-Developer - US West",
                   "Quicknode-Growth - fra1": "Quicknode-Growth - EU",
-                  "Quicknode-Growth - sfo1": "Quicknode-Growth - US West",
                   "Quicknode-Growth - sin1": "Quicknode-Growth - SG",
+                  "Quicknode-Growth - us-west": "Quicknode-Growth - US West",
                   "dRPC - fra1": "dRPC-Growth - EU",
-                  "dRPC - sfo1": "dRPC-Growth - US West",
-                  "dRPC - sin1": "dRPC-Growth - SG"
+                  "dRPC - sin1": "dRPC-Growth - SG",
+                  "dRPC - us-west": "dRPC-Growth - US West"
                 }
               }
             }
@@ -4222,13 +4222,13 @@
                             "index": 0,
                             "text": "EU"
                           },
-                          "sfo1": {
-                            "index": 2,
-                            "text": "US"
-                          },
                           "sin1": {
                             "index": 1,
                             "text": "SG"
+                          },
+                          "us-west": {
+                            "index": 2,
+                            "text": "US"
                           }
                         },
                         "type": "value"
@@ -4284,7 +4284,7 @@
               },
               "editorMode": "code",
               "exemplar": false,
-              "expr": "sum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBlock\", response_status=\"success\"}[$__range])) by (provider, source_region)\r\n/\r\nsum(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBlock\"}[$__range])) by (provider, source_region)",
+              "expr": "sum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBlock\", response_status=\"success\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)\r\n/\r\nsum(label_replace(label_replace(count_over_time(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Solana\", api_method=\"getBlock\"}[$__range]), \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")) by (provider, source_region)",
               "format": "table",
               "instant": true,
               "refId": "A"
@@ -5999,6 +5999,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Solana",
   "uid": "fe3mtxna6483ke-solana-global",
-  "version": 138,
+  "version": 139,
   "weekStart": "monday"
 }

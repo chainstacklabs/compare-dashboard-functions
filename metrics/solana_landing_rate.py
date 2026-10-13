@@ -1,28 +1,22 @@
 """Solana landing rate metrics with priority fees."""
 
 import asyncio
+import base64
 import logging
 import os
 import random
 import time
 from enum import Enum
+from typing import Any
 
+import aiohttp
 import base58
-from solana.rpc.async_api import AsyncClient
-from solana.rpc.commitment import Commitment, Confirmed
-from solana.rpc.types import TxOpts
-from solders.compute_budget import set_compute_unit_limit, set_compute_unit_price
+from solders.hash import Hash
 from solders.instruction import Instruction
 from solders.keypair import Keypair
+from solders.message import MessageV1, TransactionConfig
 from solders.pubkey import Pubkey
-from solders.rpc.responses import (
-    GetLatestBlockhashResp,
-    GetSlotResp,
-    GetTransactionResp,
-    SendTransactionResp,
-)
-from solders.signature import Signature
-from solders.transaction import Transaction
+from solders.transaction import VersionedTransaction
 
 from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metric_types import HttpMetric
@@ -30,27 +24,6 @@ from common.metrics_handler import MetricsHandler
 from config.defaults import MetricsServiceConfig
 
 LOG_TAG = "[solana-landing]"
-
-
-def _is_rate_limited_exc(exc: BaseException) -> bool:
-    """Check if an exception chain bottoms out in an ignored HTTP status.
-
-    ``SolanaRpcException`` wraps ``httpx.HTTPStatusError`` for 4xx responses
-    from the upstream RPC. Walk ``__cause__``/``__context__`` chains and inspect
-    ``.response.status_code`` (httpx-style). Returns True for any status in
-    ``IGNORED_HTTP_ERRORS`` (401/403/404/429) — these are policy responses, not
-    bugs.
-    """
-    seen: set[int] = set()
-    current: BaseException | None = exc
-    while current is not None and id(current) not in seen:
-        seen.add(id(current))
-        response = getattr(current, "response", None)
-        status_code = getattr(response, "status_code", None)
-        if status_code in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
-            return True
-        current = current.__cause__ or current.__context__
-    return False
 
 
 class RegionCode(str, Enum):
@@ -78,8 +51,28 @@ def generate_memo(region: str, provider: str) -> str:
     return f"{region_id}_{provider}_{random_id:03d}_{timestamp:013d}"
 
 
+def transaction_config() -> TransactionConfig:
+    """Return the inline compute budget for the v1 memo transaction.
+
+    A v1 message (SIMD-0385) carries the compute budget in its header instead
+    of ``ComputeBudget`` instructions, and states the priority fee as a total in
+    lamports rather than a price per compute unit. The total is
+    ``COMPUTE_LIMIT * PRIORITY_FEE_MICROLAMPORTS / 1e6``, rounded up, which is
+    the fee the runtime charges for that limit and price. The compute unit limit
+    must be set explicitly: it defaults to 0 in v1.
+    """
+    limit = MetricsServiceConfig.COMPUTE_LIMIT
+    price = MetricsServiceConfig.PRIORITY_FEE_MICROLAMPORTS
+    priority_fee = -(-limit * price // 1_000_000)
+    return TransactionConfig(priority_fee=priority_fee, compute_unit_limit=limit)
+
+
 class SolanaLandingMetric(HttpMetric):
     """Measures Solana transaction landing rate and slot latency via memo tx.
+
+    Sends a version 1 transaction (SIMD-0385). RPC calls go over aiohttp as
+    plain JSON-RPC, like the other metrics, and ``solders`` only builds and
+    signs the transaction.
 
     Exempt from the measurement gate for the same reason as the WebSocket
     block metrics — see ``BaseMetric.serialise_measurement``: the measured
@@ -90,7 +83,7 @@ class SolanaLandingMetric(HttpMetric):
 
     serialise_measurement = False
 
-    POLL_INTERVAL = 5.0  # seconds for polling getSignatureStatuses
+    POLL_INTERVAL = 5.0  # seconds between getTransaction polls
     MEMO_PROGRAM_ID = "Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo"
 
     def __init__(
@@ -133,11 +126,28 @@ class SolanaLandingMetric(HttpMetric):
         if preserved is not None:
             self.values["signer_balance"] = preserved
 
-    async def _create_client(self) -> AsyncClient:
-        endpoint: str = self.get_endpoint()
-        return AsyncClient(endpoint)
+    async def _rpc(
+        self, session: aiohttp.ClientSession, method: str, params: list[Any]
+    ) -> Any:
+        """Send one JSON-RPC request and return its ``result``.
 
-    async def _capture_signer_balance(self, client: AsyncClient) -> None:
+        A non-2xx response raises ``aiohttp.ClientResponseError``, which
+        ``handle_error`` already treats like every other HTTP metric (401/403/
+        404/429 are logged as warnings). A JSON-RPC error raises ``ValueError``.
+        """
+        body = {"jsonrpc": "2.0", "id": 1, "method": method, "params": params}
+        async with session.post(self.get_endpoint(), json=body) as response:
+            response.raise_for_status()
+            payload = await response.json(content_type=None)
+        if not isinstance(payload, dict):
+            raise ValueError(f"{method} returned non-object JSON {self._log_ctx()}")
+        if "error" in payload:
+            raise ValueError(
+                f"{method} JSON-RPC error {payload['error']!r} {self._log_ctx()}"
+            )
+        return payload.get("result")
+
+    async def _capture_signer_balance(self, session: aiohttp.ClientSession) -> None:
         """Fetch signer SOL balance and emit as signer_balance value-type.
 
         Survives ``mark_failure`` via the override above — wallet health
@@ -146,24 +156,30 @@ class SolanaLandingMetric(HttpMetric):
         drained" at a glance.
         """
         try:
-            response = await client.get_balance(self.keypair.pubkey())
-            if response and response.value is not None:
-                self.update_metric_value(response.value, "signer_balance")
+            result = await self._rpc(
+                session,
+                "getBalance",
+                [str(self.keypair.pubkey()), {"commitment": "finalized"}],
+            )
+            if isinstance(result, dict) and isinstance(result.get("value"), int):
+                self.update_metric_value(result["value"], "signer_balance")
         except Exception as e:
             logging.warning(
                 f"{LOG_TAG} signer balance fetch failed {self._log_ctx()}: {e!r}"
             )
 
-    async def _get_slot(self, client: AsyncClient) -> int:
-        response: GetSlotResp = await client.get_slot(
-            Commitment(MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL)
+    async def _get_slot(self, session: aiohttp.ClientSession) -> int:
+        result = await self._rpc(
+            session,
+            "getSlot",
+            [{"commitment": MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL}],
         )
-        if not response or response.value is None:
-            raise ValueError(f"getSlot returned empty {self._log_ctx()}")
-        return response.value
+        if not isinstance(result, int):
+            raise ValueError(f"getSlot returned {result!r} {self._log_ctx()}")
+        return result
 
     async def _check_status(
-        self, client: AsyncClient, signature: Signature
+        self, session: aiohttp.ClientSession, signature: str
     ) -> int | None:
         """Return the landing slot once the tx is confirmed, else ``None``.
 
@@ -174,41 +190,50 @@ class SolanaLandingMetric(HttpMetric):
         entire poll window, even though it confirmed on-chain in ~1s.
         ``getTransaction`` reads the ledger, so a non-null result is a
         definitive "landed and confirmed" signal on every provider we tested.
+        ``maxSupportedTransactionVersion`` must be at least 1 to read back a
+        v1 transaction.
 
         Raises immediately if the tx carries an on-chain error (revert) — a
         distinct failure mode from "not landed yet" that we don't want masked by
         the polling timeout.
         """
-        response: GetTransactionResp = await client.get_transaction(
-            signature,
-            commitment=Confirmed,
-            max_supported_transaction_version=0,
+        result = await self._rpc(
+            session,
+            "getTransaction",
+            [
+                signature,
+                {
+                    "commitment": MetricsServiceConfig.SOLANA_CONFIRMATION_LEVEL,
+                    "encoding": "json",
+                    "maxSupportedTransactionVersion": 1,
+                },
+            ],
         )
-        confirmed_tx = response.value
-        if confirmed_tx is None:
+        if result is None:
             return None
+        slot = result.get("slot") if isinstance(result, dict) else None
+        if not isinstance(slot, int):
+            raise ValueError(f"getTransaction returned no slot {self._log_ctx()}")
 
-        meta = confirmed_tx.transaction.meta
-        if meta is not None and meta.err is not None:
+        meta = result.get("meta") or {}
+        if meta.get("err") is not None:
             logging.error(
                 f"{LOG_TAG} on-chain revert sig={signature} "
-                f"slot={confirmed_tx.slot} err={meta.err!r} {self._log_ctx()}"
+                f"slot={slot} err={meta['err']!r} {self._log_ctx()}"
             )
-            raise ValueError(
-                f"on-chain revert at slot {confirmed_tx.slot}: {meta.err!r}"
-            )
+            raise ValueError(f"on-chain revert at slot {slot}: {meta['err']!r}")
 
-        return confirmed_tx.slot
+        return slot
 
     async def _wait_for_confirmation(
-        self, client: AsyncClient, signature: Signature, timeout: int
+        self, session: aiohttp.ClientSession, signature: str, timeout: int
     ) -> int:
         """Poll getTransaction until the tx confirms or the timeout elapses."""
         end_time: float = time.monotonic() + timeout
         polls = 0
         while time.monotonic() < end_time:
             polls += 1
-            confirmation_slot: int | None = await self._check_status(client, signature)
+            confirmation_slot: int | None = await self._check_status(session, signature)
             if confirmation_slot is not None:
                 return confirmation_slot
             await asyncio.sleep(self.POLL_INTERVAL)
@@ -219,70 +244,78 @@ class SolanaLandingMetric(HttpMetric):
         )
         raise ValueError(f"confirmation timeout after {timeout}s sig={signature}")
 
-    async def _prepare_memo_transaction(self, client: AsyncClient) -> Transaction:
+    async def _prepare_memo_transaction(
+        self, session: aiohttp.ClientSession
+    ) -> VersionedTransaction:
         memo_text: str = generate_memo(
             self.labels.require_label(MetricLabelKey.SOURCE_REGION),
             self.labels.require_label(MetricLabelKey.PROVIDER),
         )
-
-        compute_limit_ix: Instruction = set_compute_unit_limit(
-            MetricsServiceConfig.COMPUTE_LIMIT
-        )
-        compute_price_ix: Instruction = set_compute_unit_price(
-            MetricsServiceConfig.PRIORITY_FEE_MICROLAMPORTS
-        )
-
         memo_ix = Instruction(
             program_id=Pubkey.from_string(self.MEMO_PROGRAM_ID),
             accounts=[],
             data=memo_text.encode(),
         )
 
-        blockhash: GetLatestBlockhashResp = await client.get_latest_blockhash()
-        if not blockhash or not blockhash.value:
+        result = await self._rpc(
+            session, "getLatestBlockhash", [{"commitment": "finalized"}]
+        )
+        value = result.get("value") if isinstance(result, dict) else None
+        if not isinstance(value, dict) or not value.get("blockhash"):
             raise ValueError(f"getLatestBlockhash returned empty {self._log_ctx()}")
 
-        return Transaction.new_signed_with_payer(
-            [compute_limit_ix, compute_price_ix, memo_ix],
+        message = MessageV1.try_compile(
             self.keypair.pubkey(),
-            [self.keypair],
-            blockhash.value.blockhash,
+            [memo_ix],
+            Hash.from_string(value["blockhash"]),
+            transaction_config(),
         )
+        return VersionedTransaction(message, [self.keypair])
 
-    async def _submit(self, client: AsyncClient, tx: Transaction) -> Signature:
+    async def _submit(
+        self, session: aiohttp.ClientSession, tx: VersionedTransaction
+    ) -> str:
         """Send the transaction; log RPC errors with context before re-raising.
 
-        Returns the ``Signature`` object from solders so it can be passed
-        directly to the downstream ``get_transaction`` confirmation poll (which
-        requires ``Signature``, not ``str``). For log lines, ``Signature.__str__``
-        renders the same base58 form a raw string would.
-
-        Rate-limit responses (HTTP 401/403/404/429 wrapped in
-        ``SolanaRpcException``) are logged at WARNING instead of ERROR — an
-        endpoint throttling us is expected intermittent noise, not a regression.
-        The exception still propagates so the metric framework treats it as a
-        send failure (which it is — we couldn't land via this path this scrape).
+        Rate-limit responses (HTTP 401/403/404/429) are logged at WARNING
+        instead of ERROR — an endpoint throttling us is expected intermittent
+        noise, not a regression. The exception still propagates so the metric
+        framework treats it as a send failure (which it is — we couldn't land
+        via this path this scrape).
         """
         try:
-            signature_response: SendTransactionResp = await client.send_transaction(
-                tx, TxOpts(skip_preflight=True, max_retries=0)
+            signature = await self._rpc(
+                session,
+                "sendTransaction",
+                [
+                    base64.b64encode(bytes(tx)).decode(),
+                    {
+                        "encoding": "base64",
+                        "skipPreflight": True,
+                        "preflightCommitment": "finalized",
+                        "maxRetries": 0,
+                    },
+                ],
             )
-        except Exception as e:
-            if _is_rate_limited_exc(e):
+        except aiohttp.ClientResponseError as e:
+            if e.status in MetricsServiceConfig.IGNORED_HTTP_ERRORS:
                 logging.warning(
                     f"{LOG_TAG} sendTransaction rate-limited {self._log_ctx()}: "
-                    f"{type(e).__name__}"
+                    f"HTTP {e.status}"
                 )
             else:
                 logging.error(
                     f"{LOG_TAG} sendTransaction failed {self._log_ctx()}: {e!r}"
                 )
             raise
-        if not signature_response or not signature_response.value:
+        except Exception as e:
+            logging.error(f"{LOG_TAG} sendTransaction failed {self._log_ctx()}: {e!r}")
+            raise
+        if not isinstance(signature, str) or not signature:
             raise ValueError(
                 f"sendTransaction returned empty response {self._log_ctx()}"
             )
-        return signature_response.value
+        return signature
 
     async def fetch_data(self) -> float | None:
         """Send a memo transaction and return elapsed wall-clock time.
@@ -298,23 +331,21 @@ class SolanaLandingMetric(HttpMetric):
         self.update_metric_value(0, "response_time")
         self.update_metric_value(0, "slot_latency")
 
-        client: AsyncClient | None = None
-        try:
-            client = await self._create_client()
-            await self._capture_signer_balance(client)
-            tx: Transaction = await self._prepare_memo_transaction(client)
+        async with aiohttp.ClientSession() as session:
+            await self._capture_signer_balance(session)
+            tx: VersionedTransaction = await self._prepare_memo_transaction(session)
 
-            start_slot: int = await self._get_slot(client)
+            start_slot: int = await self._get_slot(session)
             start_time: float = time.monotonic()
 
-            signature: Signature = await self._submit(client, tx)
+            signature: str = await self._submit(session, tx)
             logging.info(
                 f"{LOG_TAG} submitted sig={signature} start_slot={start_slot} "
                 f"{self._log_ctx()}"
             )
 
             confirmation_slot: int = await self._wait_for_confirmation(
-                client, signature, self.config.timeout
+                session, signature, self.config.timeout
             )
 
             # `response_time` is not representative,
@@ -333,10 +364,6 @@ class SolanaLandingMetric(HttpMetric):
                 )
             self.update_metric_value(self._slot_diff, "slot_latency")
             return response_time
-
-        finally:
-            if client:
-                await client.close()
 
     def process_data(self, value: float) -> float:
         """Return the raw latency value unchanged."""

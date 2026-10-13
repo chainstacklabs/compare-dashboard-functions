@@ -5,7 +5,7 @@ Vercel cron functions that probe RPC providers across blockchains and regions an
 📊 [Live dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/chainstack-compare-dashboard)
 
 Chains: Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, Hyperliquid, Robinhood, Arc.
-Regions: Frankfurt (fra1), US West (sfo1 and pdx1), Singapore (sin1), Tokyo (hnd1).
+Regions: Frankfurt (fra1), US West (pdx1), Singapore (sin1), Tokyo (hnd1).
 
 ## What gets measured
 
@@ -125,7 +125,6 @@ The Vercel CLI doesn't reliably honor `--local-config`, so copy the region file 
 
 ```bash
 vercel link --project chainstack-rpc-dashboard-germany        && cp vercel.fra1.json vercel.json && vercel --prod
-vercel link --project chainstack-rpc-dashboard-us-west        && cp vercel.sfo1.json vercel.json && vercel --prod
 vercel link --project chainstack-rpc-dashboard-us-west-pdx1   && cp vercel.pdx1.json vercel.json && vercel --prod
 vercel link --project chainstack-rpc-dashboard-singapore      && cp vercel.sin1.json vercel.json && vercel --prod
 vercel link --project chainstack-rpc-dashboard-japan          && cp vercel.hnd1.json vercel.json && vercel --prod
@@ -135,7 +134,7 @@ git checkout vercel.json
 After a deploy, check **Settings** > **Crons** in each project lists only the expected crons.
 
 - `update_state`, `verify_state`, and Solana landing run only in fra1.
-- US West is two projects: Ethereum from pdx1, the other chains from sfo1. Dashboards and the comparison page show them as one US West region.
+- US West runs from pdx1 (project `chainstack-rpc-dashboard-us-west-pdx1`). Until October 2026 it ran from sfo1; that project, `chainstack-rpc-dashboard-us-west`, is kept with its crons disabled, and its last config is `git show 5e3ed02:vercel.sfo1.json`. Dashboards and the comparison page treat sfo1 and pdx1 as one US West region, so switching back needs only a deploy.
 - `vercel.pdx1.json` pins its region with `regions`; the other projects take the function region from project settings.
 
 ## License

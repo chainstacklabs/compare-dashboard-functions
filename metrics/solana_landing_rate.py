@@ -62,6 +62,10 @@ def transaction_config() -> TransactionConfig:
     and the loaded accounts data size limit must be set explicitly: both default
     to 0 in v1, and a 0 data size limit fails the transaction on-chain with
     ``MaxLoadedAccountsDataSizeExceeded`` before the memo runs.
+
+    Returns:
+        The message's inline config: total priority fee in lamports, compute
+        unit limit and loaded accounts data size limit.
     """
     limit = MetricsServiceConfig.COMPUTE_LIMIT
     price = MetricsServiceConfig.PRIORITY_FEE_MICROLAMPORTS
@@ -223,7 +227,15 @@ class SolanaLandingMetric(HttpMetric):
         if not isinstance(slot, int):
             raise ValueError(f"getTransaction returned no slot {self._log_ctx()}")
 
-        meta = result.get("meta") or {}
+        meta = result.get("meta")
+        if not isinstance(meta, dict):
+            # Without meta the outcome is unknown; poll again rather than
+            # count a transaction that may have failed as landed.
+            logging.warning(
+                f"{LOG_TAG} getTransaction returned no meta sig={signature} "
+                f"slot={slot} {self._log_ctx()}"
+            )
+            return None
         if meta.get("err") is not None:
             logging.error(
                 f"{LOG_TAG} on-chain revert sig={signature} "

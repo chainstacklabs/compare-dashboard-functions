@@ -37,6 +37,9 @@ class MetricsServiceConfig:
     SOLANA_CONFIRMATION_LEVEL = "confirmed"
     PRIORITY_FEE_MICROLAMPORTS = 200_000
     COMPUTE_LIMIT = 1000
+    # The memo tx loads 17,408 bytes: the Memo program's 17,280 bytes of data
+    # plus 64 bytes per account for the program and the fee payer.
+    LOADED_ACCOUNTS_DATA_SIZE_LIMIT = 32_768
 
     METRIC_PREFIX = (
         "dev_" if os.getenv("VERCEL_ENV") != "production" else ""

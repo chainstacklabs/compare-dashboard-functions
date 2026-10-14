@@ -16,8 +16,6 @@ from config.defaults import MetricsServiceConfig
 if TYPE_CHECKING:
     from common.metrics_handler import MetricsHandler
 
-logging.getLogger("httpx").setLevel(logging.WARNING)
-
 
 @dataclass
 class MetricValue:

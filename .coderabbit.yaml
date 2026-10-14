@@ -5,15 +5,15 @@ reviews:
   path_instructions:
     - path: "**/*.py"
       instructions: |
-        This is a Python 3.9 codebase. Enforce the following:
+        This is a Python 3.10+ codebase (ruff and mypy target 3.10; Vercel runs 3.12). Enforce the following:
         - All functions must have full type annotations (mypy strict mode).
         - Google-style docstrings on all public functions and classes.
         - Max cyclomatic complexity of 10 — flag functions that exceed this.
         - Prefer functional programming and composition over inheritance.
         - Never hardcode metric names — always use the METRIC_PREFIX variable.
-        - Error handling convention: HTTP 401/403/404/429 errors are silently ignored.
-          All other errors must zero the metric value and call mark_failure() with a log message.
-        - Avoid 3.10+ syntax: no match statements, no X | Y union types in runtime positions.
+        - Error handling convention: every failed RPC call zeroes the metric and calls mark_failure(),
+          then handle_error(). HTTP 401/403/404/429 are logged as warnings (plan limits, rate limits);
+          all other errors are logged as errors. Failed samples stay in success-rate denominators.
 
     - path: "metrics/*.py"
       instructions: |

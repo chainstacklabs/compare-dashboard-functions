@@ -59,12 +59,20 @@ def transaction_config() -> TransactionConfig:
     lamports rather than a price per compute unit. The total is
     ``COMPUTE_LIMIT * PRIORITY_FEE_MICROLAMPORTS / 1e6``, rounded up, which is
     the fee the runtime charges for that limit and price. The compute unit limit
-    must be set explicitly: it defaults to 0 in v1.
+    and the loaded accounts data size limit must be set explicitly: both default
+    to 0 in v1, and a 0 data size limit fails the transaction on-chain with
+    ``MaxLoadedAccountsDataSizeExceeded`` before the memo runs.
     """
     limit = MetricsServiceConfig.COMPUTE_LIMIT
     price = MetricsServiceConfig.PRIORITY_FEE_MICROLAMPORTS
     priority_fee = -(-limit * price // 1_000_000)
-    return TransactionConfig(priority_fee=priority_fee, compute_unit_limit=limit)
+    return TransactionConfig(
+        priority_fee=priority_fee,
+        compute_unit_limit=limit,
+        loaded_accounts_data_size_limit=(
+            MetricsServiceConfig.LOADED_ACCOUNTS_DATA_SIZE_LIMIT
+        ),
+    )
 
 
 class SolanaLandingMetric(HttpMetric):

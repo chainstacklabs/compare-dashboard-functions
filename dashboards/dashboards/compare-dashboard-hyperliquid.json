@@ -267,7 +267,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "p95 response time across all metrics per provider, segmented by request origin region.",
+      "description": "p95 response time per provider across the five EVM methods the provider score uses (eth_call, eth_getBalance, eth_getLogs, eth_getTransactionReceipt, eth_blockNumber), segmented by request origin region.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -400,7 +400,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", source_region=~\"fra1|sfo1|pdx1|hnd1\"} > 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
+          "expr": "avg by (provider, source_region) (\r\n  quantile_over_time(0.95, \r\n    (avg without (probe_site) (label_replace(label_replace(response_latency_seconds{metric_type=\"response_time\", blockchain=\"Hyperliquid\", api_method=~\"(eth_call|eth_getBalance|eth_getLogs|eth_getTransactionReceipt|eth_blockNumber)\", response_status=\"success\", provider=~\"(Chainstack|Alchemy-Growth|Quicknode-Growth|dRPC)\", source_region=~\"fra1|sfo1|pdx1|hnd1\"} > 0, \"probe_site\", \"$1\", \"source_region\", \"(.*)\"), \"source_region\", \"us-west\", \"source_region\", \"sfo1|pdx1\")))[$__range:3m]\r\n  )\r\n)",
           "format": "table",
           "instant": true,
           "legendFormat": "{{provider}}",

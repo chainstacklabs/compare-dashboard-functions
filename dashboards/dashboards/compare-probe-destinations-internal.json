@@ -15,7 +15,7 @@
       }
     ]
   },
-  "description": "Internal. Which destination IPs each chain and probe region connects to, and when that changes. Never enable public sharing.",
+  "description": "Internal. Where Chainstack probes were sent from and where they landed, to explain latency spikes. Never enable public sharing.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -24,72 +24,36 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
-      "description": "One row per chain, probe region and destination IP. A bar means requests went to that IP. A row that starts or stops is a change of destination.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "green",
-            "mode": "fixed"
-          },
-          "custom": {
-            "fillOpacity": 80,
-            "lineWidth": 0
-          },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "transparent",
-                  "index": 0,
-                  "text": "not in use"
-                }
-              },
-              "type": "value"
-            },
-            {
-              "options": {
-                "from": 0.5,
-                "result": {
-                  "color": "green",
-                  "index": 1,
-                  "text": "in use"
-                },
-                "to": 1000000000
-              },
-              "type": "range"
-            }
-          ]
-        },
-        "overrides": []
-      },
+      "id": 1,
+      "type": "text",
+      "title": "",
       "gridPos": {
-        "h": 14,
+        "h": 3,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 1,
-      "interval": "5m",
-      "maxDataPoints": 300,
       "options": {
-        "alignValue": "left",
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
-        },
-        "mergeValues": true,
-        "rowHeight": 0.8,
-        "showValue": "never",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "mode": "markdown",
+        "content": "**Pick a chain and region, find the spike, then zoom to it.** Spike + **new destination IP** and high connect time \u2192 requests landed in the wrong place. Spike + **unusual source location** and high connect time \u2192 Vercel sent from a bad egress. Spike with **usual source and destination** and normal connect time \u2192 the node itself was slow."
+      }
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "1 \u00b7 RPC time",
+      "description": "Chainstack RPC time per method, one point per probe.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
       },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "interval": "3m",
       "targets": [
         {
           "datasource": {
@@ -97,15 +61,69 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "(count by (provider, blockchain, source_region, peer_ip) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[$__interval])) > 0) or (0 * count by (provider, blockchain, source_region, peer_ip) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[1h])))",
+          "expr": "max by (api_method) (max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__interval]))",
+          "legendFormat": "{{api_method}}",
+          "refId": "A",
           "format": "time_series",
-          "instant": false,
-          "legendFormat": "{{blockchain}} \u00b7 {{source_region}} \u00b7 {{peer_ip}}",
           "range": true,
-          "refId": "A"
+          "instant": false
         }
       ],
-      "title": "Destination IPs over time",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "points",
+            "pointSize": 5,
+            "showPoints": "always"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "state-timeline",
+      "title": "2 \u00b7 Destination IP",
+      "description": "Which IP the requests connected to. A new row is a new destination.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 11
+      },
+      "interval": "3m",
+      "maxDataPoints": 300,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "(count by (peer_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__interval])) > 0) or (0 * count by (peer_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[1h])))",
+          "legendFormat": "{{peer_ip}}",
+          "refId": "A",
+          "format": "time_series",
+          "range": true,
+          "instant": false
+        }
+      ],
       "transformations": [
         {
           "id": "joinByField",
@@ -117,24 +135,316 @@
         {
           "id": "organize",
           "options": {
+            "orderByMode": "auto",
             "orderBy": [
               {
-                "desc": false,
-                "type": "name"
+                "type": "name",
+                "desc": false
               }
-            ],
-            "orderByMode": "auto"
+            ]
           }
         }
       ],
-      "type": "state-timeline"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "custom": {
+            "fillOpacity": 85,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "not used",
+                  "color": "transparent",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 0.5,
+                "to": 1000000000.0,
+                "result": {
+                  "text": "used",
+                  "color": "blue",
+                  "index": 1
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "showValue": "never",
+        "mergeValues": true,
+        "rowHeight": 0.8,
+        "legend": {
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
     },
     {
+      "id": 4,
+      "type": "state-timeline",
+      "title": "3 \u00b7 Source location",
+      "description": "Country and Cloudflare PoP of the Vercel egress IP each invocation sent from.",
       "datasource": {
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Every destination IP in the selected range: when it was first and last used, and its share of that chain and region's requests.",
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 11
+      },
+      "interval": "3m",
+      "maxDataPoints": 300,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "(count by (source_loc, source_colo) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__interval])) > 0) or (0 * count by (source_loc, source_colo) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[1h])))",
+          "legendFormat": "{{source_loc}} \u00b7 {{source_colo}}",
+          "refId": "A",
+          "format": "time_series",
+          "range": true,
+          "instant": false
+        }
+      ],
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "orderByMode": "auto",
+            "orderBy": [
+              {
+                "type": "name",
+                "desc": false
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "custom": {
+            "fillOpacity": 85,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "not used",
+                  "color": "transparent",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 0.5,
+                "to": 1000000000.0,
+                "result": {
+                  "text": "used",
+                  "color": "blue",
+                  "index": 1
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "showValue": "never",
+        "mergeValues": true,
+        "rowHeight": 0.8,
+        "legend": {
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "4 \u00b7 Connect time by destination",
+      "description": "DNS + TCP + TLS before the call. High means the destination is far away.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "interval": "3m",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "max by (peer_ip) (max_over_time(probe_route_seconds{metric_type=\"route_connect\", blockchain=\"$chain\", source_region=\"$region\"}[$__interval]))",
+          "legendFormat": "{{peer_ip}}",
+          "refId": "A",
+          "format": "time_series",
+          "range": true,
+          "instant": false
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "points",
+            "pointSize": 5,
+            "showPoints": "always"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "5 \u00b7 Slowest requests in range",
+      "description": "The 25 slowest Chainstack requests in the selected range, with where each was sent from and where it landed.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 25
+      },
+      "interval": "3m",
+      "maxDataPoints": 2000,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "max without (metric_type, target_region, response_status, provider, blockchain, source_region) (max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[3m]))",
+          "legendFormat": "__auto",
+          "refId": "rpc",
+          "format": "table",
+          "range": true,
+          "instant": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "max without (metric_type, target_region, response_status, provider, blockchain, source_region) (max_over_time(probe_route_seconds{metric_type=\"route_connect\", blockchain=\"$chain\", source_region=\"$region\"}[3m]))",
+          "legendFormat": "__auto",
+          "refId": "conn",
+          "format": "table",
+          "range": true,
+          "instant": false
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "Time": 0,
+              "source_ip": 1,
+              "source_loc": 2,
+              "source_colo": 3,
+              "peer_ip": 4,
+              "api_method": 5,
+              "Value #conn": 6,
+              "Value #rpc": 7
+            },
+            "renameByName": {
+              "Time": "Time (UTC)",
+              "source_ip": "Source IP",
+              "source_loc": "Country",
+              "source_colo": "PoP",
+              "peer_ip": "Destination IP",
+              "api_method": "Method",
+              "Value #conn": "Connect",
+              "Value #rpc": "RPC"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "RPC",
+                "desc": true
+              }
+            ]
+          }
+        },
+        {
+          "id": "limit",
+          "options": {
+            "limitField": 25
+          }
+        }
+      ],
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -146,62 +456,97 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "First seen (UTC)"
+              "options": "Connect"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "dateTimeAsIso"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last seen"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "dateTimeFromNow"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Share"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "percentunit"
+                "value": "s"
               },
               {
                 "id": "decimals",
-                "value": 0
+                "value": 3
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.15
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RPC"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time (UTC)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:YYYY-MM-DD HH:mm"
               }
             ]
           }
         ]
       },
-      "gridPos": {
-        "h": 12,
-        "w": 24,
-        "x": 0,
-        "y": 14
-      },
-      "id": 2,
       "options": {
         "cellHeight": "sm",
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
         "showHeader": true
+      }
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "6 \u00b7 By destination IP",
+      "description": "Every destination IP in range. A far destination stands out by its connect time.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 35
       },
       "targets": [
         {
@@ -210,12 +555,12 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "min by (provider, blockchain, source_region, peer_ip) (min_over_time(timestamp(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"})[$__range:3m])) * 1000",
+          "expr": "sum by (peer_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "req",
           "format": "table",
           "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "first"
+          "range": false
         },
         {
           "datasource": {
@@ -223,12 +568,12 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "max by (provider, blockchain, source_region, peer_ip) (max_over_time(timestamp(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"})[$__range:3m])) * 1000",
+          "expr": "quantile by (peer_ip) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_connect\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "conn",
           "format": "table",
           "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "last"
+          "range": false
         },
         {
           "datasource": {
@@ -236,15 +581,27 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "sum by (provider, blockchain, source_region, peer_ip) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[$__range])) / on (provider, blockchain, source_region) group_left sum by (provider, blockchain, source_region) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[$__range]))",
+          "expr": "quantile by (peer_ip) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "rpc",
           "format": "table",
           "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "max by (peer_ip) (max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
           "legendFormat": "__auto",
-          "range": false,
-          "refId": "share"
+          "refId": "max",
+          "format": "table",
+          "instant": true,
+          "range": false
         }
       ],
-      "title": "Destination IPs",
       "transformations": [
         {
           "id": "merge",
@@ -257,22 +614,22 @@
               "Time": true
             },
             "indexByName": {
-              "Value #first": 4,
-              "Value #last": 5,
-              "Value #share": 6,
-              "blockchain": 0,
-              "peer_ip": 3,
-              "provider": 2,
-              "source_region": 1
+              "peer_ip": 0,
+              "source_loc": 0,
+              "source_colo": 1,
+              "Value #req": 2,
+              "Value #ips": 3,
+              "Value #conn": 4,
+              "Value #rpc": 5,
+              "Value #max": 6
             },
             "renameByName": {
-              "Value #first": "First seen (UTC)",
-              "Value #last": "Last seen",
-              "Value #share": "Share",
-              "blockchain": "Chain",
               "peer_ip": "Destination IP",
-              "provider": "Provider",
-              "source_region": "Region"
+              "Value #req": "Requests",
+              "Value #ips": "Source IPs",
+              "Value #conn": "Median connect",
+              "Value #rpc": "Median RPC",
+              "Value #max": "Max RPC"
             }
           }
         },
@@ -281,14 +638,320 @@
           "options": {
             "sort": [
               {
-                "desc": true,
-                "field": "Last seen"
+                "field": "Median connect",
+                "desc": true
               }
             ]
           }
         }
       ],
-      "type": "table"
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Median connect"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.15
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Median RPC"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max RPC"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      }
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "7 \u00b7 By source location",
+      "description": "Every source location in range. A bad egress stands out by its connect time.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 41
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum by (source_loc, source_colo) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "req",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "count by (source_loc, source_colo) (count by (source_loc, source_colo, source_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range])))",
+          "legendFormat": "__auto",
+          "refId": "ips",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "quantile by (source_loc, source_colo) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_connect\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "conn",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "quantile by (source_loc, source_colo) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "rpc",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "max by (source_loc, source_colo) (max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "max",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "peer_ip": 0,
+              "source_loc": 0,
+              "source_colo": 1,
+              "Value #req": 2,
+              "Value #ips": 3,
+              "Value #conn": 4,
+              "Value #rpc": 5,
+              "Value #max": 6
+            },
+            "renameByName": {
+              "source_loc": "Country",
+              "source_colo": "PoP",
+              "Value #req": "Requests",
+              "Value #ips": "Source IPs",
+              "Value #conn": "Median connect",
+              "Value #rpc": "Median RPC",
+              "Value #max": "Max RPC"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Median connect",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Median connect"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "transparent",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.15
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Median RPC"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Max RPC"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "cellHeight": "sm",
+        "showHeader": true
+      }
     }
   ],
   "preload": false,
@@ -301,95 +964,58 @@
   "templating": {
     "list": [
       {
-        "allValue": ".*",
-        "current": {
-          "text": [
-            "Chainstack"
-          ],
-          "value": [
-            "Chainstack"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(probe_peer_latency_seconds, provider)",
-        "includeAll": true,
-        "label": "Provider",
-        "multi": true,
-        "name": "provider",
-        "query": {
-          "query": "label_values(probe_peer_latency_seconds, provider)",
-          "refId": "provider-var"
-        },
-        "refresh": 2,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "current": {
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(probe_peer_latency_seconds{provider=~\"$provider\"}, blockchain)",
-        "includeAll": true,
-        "label": "Chain",
-        "multi": true,
         "name": "chain",
+        "label": "Chain",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-prom"
+        },
+        "definition": "label_values(probe_route_seconds, blockchain)",
         "query": {
-          "query": "label_values(probe_peer_latency_seconds{provider=~\"$provider\"}, blockchain)",
+          "query": "label_values(probe_route_seconds, blockchain)",
           "refId": "chain-var"
         },
+        "multi": false,
+        "includeAll": false,
+        "current": {
+          "text": "Robinhood",
+          "value": "Robinhood"
+        },
         "refresh": 2,
-        "sort": 1,
-        "type": "query"
+        "sort": 1
       },
       {
-        "allValue": ".*",
-        "current": {
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "name": "region",
+        "label": "Region",
+        "type": "query",
         "datasource": {
           "type": "prometheus",
           "uid": "grafanacloud-prom"
         },
-        "definition": "label_values(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\"}, source_region)",
-        "includeAll": true,
-        "label": "Region",
-        "multi": true,
-        "name": "region",
+        "definition": "label_values(probe_route_seconds{blockchain=\"$chain\"}, source_region)",
         "query": {
-          "query": "label_values(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\"}, source_region)",
+          "query": "label_values(probe_route_seconds{blockchain=\"$chain\"}, source_region)",
           "refId": "region-var"
         },
+        "multi": false,
+        "includeAll": false,
+        "current": {
+          "text": "pdx1",
+          "value": "pdx1"
+        },
         "refresh": 2,
-        "sort": 1,
-        "type": "query"
+        "sort": 1
       }
     ]
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "utc",
-  "title": "Compare: probe destinations (internal)",
+  "title": "Compare: Chainstack probe routes (internal)",
   "uid": "compare-internal-probe-destinations",
   "version": 3
 }

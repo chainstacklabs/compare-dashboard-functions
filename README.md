@@ -121,13 +121,13 @@ A new chain emits nothing until `update_state` has run once, up to 15 minutes af
 
 Each region is a separate Vercel project with its own config file. Vercel runs every cron in `vercel.json` in every project, so per-region files keep each project's cron list to what it needs (Pro allows 40 crons).
 
-The Vercel CLI doesn't reliably honor `--local-config`, so copy the region file over `vercel.json` before deploying:
+The Vercel CLI doesn't reliably honor `--local-config`, so copy the region file over `vercel.json` before deploying. Run the lines one at a time, since they share `vercel.json`. Both `link` and `--prod` take `--scope chainstack`: without it the CLI uses your default scope, which may hold a project with the same name.
 
 ```bash
-vercel link --project chainstack-rpc-dashboard-germany        && cp vercel.fra1.json vercel.json && vercel --prod
-vercel link --project chainstack-rpc-dashboard-us-west-pdx1   && cp vercel.pdx1.json vercel.json && vercel --prod
-vercel link --project chainstack-rpc-dashboard-singapore      && cp vercel.sin1.json vercel.json && vercel --prod
-vercel link --project chainstack-rpc-dashboard-japan          && cp vercel.hnd1.json vercel.json && vercel --prod
+vercel link --scope chainstack --project chainstack-rpc-dashboard-germany        && cp vercel.fra1.json vercel.json && vercel --prod --scope chainstack
+vercel link --scope chainstack --project chainstack-rpc-dashboard-us-west-pdx1   && cp vercel.pdx1.json vercel.json && vercel --prod --scope chainstack
+vercel link --scope chainstack --project chainstack-rpc-dashboard-singapore      && cp vercel.sin1.json vercel.json && vercel --prod --scope chainstack
+vercel link --scope chainstack --project chainstack-rpc-dashboard-japan          && cp vercel.hnd1.json vercel.json && vercel --prod --scope chainstack
 git checkout vercel.json
 ```
 

@@ -3,6 +3,7 @@
 import asyncio
 import contextlib
 import logging
+import socket
 import time
 from abc import abstractmethod
 from typing import Any, ClassVar
@@ -15,6 +16,49 @@ from common.metric_config import MetricConfig, MetricLabelKey, MetricLabels
 from common.metrics_handler import MetricsHandler
 
 MAX_RETRIES = 2
+
+
+class PeerAddressRecorder:
+    """Record the IP address a session's requests are connected to.
+
+    The connection is gone by the time ``session.post`` returns: aiohttp hands
+    it back to the pool, or closes it when the server sent
+    ``Connection: close``. So the address is read as soon as a connection is
+    up: ``socket_factory`` keeps every socket the connector opens, and the
+    ``on_connection_create_end`` trace hook asks them for their peer. A reused
+    pooled connection keeps the address recorded when it was created.
+    """
+
+    def __init__(self) -> None:
+        """Start with no sockets and no address."""
+        self.ip: str | None = None
+        self._sockets: list[socket.socket] = []
+
+    def socket_factory(self, addr_info: tuple[Any, ...]) -> socket.socket:
+        """Create a socket the way aiohttp's default factory does, and keep it."""
+        family, type_, proto, _, _ = addr_info
+        sock = socket.socket(family=family, type=type_, proto=proto)
+        self._sockets.append(sock)
+        return sock
+
+    async def on_connection_created(
+        self, session: Any, context: Any, params: Any
+    ) -> None:
+        """Read the peer of the socket that just connected.
+
+        Never raises: the address is diagnostic, and an exception in a trace
+        hook would fail the probe it runs in.
+        """
+        self.ip = None
+        for sock in self._sockets:
+            try:
+                self.ip = str(sock.getpeername()[0])
+                return
+            except OSError:
+                continue  # closed, or lost the happy-eyeballs race
+            except Exception:
+                logging.warning("Could not read probe peer address", exc_info=True)
+                return
 
 
 class WebSocketMetric(BaseMetric):
@@ -200,12 +244,14 @@ class HttpCallLatencyMetricBase(HttpMetric):
         self._base_request = self._build_base_request()
         self._captured_block_number: int | None = None
         self._captured_balance: int | None = None
+        self._captured_peer_ip: str | None = None
 
     def mark_failure(self) -> None:
         """Mark metric as failed and clear any captured response fields."""
         super().mark_failure()
         self._captured_block_number = None
         self._captured_balance = None
+        self._captured_peer_ip = None
 
     def _build_base_request(self) -> dict[str, Any]:
         """Build the base JSON-RPC request object."""
@@ -290,10 +336,15 @@ class HttpCallLatencyMetricBase(HttpMetric):
         ) -> None:
             timing["conn_end"] = time.monotonic()
 
+        # The peer read is registered before conn_end is stamped, so its cost
+        # falls inside conn_time, which is subtracted from the reported latency.
+        peer = PeerAddressRecorder()
         trace_config.on_connection_create_start.append(on_connection_create_start)
+        trace_config.on_connection_create_end.append(peer.on_connection_created)
         trace_config.on_connection_create_end.append(on_connection_create_end)
 
         async with aiohttp.ClientSession(
+            connector=aiohttp.TCPConnector(socket_factory=peer.socket_factory),
             trace_configs=[trace_config],
         ) as session:
             response_time = 0.0
@@ -303,6 +354,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 start_time: float = time.monotonic()
                 response = await self._send_request(session, endpoint)
                 response_time = time.monotonic() - start_time
+                self._captured_peer_ip = peer.ip
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     # Capped: this sleep runs while holding the measurement

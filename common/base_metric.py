@@ -23,6 +23,7 @@ class MetricValue:
 
     value: int | float
     labels: dict[str, str] | None = None
+    measurement: str | None = None
 
 
 class BaseMetric(ABC):
@@ -107,7 +108,7 @@ class BaseMetric(ABC):
                 if extra:
                     tags = f"{tags},{extra}"
 
-            metric_line: str = f"{self.metric_name}"
+            metric_line: str = metric_value.measurement or self.metric_name
             if tags:
                 metric_line += f",{tags}"
             metric_line += f" value={metric_value.value}"
@@ -121,6 +122,7 @@ class BaseMetric(ABC):
         value: int | float,
         value_type: str = "response_time",
         labels: dict[str, str] | None = None,
+        measurement: str | None = None,
     ) -> None:
         """Updates metric value, preserving existing labels if present.
 
@@ -130,6 +132,9 @@ class BaseMetric(ABC):
         ``blockchain``, ``provider``, ``api_method``, ``response_status``)
         or with the reserved ``metric_type`` tag are silently dropped at emit
         time — the instance value wins.
+
+        ``measurement`` emits this value under a different metric name than
+        the instance's; it is preserved like ``labels``.
 
         Raises:
             ValueError: If value is negative.
@@ -141,7 +146,10 @@ class BaseMetric(ABC):
             )
         if value_type in self.values:
             labels = labels or self.values[value_type].labels
-        self.values[value_type] = MetricValue(value=value, labels=labels)
+            measurement = measurement or self.values[value_type].measurement
+        self.values[value_type] = MetricValue(
+            value=value, labels=labels, measurement=measurement
+        )
 
     def mark_success(self) -> None:
         """Sets response status to success."""

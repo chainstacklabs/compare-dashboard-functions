@@ -15,136 +15,52 @@
       }
     ]
   },
-  "description": "Internal. Where each HTTP probe's request actually landed (destination IP), per chain, region and provider. Never enable public sharing.",
+  "description": "Internal. Which destination IPs each chain and probe region connects to, and when that changes. Never enable public sharing.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": 4248775412322304,
+  "links": [],
   "liveNow": false,
   "panels": [
     {
+      "id": 1,
+      "type": "state-timeline",
+      "title": "Destination IPs over time",
+      "description": "One row per chain, probe region and destination IP. A bar means requests went to that IP. A row that starts or stops is a change of destination.",
       "datasource": {
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "One row per chain, probe region, provider and destination IP over the selected range. Share is this IP's part of the provider's samples in that region; p50/p95 average the per-method quantiles. Internal only: never share this dashboard publicly.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "filterable": true
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Share"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "percentunit"
-              },
-              {
-                "id": "decimals",
-                "value": 1
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "^p(50|95)$"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "s"
-              },
-              {
-                "id": "decimals",
-                "value": 3
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "p95"
-            },
-            "properties": [
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "mode": "basic",
-                  "type": "color-background"
-                }
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "thresholds"
-                }
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "green"
-                    },
-                    {
-                      "color": "yellow",
-                      "value": 0.1
-                    },
-                    {
-                      "color": "red",
-                      "value": 0.2
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Last seen"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "dateTimeFromNow"
-              },
-              {
-                "id": "custom.width",
-                "value": 130
-              }
-            ]
-          }
-        ]
-      },
       "gridPos": {
-        "h": 12,
+        "h": 14,
         "w": 24,
         "x": 0,
         "y": 0
       },
-      "id": 1,
-      "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
+      "interval": "5m",
+      "maxDataPoints": 300,
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
         },
-        "showHeader": true
-      },
-      "pluginVersion": "",
+        {
+          "id": "organize",
+          "options": {
+            "orderByMode": "auto",
+            "orderBy": [
+              {
+                "type": "name",
+                "desc": false
+              }
+            ]
+          }
+        }
+      ],
       "targets": [
         {
           "datasource": {
@@ -152,67 +68,123 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "sum by (blockchain, source_region, provider, peer_ip) (count_over_time(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__range]))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "samples"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "sum by (blockchain, source_region, provider, peer_ip) (count_over_time(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__range])) / on (blockchain, source_region, provider) group_left sum by (blockchain, source_region, provider) (count_over_time(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__range]))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "share"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "avg by (blockchain, source_region, provider, peer_ip) (quantile_over_time(0.5, probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__range]))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "p50"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "avg by (blockchain, source_region, provider, peer_ip) (quantile_over_time(0.95, probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__range]))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "p95"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "max by (blockchain, source_region, provider, peer_ip) (max_over_time(timestamp(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"})[$__range:3m]))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "last_seen"
+          "expr": "(count by (provider, blockchain, source_region, peer_ip) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[$__interval])) > 0) or (0 * count by (provider, blockchain, source_region, peer_ip) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[1h])))",
+          "legendFormat": "{{blockchain}} \u00b7 {{source_region}} \u00b7 {{peer_ip}}",
+          "refId": "A",
+          "format": "time_series",
+          "range": true,
+          "instant": false
         }
       ],
-      "title": "Destinations",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "not in use",
+                  "color": "transparent",
+                  "index": 0
+                }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 0.5,
+                "to": 1000000000.0,
+                "result": {
+                  "text": "in use",
+                  "color": "green",
+                  "index": 1
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "showValue": "never",
+        "mergeValues": true,
+        "rowHeight": 0.8,
+        "alignValue": "left",
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "table",
+      "title": "Destination IPs",
+      "description": "Every destination IP in the selected range: when it was first and last used, and its share of that chain and region's requests.",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "min by (provider, blockchain, source_region, peer_ip) (min_over_time(timestamp(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"})[$__range:3m])) * 1000",
+          "legendFormat": "__auto",
+          "refId": "first",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "max by (provider, blockchain, source_region, peer_ip) (max_over_time(timestamp(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"})[$__range:3m])) * 1000",
+          "legendFormat": "__auto",
+          "refId": "last",
+          "format": "table",
+          "instant": true,
+          "range": false
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum by (provider, blockchain, source_region, peer_ip) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[$__range])) / on (provider, blockchain, source_region) group_left sum by (provider, blockchain, source_region) (count_over_time(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\", source_region=~\"$region\"}[$__range]))",
+          "legendFormat": "__auto",
+          "refId": "share",
+          "format": "table",
+          "instant": true,
+          "range": false
+        }
+      ],
       "transformations": [
         {
           "id": "merge",
@@ -225,26 +197,22 @@
               "Time": true
             },
             "indexByName": {
-              "Value #last_seen": 8,
-              "Value #p50": 6,
-              "Value #p95": 7,
-              "Value #samples": 4,
-              "Value #share": 5,
               "blockchain": 0,
-              "peer_ip": 3,
+              "source_region": 1,
               "provider": 2,
-              "source_region": 1
+              "peer_ip": 3,
+              "Value #first": 4,
+              "Value #last": 5,
+              "Value #share": 6
             },
             "renameByName": {
-              "Value #last_seen": "Last seen",
-              "Value #p50": "p50",
-              "Value #p95": "p95",
-              "Value #samples": "Samples",
-              "Value #share": "Share",
               "blockchain": "Chain",
-              "peer_ip": "Peer IP",
+              "source_region": "Region",
               "provider": "Provider",
-              "source_region": "Region"
+              "peer_ip": "Destination IP",
+              "Value #first": "First seen (UTC)",
+              "Value #last": "Last seen",
+              "Value #share": "Share"
             }
           }
         },
@@ -253,197 +221,74 @@
           "options": {
             "sort": [
               {
-                "desc": true,
-                "field": "p95"
+                "field": "Last seen",
+                "desc": true
               }
             ]
           }
         }
       ],
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
-      "description": "Samples per destination IP over time. A provider pinned to one IP shows one colour; a new colour appearing in bursts means DNS sent some probes elsewhere. Narrow the filters to one provider and region.",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "drawStyle": "bars",
-            "fillOpacity": 80,
-            "lineWidth": 0,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            }
-          },
-          "unit": "short"
-        }
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 24,
-        "x": 0,
-        "y": 12
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [
-            "sum"
-          ],
-          "displayMode": "table",
-          "placement": "right",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "pluginVersion": "",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "sum by (blockchain, source_region, provider, peer_ip) (count_over_time(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__interval]))",
-          "legendFormat": "{{provider}} {{source_region}} {{peer_ip}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Destination switches",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
-      "description": "p95 per destination IP over a trailing 30 minutes, averaged across methods. A slow IP stands out from the provider's others.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "drawStyle": "line",
-            "lineWidth": 1,
-            "spanNulls": false
-          },
-          "unit": "s"
-        }
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 16,
-        "x": 0,
-        "y": 21
-      },
-      "id": 3,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "max"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        }
-      },
-      "pluginVersion": "",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "avg by (blockchain, source_region, provider, peer_ip) (quantile_over_time(0.95, probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[30m]))",
-          "legendFormat": "{{provider}} {{source_region}} {{peer_ip}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Latency by destination (p95)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
-      "description": "How many destination IPs each provider served per region over the range. 1 = pinned; many = anycast or DNS load balancing.",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto"
+            "align": "auto",
+            "filterable": true
           }
-        }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "First seen (UTC)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeAsIso"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Last seen"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeFromNow"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Share"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
       },
-      "gridPos": {
-        "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 21
-      },
-      "id": 4,
       "options": {
         "cellHeight": "sm",
-        "showHeader": true
-      },
-      "pluginVersion": "",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "count by (blockchain, source_region, provider) (count by (blockchain, source_region, provider, peer_ip) (count_over_time(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\", provider=~\"$provider\"}[$__range])))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "A"
+        "showHeader": true,
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "fields": ""
         }
-      ],
-      "title": "Distinct IPs per provider",
-      "transformations": [
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true
-            },
-            "renameByName": {
-              "Value": "IPs",
-              "blockchain": "Chain",
-              "provider": "Provider",
-              "source_region": "Region"
-            }
-          }
-        },
-        {
-          "id": "sortBy",
-          "options": {
-            "sort": [
-              {
-                "desc": true,
-                "field": "IPs"
-              }
-            ]
-          }
-        }
-      ],
-      "type": "table"
+      }
     }
   ],
   "preload": false,
@@ -456,100 +301,85 @@
   "templating": {
     "list": [
       {
-        "allValue": ".*",
-        "allowCustomValue": true,
-        "current": {
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(probe_peer_latency_seconds, blockchain)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Chain",
-        "multi": true,
-        "name": "chain",
-        "options": [],
-        "query": {
-          "query": "label_values(probe_peer_latency_seconds, blockchain)",
-          "refId": "chain-var"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "allowCustomValue": true,
-        "current": {
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(probe_peer_latency_seconds{blockchain=~\"$chain\"}, source_region)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Region",
-        "multi": true,
-        "name": "region",
-        "options": [],
-        "query": {
-          "query": "label_values(probe_peer_latency_seconds{blockchain=~\"$chain\"}, source_region)",
-          "refId": "region-var"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "allValue": ".*",
-        "allowCustomValue": true,
-        "current": {
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\"}, provider)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Provider",
-        "multi": true,
         "name": "provider",
-        "options": [],
+        "label": "Provider",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-prom"
+        },
+        "definition": "label_values(probe_peer_latency_seconds, provider)",
         "query": {
-          "query": "label_values(probe_peer_latency_seconds{blockchain=~\"$chain\", source_region=~\"$region\"}, provider)",
+          "query": "label_values(probe_peer_latency_seconds, provider)",
           "refId": "provider-var"
         },
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": [
+            "Chainstack"
+          ],
+          "value": [
+            "Chainstack"
+          ]
+        },
         "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
+        "sort": 1
+      },
+      {
+        "name": "chain",
+        "label": "Chain",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-prom"
+        },
+        "definition": "label_values(probe_peer_latency_seconds{provider=~\"$provider\"}, blockchain)",
+        "query": {
+          "query": "label_values(probe_peer_latency_seconds{provider=~\"$provider\"}, blockchain)",
+          "refId": "chain-var"
+        },
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "refresh": 2,
+        "sort": 1
+      },
+      {
+        "name": "region",
+        "label": "Region",
+        "type": "query",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-prom"
+        },
+        "definition": "label_values(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\"}, source_region)",
+        "query": {
+          "query": "label_values(probe_peer_latency_seconds{provider=~\"$provider\", blockchain=~\"$chain\"}, source_region)",
+          "refId": "region-var"
+        },
+        "multi": true,
+        "includeAll": true,
+        "allValue": ".*",
+        "current": {
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "refresh": 2,
+        "sort": 1
       }
     ]
   },
@@ -557,20 +387,7 @@
     "from": "now-24h",
     "to": "now"
   },
-  "timepicker": {
-    "refresh_intervals": [
-      "5s",
-      "10s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h",
-      "2h",
-      "1d"
-    ]
-  },
+  "timepicker": {},
   "timezone": "utc",
   "title": "Compare: probe destinations (internal)",
   "uid": "compare-internal-probe-destinations",

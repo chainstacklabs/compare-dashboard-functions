@@ -15,8 +15,9 @@ import aiohttp
 from common.balance_hash import hash_balance_to_float
 from common.base_metric import BaseMetric
 from common.factory import MetricFactory, MetricSpec
-from common.metric_config import MetricConfig
+from common.metric_config import MetricConfig, MetricLabelKey
 from common.state.blockchain_state import BlockchainState
+from common.verify.providers import CHAINSTACK_PROVIDER_NAME
 from config.defaults import MetricsServiceConfig
 
 
@@ -133,28 +134,72 @@ class MetricsHandler:
                 labels={"block_number": anchor_hex},
             )
 
-    def _emit_peer_ips(self) -> None:
-        """Emit each successful HTTP probe's latency tagged with its peer IP.
+    def _route_instances(self) -> list[BaseMetric]:
+        """Chainstack HTTP probes that succeeded and recorded their peer IP."""
+        return [
+            instance
+            for instance in self._instances
+            if instance.labels.get_label(MetricLabelKey.PROVIDER)
+            == CHAINSTACK_PROVIDER_NAME
+            and getattr(instance, "_captured_peer_ip", None) is not None
+            and "response_time" in instance.values
+        ]
 
-        Mirrors ``_emit_block_numbers``. The value goes out under
-        ``PEER_METRIC_NAME``, not the instance's metric name, so the IP never
-        reaches the public dashboards that read ``response_latency_seconds``.
-        Failed probes clear ``_captured_peer_ip`` and are skipped.
+    @staticmethod
+    async def _fetch_source() -> dict[str, str]:
+        """Read this invocation's egress IP and its location from the trace endpoint.
+
+        Never raises: on any failure every field is ``unknown``, so the route
+        is still recorded and the missing source shows as such.
+        """
+        fields = {"ip": "unknown", "loc": "unknown", "colo": "unknown"}
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    MetricsServiceConfig.SOURCE_TRACE_URL,
+                    timeout=aiohttp.ClientTimeout(
+                        total=MetricsServiceConfig.SOURCE_TRACE_TIMEOUT
+                    ),
+                ) as response:
+                    response.raise_for_status()
+                    text = await response.text()
+            pairs = dict(
+                line.split("=", 1) for line in text.splitlines() if "=" in line
+            )
+            fields.update({k: pairs[k] for k in fields if pairs.get(k)})
+        except Exception:
+            logging.warning(
+                "Could not read the probe source from the trace endpoint", exc_info=True
+            )
+        return {f"source_{k}": v for k, v in fields.items()}
+
+    def _emit_routes(self, instances: list[BaseMetric], source: dict[str, str]) -> None:
+        """Emit each Chainstack probe's connect and RPC time with its route.
+
+        Mirrors ``_emit_block_numbers``. The values go out under
+        ``ROUTE_METRIC_NAME``, not the instance's metric name, so the IPs never
+        reach the public dashboards that read ``response_latency_seconds``.
 
         Returns:
             None
         """
-        for instance in self._instances:
-            ip = getattr(instance, "_captured_peer_ip", None)
-            latency = instance.values.get("response_time")
-            if ip is None or latency is None:
-                continue
-            instance.update_metric_value(
-                latency.value,
-                "peer_response_time",
-                labels={"peer_ip": ip},
-                measurement=MetricsServiceConfig.PEER_METRIC_NAME,
-            )
+        for instance in instances:
+            labels = {
+                "peer_ip": str(getattr(instance, "_captured_peer_ip", "")),
+                **source,
+            }
+            phases = {
+                "route_rpc": instance.values["response_time"].value,
+                "route_connect": getattr(instance, "_captured_conn_time", None),
+            }
+            for value_type, value in phases.items():
+                if value is not None:
+                    instance.update_metric_value(
+                        value,
+                        value_type,
+                        labels=labels,
+                        measurement=MetricsServiceConfig.ROUTE_METRIC_NAME,
+                    )
 
     def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""
@@ -339,7 +384,11 @@ class MetricsHandler:
             self._emit_block_numbers()
             self._emit_observed_balances()
             self._emit_observed_accounts()
-            self._emit_peer_ips()
+            # After the measurements, so the trace call is never inside a
+            # timed window; skipped when there is no Chainstack probe to tag.
+            route_instances = self._route_instances()
+            if route_instances:
+                self._emit_routes(route_instances, await self._fetch_source())
 
             metrics_text: str = self.get_metrics_text()
             if metrics_text:

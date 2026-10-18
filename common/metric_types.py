@@ -245,6 +245,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         self._captured_block_number: int | None = None
         self._captured_balance: int | None = None
         self._captured_peer_ip: str | None = None
+        self._captured_conn_time: float | None = None
 
     def mark_failure(self) -> None:
         """Mark metric as failed and clear any captured response fields."""
@@ -252,6 +253,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
         self._captured_block_number = None
         self._captured_balance = None
         self._captured_peer_ip = None
+        self._captured_conn_time = None
 
     def _build_base_request(self) -> dict[str, Any]:
         """Build the base JSON-RPC request object."""
@@ -381,6 +383,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
             if not response:
                 raise ValueError("No response received")
 
+            self._captured_conn_time = conn_time
             return await self._process_response(response, response_time, conn_time)
 
     async def _send_request(

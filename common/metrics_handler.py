@@ -133,6 +133,29 @@ class MetricsHandler:
                 labels={"block_number": anchor_hex},
             )
 
+    def _emit_peer_ips(self) -> None:
+        """Emit each successful HTTP probe's latency tagged with its peer IP.
+
+        Mirrors ``_emit_block_numbers``. The value goes out under
+        ``PEER_METRIC_NAME``, not the instance's metric name, so the IP never
+        reaches the public dashboards that read ``response_latency_seconds``.
+        Failed probes clear ``_captured_peer_ip`` and are skipped.
+
+        Returns:
+            None
+        """
+        for instance in self._instances:
+            ip = getattr(instance, "_captured_peer_ip", None)
+            latency = instance.values.get("response_time")
+            if ip is None or latency is None:
+                continue
+            instance.update_metric_value(
+                latency.value,
+                "peer_response_time",
+                labels={"peer_ip": ip},
+                measurement=MetricsServiceConfig.PEER_METRIC_NAME,
+            )
+
     def get_metrics_influx_format(self) -> list[str]:
         """Returns all metric values in Influx format."""
         metrics = []
@@ -316,6 +339,7 @@ class MetricsHandler:
             self._emit_block_numbers()
             self._emit_observed_balances()
             self._emit_observed_accounts()
+            self._emit_peer_ips()
 
             metrics_text: str = self.get_metrics_text()
             if metrics_text:

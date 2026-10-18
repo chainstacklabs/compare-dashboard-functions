@@ -17,6 +17,23 @@ from common.metrics_handler import MetricsHandler
 MAX_RETRIES = 2
 
 
+def peer_ip(response: aiohttp.ClientResponse) -> str | None:
+    """Return the IP address the response's connection is attached to.
+
+    aiohttp hands the connection back to the pool as soon as a small body is
+    fully read, often before ``session.post`` returns, so ``response.connection``
+    is usually already ``None``. The response's protocol still holds the
+    transport. ``_protocol`` is private and has no public equivalent;
+    ``tests/test_peer_ip.py`` fails if an aiohttp upgrade removes it.
+    """
+    connection = response.connection
+    transport = connection.transport if connection else None
+    if transport is None:
+        transport = getattr(getattr(response, "_protocol", None), "transport", None)
+    peer = transport.get_extra_info("peername") if transport else None
+    return str(peer[0]) if peer else None
+
+
 class WebSocketMetric(BaseMetric):
     """WebSocket metric for collecting real-time data.
 
@@ -200,12 +217,14 @@ class HttpCallLatencyMetricBase(HttpMetric):
         self._base_request = self._build_base_request()
         self._captured_block_number: int | None = None
         self._captured_balance: int | None = None
+        self._captured_peer_ip: str | None = None
 
     def mark_failure(self) -> None:
         """Mark metric as failed and clear any captured response fields."""
         super().mark_failure()
         self._captured_block_number = None
         self._captured_balance = None
+        self._captured_peer_ip = None
 
     def _build_base_request(self) -> dict[str, Any]:
         """Build the base JSON-RPC request object."""
@@ -303,6 +322,7 @@ class HttpCallLatencyMetricBase(HttpMetric):
                 start_time: float = time.monotonic()
                 response = await self._send_request(session, endpoint)
                 response_time = time.monotonic() - start_time
+                self._captured_peer_ip = peer_ip(response)
 
                 if response.status == 429 and retry_count < MAX_RETRIES - 1:
                     # Capped: this sleep runs while holding the measurement

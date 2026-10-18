@@ -44,7 +44,11 @@ class PeerAddressRecorder:
     async def on_connection_created(
         self, session: Any, context: Any, params: Any
     ) -> None:
-        """Read the peer of the socket that just connected."""
+        """Read the peer of the socket that just connected.
+
+        Never raises: the address is diagnostic, and an exception in a trace
+        hook would fail the probe it runs in.
+        """
         self.ip = None
         for sock in self._sockets:
             try:
@@ -52,6 +56,9 @@ class PeerAddressRecorder:
                 return
             except OSError:
                 continue  # closed, or lost the happy-eyeballs race
+            except Exception:
+                logging.warning("Could not read probe peer address", exc_info=True)
+                return
 
 
 class WebSocketMetric(BaseMetric):

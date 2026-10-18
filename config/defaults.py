@@ -45,10 +45,17 @@ class MetricsServiceConfig:
         "dev_" if os.getenv("VERCEL_ENV") != "production" else ""
     )  # System env var, standard name
 
-    # Destination IP of each HTTP probe, for internal diagnosis only. A separate
-    # measurement rather than a label on response_latency_seconds: dashboard
-    # queries that keep every label would split per IP and expose it publicly.
-    PEER_METRIC_NAME = f"{METRIC_PREFIX}probe_peer_latency_seconds"
+    # Route of each Chainstack HTTP probe, for internal diagnosis only: the egress
+    # IP it was sent from and that IP's location, the IP it connected to, and its
+    # connect and RPC time. A separate measurement rather than labels on
+    # response_latency_seconds: dashboard queries that keep every label would
+    # split per IP and expose it publicly.
+    ROUTE_METRIC_NAME = f"{METRIC_PREFIX}probe_route_seconds"
+    # Cloudflare's trace endpoint on our own domain reports the caller's IP,
+    # country (loc) and Cloudflare PoP (colo). Queried once per invocation, after
+    # the measurements, so it never runs inside a timed window.
+    SOURCE_TRACE_URL = "https://chainstack.com/cdn-cgi/trace"
+    SOURCE_TRACE_TIMEOUT = 1.5
 
     # Block offset configuration (N blocks back from latest)
     BLOCK_OFFSET_RANGES: ClassVar[dict[str, tuple[int, int]]] = {

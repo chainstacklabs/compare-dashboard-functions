@@ -32,7 +32,7 @@
       },
       "id": 1,
       "options": {
-        "content": "**Pick a chain and region, find the spike, then zoom to it.** Spike + **new destination IP** and high connect time \u2192 requests landed in the wrong place. Spike + **unusual source location** and high connect time \u2192 Vercel sent from a bad egress. Spike with **usual source and destination** and normal connect time \u2192 the node itself was slow.",
+        "content": "**Pick a chain and region, find the spike, then zoom to it.** Spike + **new destination IP** and high connect time \u2192 requests landed in the wrong place. Spike + **unusual source IP** and high connect time \u2192 Vercel sent from a bad egress. Spike with **usual source and destination** and normal connect time \u2192 the node itself was slow.",
         "mode": "markdown"
       },
       "title": "",
@@ -200,7 +200,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Country and Cloudflare PoP of the Vercel egress IP each invocation sent from.",
+      "description": "Vercel egress IP each invocation sent from. A new row is a new source.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -266,15 +266,15 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "(count by (source_loc, source_colo) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__interval])) > 0) or (0 * count by (source_loc, source_colo) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[1h])))",
+          "expr": "(count by (source_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__interval])) > 0) or (0 * count by (source_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[1h])))",
           "format": "time_series",
           "instant": false,
-          "legendFormat": "{{source_loc}} \u00b7 {{source_colo}}",
+          "legendFormat": "{{source_ip}}",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "3 \u00b7 Source location",
+      "title": "3 \u00b7 Source IP",
       "transformations": [
         {
           "id": "joinByField",
@@ -741,7 +741,7 @@
         "type": "prometheus",
         "uid": "grafanacloud-prom"
       },
-      "description": "Every source location in range. A bad egress stands out by its connect time.",
+      "description": "Every source IP in range. A bad egress stands out by its connect time.",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -846,7 +846,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "sum by (source_loc, source_colo) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "expr": "sum by (source_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -859,20 +859,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "count by (source_loc, source_colo) (count by (source_loc, source_colo, source_ip) (count_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range])))",
-          "format": "table",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "ips"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "editorMode": "code",
-          "expr": "quantile by (source_loc, source_colo) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_connect\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "expr": "quantile by (source_ip) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_connect\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -885,7 +872,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "quantile by (source_loc, source_colo) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "expr": "quantile by (source_ip) (0.5, max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -898,7 +885,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "max by (source_loc, source_colo) (max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
+          "expr": "max by (source_ip) (max_over_time(probe_route_seconds{metric_type=\"route_rpc\", blockchain=\"$chain\", source_region=\"$region\"}[$__range]))",
           "format": "table",
           "instant": true,
           "legendFormat": "__auto",
@@ -906,7 +893,7 @@
           "refId": "max"
         }
       ],
-      "title": "7 \u00b7 By source location",
+      "title": "7 \u00b7 By source IP",
       "transformations": [
         {
           "id": "merge",
@@ -919,23 +906,18 @@
               "Time": true
             },
             "indexByName": {
-              "Value #conn": 4,
-              "Value #ips": 3,
-              "Value #max": 6,
-              "Value #req": 2,
-              "Value #rpc": 5,
-              "peer_ip": 0,
-              "source_colo": 1,
-              "source_loc": 0
+              "Value #conn": 2,
+              "Value #max": 4,
+              "Value #req": 1,
+              "Value #rpc": 3,
+              "source_ip": 0
             },
             "renameByName": {
               "Value #conn": "Median connect",
-              "Value #ips": "Source IPs",
               "Value #max": "Max RPC",
               "Value #req": "Requests",
               "Value #rpc": "Median RPC",
-              "source_colo": "PoP",
-              "source_loc": "Country"
+              "source_ip": "Source IP"
             }
           }
         },
@@ -1017,5 +999,5 @@
   "timezone": "utc",
   "title": "Compare: Chainstack probe routes (internal)",
   "uid": "compare-internal-probe-destinations",
-  "version": 4
+  "version": 5
 }

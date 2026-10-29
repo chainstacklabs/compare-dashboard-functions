@@ -7296,6 +7296,6 @@
   "timezone": "browser",
   "title": "Compare Dashboard: Arc (US West)",
   "uid": "arc-us-west-1",
-  "version": 4,
+  "version": 5,
   "weekStart": "monday"
 }

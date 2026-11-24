@@ -1,8 +1,8 @@
 # Chainstack Compare: RPC probes
 
-Vercel cron functions that probe RPC providers across blockchains and regions and push the results to Grafana Cloud. The data feeds [Chainstack Compare](https://compare.chainstack.com); the page itself lives in [performance-tool-client](https://github.com/chainstacklabs/performance-tool-client).
+Vercel cron functions that probe RPC providers across blockchains and regions and push the results to Grafana Cloud. The data feeds [Chainstack Compare](https://compare.chainstack.com/?utm_source=github&utm_medium=referral&utm_campaign=compare-dashboard-functions); the page itself lives in [performance-tool-client](https://github.com/chainstacklabs/performance-tool-client).
 
-📊 [Live dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/chainstack-compare-dashboard)
+📊 [Live dashboard](https://chainstack.grafana.net/public-dashboards/65c0fcb02f994faf845d4ec095771bd0?orgId=1) | 📚 [Documentation](https://docs.chainstack.com/docs/chainstack-compare-dashboard?utm_source=github&utm_medium=referral&utm_campaign=compare-dashboard-functions)
 
 Chains: Ethereum, Base, Arbitrum, BNB Smart Chain, Solana, Hyperliquid, Robinhood, Arc.
 Regions: Frankfurt (fra1), US West (pdx1), Singapore (sin1), Tokyo (hnd1).
